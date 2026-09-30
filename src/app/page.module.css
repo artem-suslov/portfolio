@@ -944,6 +944,20 @@
   background: #f7f8f8;
 }
 
+.caseVisual:where(button) {
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.caseVisual:where(button):focus-visible {
+  outline: 2px solid #051e1d;
+  outline-offset: 4px;
+}
+
 .case[data-case-id="steamify-case"] .caseVisual,
 .case[data-case-id="animator"] .caseVisual {
   z-index: 6;
@@ -1003,11 +1017,70 @@
   background-size: cover;
 }
 
+.screenCaseVisual {
+  background: #f7f8f8;
+}
+
+.screenCaseImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 81%;
+  height: auto;
+  max-width: none;
+  border-radius: 6px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 .backgroundCaseImage {
   width: min(88%, 560px);
   height: auto;
   border-radius: 10px;
   object-fit: contain;
+}
+
+.caseImageBackdrop {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  cursor: zoom-out;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.caseImageModal {
+  position: fixed;
+  z-index: 1110;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: none;
+}
+
+.caseImageModalDragTarget {
+  cursor: grab;
+  touch-action: none;
+  perspective: 1200px;
+  pointer-events: auto;
+}
+
+.caseImageModalDragTarget:active {
+  cursor: grabbing;
+}
+
+.caseImageModalContent {
+  overflow: hidden;
+  background: #f7f8f8;
+  box-shadow: 0 18px 56px rgb(0 0 0 / 18%);
+}
+
+.caseImageModalContent > .case {
+  pointer-events: none;
+  user-select: none;
 }
 
 .interactiveCaseMedia {
@@ -1744,21 +1817,6 @@
 }
 
 /* CASE_MEDIA_DEBUG_OVERRIDES_START */
-/* orbit */
-.case[data-case-id="orbit"] [data-debug-media] {
-  position: absolute;
-  inset: auto;
-  top: -2px;
-  left: 38px;
-  width: 560px;
-  height: 363px;
-  max-width: none;
-  max-height: none;
-  margin: 0;
-  flex: none;
-  object-fit: contain;
-  transform: none;
-}
 /* northstar */
 .case[data-case-id="northstar"] [data-debug-media] {
   position: absolute;
@@ -2098,6 +2156,11 @@
     line-height: 20px;
   }
 
+  /* The single-line title is a desktop layout; phones are too narrow for it. */
+  .case[data-case-id="steamify-case"] .caseDetails h3 {
+    text-wrap: balance;
+  }
+
   .caseDetails > p {
     margin: 8px 0 16px;
     font-size: 14px;
@@ -2141,6 +2204,11 @@
 
   .case[data-case-id="steamify-case"]:has(.steamifyExperimentCaseVisual) .caseLinkOverlay {
     aspect-ratio: 1120 / 726;
+  }
+
+  .screenCaseImage {
+    width: 90%;
+    border-radius: 4px;
   }
 
   .case[data-case-id="freelance-tracker"] .caseVisual {

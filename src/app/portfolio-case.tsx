@@ -6,16 +6,26 @@ import type { StaticImageData } from "next/image";
 import dynamic from "next/dynamic";
 import { Pause, Play } from "lucide";
 import { MorphIcon } from "morphicons/react";
+import { createPortal } from "react-dom";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "framer-motion";
 import {
   Fragment,
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
   type CSSProperties,
   type PointerEvent,
+  type ReactNode,
   type RefObject,
 } from "react";
 import { InteractiveCardCover } from "@/components/interactive-card-cover";
@@ -35,6 +45,14 @@ type CaseCover =
       };
       src: string;
       type: "background";
+    }
+  | {
+      // A bare screen capture placed on the native gray cover surface.
+      alt: string;
+      height: number;
+      src: string | StaticImageData;
+      type: "screen";
+      width: number;
     }
   | {
       type: "interactive-card";
@@ -120,6 +138,11 @@ declare global {
 }
 
 const yandexMetricaCounterId = 110413593;
+const caseViewSizes = "(max-width: 760px) 92vw, 900px";
+const caseViewTransition = {
+  duration: 0.32,
+  ease: [0.22, 1, 0.36, 1] as const,
+};
 
 function trackMetricaGoal(goalName: string) {
   window.ym?.(yandexMetricaCounterId, "reachGoal", goalName);
@@ -403,6 +426,373 @@ function AutoPlayCaseVideo({
   );
 }
 
+type CaseCoverSize = {
+  height: number;
+  width: number;
+};
+
+type CaseCoverModalPhase = "closed" | "open" | "closing";
+
+const caseViewMaxWidth = 900;
+const caseViewRadius = 12;
+
+function getCaseViewWidth(cover: CaseCoverSize) {
+  const ratio = cover.width / cover.height;
+
+  return Math.min(
+    caseViewMaxWidth,
+    document.documentElement.clientWidth * 0.92,
+    window.innerHeight * 0.9 * ratio,
+  );
+}
+
+// Expanded views show original files. Decoding a large original mid-animation
+// janks the first open, so fetch and decode it ahead of time and keep the
+// decoded element referenced for reuse.
+const decodedCaseImages = new Map<string, Promise<void>>();
+
+function preloadCaseImage(src: string) {
+  let decoded = decodedCaseImages.get(src);
+
+  if (!decoded) {
+    const image = new window.Image();
+    image.decoding = "async";
+    image.src = src;
+    decoded = image.decode().catch(() => undefined).then(() => void image);
+    decodedCaseImages.set(src, decoded);
+  }
+
+  return decoded;
+}
+
+const caseViewMobileQuery = "(max-width: 760px)";
+
+function subscribeToCaseViewMobile(onChange: () => void) {
+  const query = window.matchMedia(caseViewMobileQuery);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function StaticCaseCoverModal({
+  caseId,
+  className,
+  expandedSrc,
+  label,
+  renderMedia,
+  style,
+}: {
+  caseId: string;
+  className: string;
+  expandedSrc?: string;
+  label: string;
+  renderMedia: (isExpanded: boolean) => ReactNode;
+  style?: CSSProperties;
+}) {
+  const { playTap } = useInteractionSound();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [phase, setPhase] = useState<CaseCoverModalPhase>("closed");
+  const [coverSize, setCoverSize] = useState<CaseCoverSize | null>(null);
+  const [expandedWidth, setExpandedWidth] = useState(0);
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
+  const rotateZ = useTransform(dragX, [-300, 300], [-2.5, 2.5]);
+  const rotateX = useTransform(dragY, [-300, 300], [2.5, -2.5]);
+  const contentX = useMotionValue(0);
+  const contentY = useMotionValue(0);
+  const contentScale = useMotionValue(1);
+  const contentRadius = useMotionValue(caseViewRadius);
+  const contentOpacity = useMotionValue(1);
+  const backdropOpacity = useMotionValue(0);
+  const prefersReducedMotion = useReducedMotion();
+  // On phones the cover already spans the screen, so it stays a static image.
+  const isMobile = useSyncExternalStore(
+    subscribeToCaseViewMobile,
+    () => window.matchMedia(caseViewMobileQuery).matches,
+    () => false,
+  );
+
+  // Offset and scale that place the expanded view exactly over the thumbnail,
+  // measured without the drag offset so both can settle back together.
+  const getThumbnailPose = useCallback(() => {
+    const trigger = triggerRef.current;
+    const content = contentRef.current;
+
+    if (!trigger || !content) {
+      return null;
+    }
+
+    const from = trigger.getBoundingClientRect();
+    const to = content.getBoundingClientRect();
+    const scale = trigger.offsetWidth / content.offsetWidth;
+
+    return {
+      radius: caseViewRadius / scale,
+      scale,
+      x: from.left + from.width / 2 - (to.left + to.width / 2 - contentX.get() - dragX.get()),
+      y: from.top + from.height / 2 - (to.top + to.height / 2 - contentY.get() - dragY.get()),
+    };
+  }, [contentX, contentY, dragX, dragY]);
+
+  const isOpeningRef = useRef(false);
+
+  useEffect(() => {
+    const trigger = triggerRef.current;
+
+    if (!expandedSrc || !trigger) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          return;
+        }
+
+        observer.disconnect();
+        void preloadCaseImage(expandedSrc);
+      },
+      { rootMargin: "400px 0px" },
+    );
+
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, [expandedSrc]);
+
+  async function open() {
+    const trigger = triggerRef.current;
+
+    if (!trigger || phase !== "closed" || isOpeningRef.current) {
+      return;
+    }
+
+    isOpeningRef.current = true;
+    playTap();
+
+    if (expandedSrc) {
+      // Start the transition only once the original can paint without a
+      // decode hitch, but never keep the click waiting for long.
+      await Promise.race([
+        preloadCaseImage(expandedSrc),
+        new Promise((resolve) => window.setTimeout(resolve, 400)),
+      ]);
+    }
+
+    isOpeningRef.current = false;
+    const size = { height: trigger.offsetHeight, width: trigger.offsetWidth };
+    dragX.set(0);
+    dragY.set(0);
+    setCoverSize(size);
+    setExpandedWidth(getCaseViewWidth(size));
+    setPhase("open");
+  }
+
+  const close = useCallback(() => {
+    if (phase !== "open") {
+      return;
+    }
+
+    playTap();
+    setPhase("closing");
+
+    const pose = prefersReducedMotion ? null : getThumbnailPose();
+    const finish = () => setPhase("closed");
+
+    animate(backdropOpacity, 0, { duration: 0.24, ease: "easeOut" });
+
+    if (!pose) {
+      void animate(contentOpacity, 0, { duration: 0.18, ease: "easeOut" }).then(finish);
+      return;
+    }
+
+    // Wait for every value: one that is already at its target (e.g. x for a
+    // centered card) resolves immediately and would cut the return short.
+    void Promise.all([
+      animate(dragX, 0, caseViewTransition),
+      animate(dragY, 0, caseViewTransition),
+      animate(contentScale, pose.scale, caseViewTransition),
+      animate(contentRadius, pose.radius, caseViewTransition),
+      animate(contentY, pose.y, caseViewTransition),
+      animate(contentX, pose.x, caseViewTransition),
+    ]).then(finish);
+  }, [
+    backdropOpacity,
+    contentOpacity,
+    contentRadius,
+    contentScale,
+    contentX,
+    contentY,
+    dragX,
+    dragY,
+    getThumbnailPose,
+    phase,
+    playTap,
+    prefersReducedMotion,
+  ]);
+
+  useLayoutEffect(() => {
+    if (phase !== "open" || !coverSize) {
+      return;
+    }
+
+    const pose = prefersReducedMotion ? null : getThumbnailPose();
+
+    backdropOpacity.set(0);
+    animate(backdropOpacity, 1, { duration: 0.2, ease: "easeOut" });
+
+    if (!pose) {
+      contentOpacity.set(0);
+      animate(contentOpacity, 1, { duration: 0.18, ease: "easeOut" });
+      return;
+    }
+
+    contentOpacity.set(1);
+    contentX.set(pose.x);
+    contentY.set(pose.y);
+    contentScale.set(pose.scale);
+    contentRadius.set(pose.radius);
+    animate(contentX, 0, caseViewTransition);
+    animate(contentY, 0, caseViewTransition);
+    animate(contentScale, 1, caseViewTransition);
+    animate(contentRadius, caseViewRadius, caseViewTransition);
+    // Only the transition into the open phase should run the entrance.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase === "closed" || !coverSize) {
+      return;
+    }
+
+    // Scroll is owned by <html> (see globals.css), so lock it there.
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        close();
+      }
+    };
+    const onResize = () => setExpandedWidth(getCaseViewWidth(coverSize));
+
+    root.style.overflow = "hidden";
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      root.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [close, coverSize, phase]);
+
+  const expandedScale = coverSize ? expandedWidth / coverSize.width : 1;
+
+  if (isMobile && phase === "closed") {
+    return (
+      <div className={className} data-debug-frame style={style}>
+        {renderMedia(false)}
+      </div>
+    );
+  }
+
+  const trigger = (
+    <motion.button
+      aria-label={`Open ${label}`}
+      className={className}
+      data-debug-frame
+      onClick={() => void open()}
+      onFocus={expandedSrc ? () => void preloadCaseImage(expandedSrc) : undefined}
+      onPointerEnter={expandedSrc ? () => void preloadCaseImage(expandedSrc) : undefined}
+      ref={triggerRef}
+      style={{ ...style, visibility: phase === "closed" ? undefined : "hidden" }}
+      transition={caseViewTransition}
+      type="button"
+      whileHover={prefersReducedMotion ? undefined : { scale: 1.01 }}
+    >
+      {renderMedia(false)}
+    </motion.button>
+  );
+
+  return (
+    <>
+      {trigger}
+
+      {phase !== "closed" && coverSize
+        ? createPortal(
+            <>
+              <motion.div
+                className={styles.caseImageBackdrop}
+                onClick={close}
+                style={{ opacity: backdropOpacity }}
+              />
+              <div className={styles.caseImageModal}>
+                <motion.div
+                  className={styles.caseImageModalDragTarget}
+                  drag={phase === "open" && !prefersReducedMotion}
+                  dragConstraints={{ bottom: 90, left: -90, right: 90, top: -90 }}
+                  dragElastic={0.22}
+                  onDragEnd={(_, info) => {
+                    const shouldClose =
+                      Math.abs(info.offset.x) > 140 ||
+                      Math.abs(info.offset.y) > 140 ||
+                      Math.abs(info.velocity.x) > 650 ||
+                      Math.abs(info.velocity.y) > 650;
+
+                    if (shouldClose) {
+                      close();
+                      return;
+                    }
+
+                    animate(dragX, 0, caseViewTransition);
+                    animate(dragY, 0, caseViewTransition);
+                  }}
+                  style={{ x: dragX, y: dragY, rotateX, rotateZ }}
+                  whileDrag={{ scale: 1.01 }}
+                >
+                  <motion.div
+                    aria-label={label}
+                    aria-modal="true"
+                    className={styles.caseImageModalContent}
+                    ref={contentRef}
+                    role="dialog"
+                    style={{
+                      borderRadius: contentRadius,
+                      height: expandedWidth * (coverSize.height / coverSize.width),
+                      opacity: contentOpacity,
+                      scale: contentScale,
+                      width: expandedWidth,
+                      x: contentX,
+                      y: contentY,
+                    }}
+                  >
+                    {/* Re-create the card context so per-case cover styles still apply. */}
+                    <div
+                      className={styles.case}
+                      data-case-id={caseId}
+                      style={{
+                        transform: `scale(${expandedScale})`,
+                        transformOrigin: "0 0",
+                        width: coverSize.width,
+                      }}
+                    >
+                      <div
+                        className={className}
+                        style={{ ...style, height: coverSize.height, width: coverSize.width }}
+                      >
+                        {renderMedia(true)}
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </>,
+            document.body,
+          )
+        : null}
+    </>
+  );
+}
+
 export function PortfolioCase({
   accent,
   caseId,
@@ -512,22 +902,70 @@ export function PortfolioCase({
   return (
     <article className={styles.case} data-case-id={caseId} ref={cardRef}>
       {cover.type === "background" ? (
-        <div
-          className={`${styles.caseVisual} ${styles.backgroundCaseVisual}`}
-          data-debug-frame
-          style={{ backgroundImage: `url("${cover.src}")` }}
-        >
-          {cover.foreground ? (
-            <Image
-              alt={cover.foreground.alt}
-              className={styles.backgroundCaseImage}
-              data-debug-media
-              height={cover.foreground.height}
-              src={cover.foreground.src}
-              width={cover.foreground.width}
+        (() => {
+          const visualClassName = `${styles.caseVisual} ${styles.backgroundCaseVisual}`;
+          const visualStyle = { backgroundImage: `url("${cover.src}")` };
+          const renderMedia = (isExpanded: boolean) =>
+            cover.foreground ? (
+              <Image
+                alt={cover.foreground.alt}
+                className={styles.backgroundCaseImage}
+                data-debug-media
+                height={cover.foreground.height}
+                sizes={isExpanded ? caseViewSizes : undefined}
+                src={cover.foreground.src}
+                loading={isExpanded ? "eager" : undefined}
+                unoptimized={isExpanded}
+                width={cover.foreground.width}
+              />
+            ) : null;
+
+          return href ? (
+            <div className={visualClassName} data-debug-frame style={visualStyle}>
+              {renderMedia(false)}
+            </div>
+          ) : (
+            <StaticCaseCoverModal
+              caseId={caseId}
+              className={visualClassName}
+              expandedSrc={cover.foreground?.src}
+              label={title || "case image"}
+              renderMedia={renderMedia}
+              style={visualStyle}
             />
-          ) : null}
-        </div>
+          );
+        })()
+      ) : cover.type === "screen" ? (
+        (() => {
+          const visualClassName = `${styles.caseVisual} ${styles.screenCaseVisual}`;
+          const renderMedia = (isExpanded: boolean) => (
+            <Image
+              alt={cover.alt}
+              className={styles.screenCaseImage}
+              data-debug-media
+              height={cover.height}
+              sizes={isExpanded ? caseViewSizes : "(max-width: 760px) 90vw, 520px"}
+              src={cover.src}
+              loading={isExpanded ? "eager" : undefined}
+              unoptimized={isExpanded}
+              width={cover.width}
+            />
+          );
+
+          return href ? (
+            <div className={visualClassName} data-debug-frame>
+              {renderMedia(false)}
+            </div>
+          ) : (
+            <StaticCaseCoverModal
+              caseId={caseId}
+              className={visualClassName}
+              expandedSrc={typeof cover.src === "string" ? cover.src : cover.src.src}
+              label={title || "case image"}
+              renderMedia={renderMedia}
+            />
+          );
+        })()
       ) : cover.type === "interactive-card" ? (
         <div
           className={`${styles.caseVisual} ${styles.interactiveCaseVisual}`}
@@ -552,107 +990,136 @@ export function PortfolioCase({
           role="img"
         />
       ) : cover.type === "video" ? (
-        <div className={styles.caseVisual} data-debug-frame>
-          <AutoPlayCaseVideo
-            className={`${styles.caseVideo} ${
-              cover.variant === "loop"
-                ? styles.loopCaseVideo
-                : cover.variant === "animator"
-                  ? styles.animatorCaseVideo
-                  : cover.variant === "steamify"
-                    ? styles.steamifyCaseVideo
-                    : cover.variant === "quick-stickers"
-                      ? styles.quickStickersCaseVideo
-                      : cover.variant === "freelance-tracker"
-                        ? styles.freelanceTrackerCaseVideo
-                        : styles.ccpCaseVideo
-            }`}
-            mobilePoster={cover.mobilePoster}
-            mobileSrc={cover.mobileSrc}
-            poster={cover.poster}
-            src={cover.src}
-            videoRef={hasVideoControl ? caseVideoRef : undefined}
-          />
-          {hasVideoControl ? (
-            <button
-              aria-label={
-                isCaseVideoPaused ? "Play case video" : "Pause case video"
-              }
-              className={styles.caseVideoControl}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                toggleCaseVideo();
-              }}
-              type="button"
-            >
-              <MorphIcon
-                aria-hidden="true"
-                icon={isCaseVideoPaused ? Play : Pause}
-                size={16}
-                strokeWidth={1.75}
-                viewBox="0 0 24 24"
+        (() => {
+          const videoClassName = `${styles.caseVideo} ${
+            cover.variant === "loop"
+              ? styles.loopCaseVideo
+              : cover.variant === "animator"
+                ? styles.animatorCaseVideo
+                : cover.variant === "steamify"
+                  ? styles.steamifyCaseVideo
+                  : cover.variant === "quick-stickers"
+                    ? styles.quickStickersCaseVideo
+                    : cover.variant === "freelance-tracker"
+                      ? styles.freelanceTrackerCaseVideo
+                      : styles.ccpCaseVideo
+          }`;
+          return (
+            <div className={styles.caseVisual} data-debug-frame>
+              <AutoPlayCaseVideo
+                className={videoClassName}
+                mobilePoster={cover.mobilePoster}
+                mobileSrc={cover.mobileSrc}
+                poster={cover.poster}
+                src={cover.src}
+                videoRef={hasVideoControl ? caseVideoRef : undefined}
               />
-            </button>
-          ) : null}
-        </div>
+              {hasVideoControl ? (
+                <button
+                  aria-label={
+                    isCaseVideoPaused ? "Play case video" : "Pause case video"
+                  }
+                  className={styles.caseVideoControl}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    toggleCaseVideo();
+                  }}
+                  type="button"
+                >
+                  <MorphIcon
+                    aria-hidden="true"
+                    icon={isCaseVideoPaused ? Play : Pause}
+                    size={16}
+                    strokeWidth={1.75}
+                    viewBox="0 0 24 24"
+                  />
+                </button>
+              ) : null}
+            </div>
+          );
+        })()
       ) : (
-        <div
-          className={`${styles.caseVisual} ${
+        (() => {
+          const visualClassName = `${styles.caseVisual} ${
             cover.variant === "steamify"
               ? styles.steamifyCaseVisual
               : cover.variant === "steamify-experiment"
                 ? styles.steamifyExperimentCaseVisual
               : ""
-          } ${
-            cover.variant === "loop" ? styles.loopCaseVisual : ""
-          } ${
+          } ${cover.variant === "loop" ? styles.loopCaseVisual : ""} ${
             cover.variant === "ccp" ? styles.ccpCaseVisual : ""
           } ${
             cover.variant === "ccp" || cover.variant === "safe"
               ? styles.caseVisualFlushBottom
               : ""
-          }`}
-          data-debug-frame
-        >
-          {cover.variant === "loop" ? (
-            <DashboardCasePreview
-              alt={cover.alt}
-              sizes={
-                cover.sizes ??
-                "(max-width: 760px) calc(100vw - 40px), 512px"
-              }
-              src={cover.src}
-            />
-          ) : cover.mobileSrc ? (
-            <picture className={styles.steamifyExperimentPicture}>
-              <source media="(max-width: 760px)" srcSet={cover.mobileSrc} />
+          }`;
+          const renderMedia = (isExpanded: boolean) => {
+            const imageSizes = isExpanded
+              ? caseViewSizes
+              : (cover.sizes ?? "(max-width: 760px) 100vw, 700px");
+
+            if (cover.variant === "loop") {
+              return (
+                <DashboardCasePreview
+                  alt={cover.alt}
+                  sizes={
+                    isExpanded
+                      ? caseViewSizes
+                      : (cover.sizes ??
+                        "(max-width: 760px) calc(100vw - 40px), 512px")
+                  }
+                  src={cover.src}
+                />
+              );
+            }
+
+            const image = (
               <Image
                 alt={cover.alt}
                 className={`${styles.caseImage} ${caseImageClassNames[cover.variant]}`}
                 data-debug-media
                 height={cover.height}
-                preload={cover.eager ? true : undefined}
-                sizes={cover.sizes ?? "(max-width: 760px) 100vw, 700px"}
+                preload={cover.eager && !isExpanded ? true : undefined}
+                sizes={imageSizes}
                 src={cover.src}
-                unoptimized={cover.unoptimized}
+                // The expanded view shows the original file, not a recompressed variant.
+                loading={isExpanded ? "eager" : undefined}
+                unoptimized={isExpanded || cover.unoptimized}
                 width={cover.width}
               />
-            </picture>
+            );
+
+            return cover.mobileSrc ? (
+              <picture className={styles.steamifyExperimentPicture}>
+                <source media="(max-width: 760px)" srcSet={cover.mobileSrc} />
+                {image}
+              </picture>
+            ) : (
+              image
+            );
+          };
+
+          return href ? (
+            <div className={visualClassName} data-debug-frame>
+              {renderMedia(false)}
+            </div>
           ) : (
-            <Image
-              alt={cover.alt}
-              className={`${styles.caseImage} ${caseImageClassNames[cover.variant]}`}
-              data-debug-media
-              height={cover.height}
-              preload={cover.eager ? true : undefined}
-              sizes={cover.sizes ?? "(max-width: 760px) 100vw, 700px"}
-              src={cover.src}
-              unoptimized={cover.unoptimized}
-              width={cover.width}
+            <StaticCaseCoverModal
+              caseId={caseId}
+              className={visualClassName}
+              expandedSrc={
+                cover.variant === "loop" || cover.mobileSrc
+                  ? undefined
+                  : typeof cover.src === "string"
+                    ? cover.src
+                    : cover.src.src
+              }
+              label={title || "case image"}
+              renderMedia={renderMedia}
             />
-          )}
-        </div>
+          );
+        })()
       )}
 
       {details ? (

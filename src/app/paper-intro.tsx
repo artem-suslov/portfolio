@@ -23,12 +23,15 @@ export function PaperIntro() {
     document.documentElement.dataset.paperIntro = "playing";
     const previousScrollRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
+    // <html> uses smooth scrolling; the reset must be instant, otherwise a
+    // restored position visibly glides back to the top as the paper unrolls.
+    const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    resetScroll();
 
     let scrollResetFrame: number | undefined = window.requestAnimationFrame(() => {
       // A browser can restore its previous position after hydration, so reset it
       // once more on the next frame while the cover is already visible.
-      window.scrollTo(0, 0);
+      resetScroll();
       scrollResetFrame = undefined;
     });
 

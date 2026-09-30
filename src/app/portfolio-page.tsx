@@ -1,6 +1,9 @@
 import type { StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 import safeDesignSystemThumbnail from "../../public/images/safe_design_system_thumbnail.png";
+// Imported so the URL carries a content hash: replacing the file busts the image cache.
+import steamifyCashoutPhones from "../../public/images/steamify_cashout_phones.jpg";
+import steamifyTradingBotScreen from "../../public/images/steamify_trading_bot_4.jpg";
 import styles from "./page.module.css";
 import { AboutMeContent } from "./about-me-content";
 import { PortfolioCase } from "./portfolio-case";
@@ -53,6 +56,13 @@ const portfolioCases: Array<{
         type: "image";
         unoptimized?: boolean;
         variant: "steamify" | "steamify-experiment" | "loop" | "ccp" | "safe";
+        width: number;
+      }
+    | {
+        alt: string;
+        height: number;
+        src: string | StaticImageData;
+        type: "screen";
         width: number;
       }
     | { type: "interactive-card" }
@@ -141,23 +151,33 @@ const portfolioCases: Array<{
     //   variant: "steamify",
     //   width: 494,
     // },
+    // Video cover retained for a quick rollback.
+    // cover: {
+    //   poster: "/images/video-posters/steamify.webp",
+    //   src: "/videos/steamify_thumb_case.mp4?v=20260903-fs",
+    //   type: "video",
+    //   variant: "steamify",
+    // },
+    // A/B-test configuration retained for a quick rollback.
+    // coverExperiment: {
+    //   id: "steamify-cover-v1",
+    //   newCover: {
+    //     alt: "Steamify payout flow before and after introducing an earlier Telegram offer",
+    //     height: 620,
+    //     mobileSrc: "/images/steamify-case-v2/steamify_thumb_2_mobile.png?v=20260910-1302",
+    //     src: "/images/steamify_thumb_2.png",
+    //     type: "image",
+    //     variant: "steamify-experiment",
+    //     width: 1272,
+    //   },
+    // },
     cover: {
-      poster: "/images/video-posters/steamify.webp",
-      src: "/videos/steamify_thumb_case.mp4?v=20260903-fs",
-      type: "video",
-      variant: "steamify",
-    },
-    coverExperiment: {
-      id: "steamify-cover-v1",
-      newCover: {
-        alt: "Steamify payout flow before and after introducing an earlier Telegram offer",
-        height: 620,
-        mobileSrc: "/images/steamify-case-v2/steamify_thumb_2_mobile.png?v=20260910-1302",
-        src: "/images/steamify_thumb_2.png",
-        type: "image",
-        variant: "steamify-experiment",
-        width: 1272,
-      },
+      alt: "Steamify cashout flow across mobile screens",
+      height: steamifyCashoutPhones.height,
+      src: steamifyCashoutPhones,
+      type: "image",
+      variant: "steamify-experiment",
+      width: steamifyCashoutPhones.width,
     },
     id: "steamify-case",
     details: {
@@ -242,14 +262,11 @@ const portfolioCases: Array<{
   },
   {
     cover: {
-      foreground: {
-        alt: "Steamify Trading Bot dashboard",
-        height: 1038,
-        src: "/images/steamify_trading_bot_case_thumb.webp",
-        width: 1600,
-      },
-      src: "/images/AI_Bg_083.png",
-      type: "background",
+      alt: "Steam trading management dashboard overview",
+      height: steamifyTradingBotScreen.height,
+      src: steamifyTradingBotScreen,
+      type: "screen",
+      width: steamifyTradingBotScreen.width,
     },
     id: "orbit",
     details: {
@@ -263,30 +280,31 @@ const portfolioCases: Array<{
     },
     title: "Steam trading management dashboard",
   },
+  // Hidden for now; uncomment together with "northstar" in the case-study tab.
+  // {
+  //   cover: {
+  //     foreground: {
+  //       alt: "Playdex game marketplace",
+  //       height: 1038,
+  //       src: "/images/playdex_thumbnail.webp",
+  //       width: 1600,
+  //     },
+  //     src: "/images/AI_Bg_051.png",
+  //     type: "background",
+  //   },
+  //   id: "northstar",
+  //   details: {
+  //     company: "Playdex",
+  //     description:
+  //       "Designed a Web3 NFT marketplace for gamers in Asia, making it easier to discover and rent in-game assets.",
+  //     period: "2023",
+  //     role: "Product Designer",
+  //     title: "Web3 NFT marketplace for gamers in Asia",
+  //   },
+  //   title: "Web3 NFT marketplace for gamers in Asia",
+  // },
   {
-    cover: {
-      foreground: {
-        alt: "Playdex game marketplace",
-        height: 1038,
-        src: "/images/playdex_thumbnail.webp",
-        width: 1600,
-      },
-      src: "/images/AI_Bg_051.png",
-      type: "background",
-    },
-    id: "northstar",
-    details: {
-      company: "Playdex",
-      description:
-        "Designed a Web3 NFT marketplace for gamers in Asia, making it easier to discover and rent in-game assets.",
-      period: "2023",
-      role: "Product Designer",
-      title: "Web3 NFT marketplace for gamers in Asia",
-    },
-    title: "Web3 NFT marketplace for gamers in Asia",
-  },
-  {
-    cover: { mobilePoster: "/images/video-posters/ccp-mobile.webp", mobileSrc: "/videos/Mobile_CCP_2_Animation_Compress.mp4?v=20260903-fs", poster: "/images/video-posters/ccp.webp", src: "/videos/Desktop_CCP_2_Animation_Compress.mp4?v=20260903-fs", type: "video", variant: "ccp" },
+    cover: { poster: "/images/video-posters/ccp-white.webp", src: "/videos/CCP_White_BG_compress.mp4?v=20261001-fs", type: "video", variant: "ccp" },
     id: "s7-case",
     details: {
       company: "KOTELOV",
@@ -374,9 +392,9 @@ export async function PortfolioPage({
                 "case-study": renderWork([
                   "steamify-case",
                   "orbit",
-                  "ccp-design-system",
-                  "northstar",
                   "s7-case",
+                  "ccp-design-system",
+                  // "northstar",
                 ]),
                 "my-products": renderWork(["animator"]),
                 craft: renderWork([
