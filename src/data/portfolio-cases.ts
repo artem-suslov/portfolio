@@ -196,7 +196,13 @@ export const portfolioCases: PortfolioCaseData[] = [
   //   title: "Web3 NFT marketplace for gamers in Asia",
   // },
   {
-    cover: { poster: "/images/video-posters/ccp-white.webp", src: "/videos/CCP_White_BG_compress.mp4?v=20261001-fs", type: "video", variant: "ccp" },
+    cover: {
+      expandable: true,
+      poster: "/images/video-posters/ccp-white.webp",
+      src: "/videos/CCP_White_BG_compress.mp4?v=20261001-fs",
+      type: "video",
+      variant: "ccp",
+    },
     id: "s7-case",
     details: {
       company: "KOTELOV",

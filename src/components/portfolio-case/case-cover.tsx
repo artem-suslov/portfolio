@@ -11,6 +11,8 @@ import styles from "./portfolio-case.module.css";
 import type { CaseCover as CaseCoverData, CaseImageVariant } from "./types";
 
 const caseViewSizes = "(max-width: 760px) 92vw, 900px";
+// Matches `--radius-sm` on `.screenCaseTrigger`.
+const screenCaseRadius = 6;
 
 const imageClassNames: Record<CaseImageVariant, string> = {
   ccp: styles.ccpCaseImage,
@@ -45,20 +47,28 @@ function StaticCover({
   expandedSrc,
   isLinked,
   label,
+  mediaOnly = false,
   renderMedia,
   style,
+  thumbnailRadius,
 }: {
   caseId: string;
   className: string;
   expandedSrc?: string;
   isLinked: boolean;
   label: string;
+  mediaOnly?: boolean;
   renderMedia: (isExpanded: boolean) => ReactNode;
   style?: CSSProperties;
+  thumbnailRadius?: number;
 }) {
   if (isLinked) {
     return (
-      <div className={className} data-debug-frame style={style}>
+      <div
+        className={className}
+        {...(mediaOnly ? { "data-debug-media": true } : { "data-debug-frame": true })}
+        style={style}
+      >
         {renderMedia(false)}
       </div>
     );
@@ -70,8 +80,10 @@ function StaticCover({
       className={className}
       expandedSrc={expandedSrc}
       label={label}
+      mediaOnly={mediaOnly}
       renderMedia={renderMedia}
       style={style}
+      thumbnailRadius={thumbnailRadius}
     />
   );
 }
@@ -121,27 +133,34 @@ export function CaseCover({
     }
 
     case "screen":
+      // Only the screen itself scales on hover and expands; the gray frame stays put.
       return (
-        <StaticCover
-          caseId={caseId}
+        <div
           className={join(styles.caseVisual, styles.screenCaseVisual)}
-          expandedSrc={getImageUrl(cover.src)}
-          isLinked={isLinked}
-          label={label}
-          renderMedia={(isExpanded) => (
-            <Image
-              alt={cover.alt}
-              className={styles.screenCaseImage}
-              data-debug-media
-              height={cover.height}
-              loading={isExpanded ? "eager" : undefined}
-              sizes={isExpanded ? caseViewSizes : "(max-width: 760px) 90vw, 520px"}
-              src={cover.src}
-              unoptimized={isExpanded}
-              width={cover.width}
-            />
-          )}
-        />
+          data-debug-frame
+        >
+          <StaticCover
+            caseId={caseId}
+            className={styles.screenCaseTrigger}
+            expandedSrc={getImageUrl(cover.src)}
+            isLinked={isLinked}
+            label={label}
+            mediaOnly
+            renderMedia={(isExpanded) => (
+              <Image
+                alt={cover.alt}
+                className={styles.screenCaseImage}
+                height={cover.height}
+                loading={isExpanded ? "eager" : undefined}
+                sizes={isExpanded ? caseViewSizes : "(max-width: 760px) 90vw, 520px"}
+                src={cover.src}
+                unoptimized={isExpanded}
+                width={cover.width}
+              />
+            )}
+            thumbnailRadius={screenCaseRadius}
+          />
+        </div>
       );
 
     case "interactive-card":
@@ -177,7 +196,14 @@ export function CaseCover({
       );
 
     case "video":
-      return <CaseVideo {...cover} />;
+      return (
+        <CaseVideo
+          {...cover}
+          caseId={caseId}
+          expandable={cover.expandable && !isLinked}
+          label={label}
+        />
+      );
 
     case "image": {
       const isLoop = cover.variant === "loop";

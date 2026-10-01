@@ -3,6 +3,7 @@
 import {
   animate,
   m,
+  useMotionTemplate,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -36,6 +37,7 @@ type CaseCoverModalPhase = "closed" | "open" | "closing";
 
 const caseViewMaxWidth = 900;
 const caseViewRadius = 12;
+const caseViewShadowAlpha = 0.18;
 
 function getCaseViewWidth(cover: CaseCoverSize) {
   const ratio = cover.width / cover.height;
@@ -71,15 +73,27 @@ export function CaseCoverModal({
   className,
   expandedSrc,
   label,
+  mediaOnly = false,
+  plainBackdrop = false,
+  renderExpandedOverlay,
   renderMedia,
   style,
+  thumbnailRadius = caseViewRadius,
 }: {
   caseId: string;
   className: string;
   expandedSrc?: string;
   label: string;
+  /** The trigger is the media itself, sitting inside a static cover frame. */
+  mediaOnly?: boolean;
+  /** Dim the page without blurring it; a live blur tears under playing video. */
+  plainBackdrop?: boolean;
+  /** Controls drawn over the expanded view at their natural size. */
+  renderExpandedOverlay?: () => ReactNode;
   renderMedia: (isExpanded: boolean) => ReactNode;
   style?: CSSProperties;
+  /** Corner radius of the trigger, so the expanded view starts from it. */
+  thumbnailRadius?: number;
 }) {
   const { playTap } = useInteractionSound();
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -97,6 +111,10 @@ export function CaseCoverModal({
   const contentRadius = useMotionValue(caseViewRadius);
   const contentOpacity = useMotionValue(1);
   const backdropOpacity = useMotionValue(0);
+  // The shadow lifts with the view and settles back into the page with it,
+  // instead of cutting off when the view unmounts.
+  const shadowAlpha = useMotionValue(caseViewShadowAlpha);
+  const contentShadow = useMotionTemplate`0 18px 56px rgb(0 0 0 / ${shadowAlpha})`;
   const prefersReducedMotion = useReducedMotion();
   // On phones the cover already spans the screen, so it stays a static image.
   const isMobile = useMediaQuery(MOBILE_QUERY);
@@ -116,12 +134,12 @@ export function CaseCoverModal({
     const scale = trigger.offsetWidth / content.offsetWidth;
 
     return {
-      radius: caseViewRadius / scale,
+      radius: thumbnailRadius / scale,
       scale,
       x: from.left + from.width / 2 - (to.left + to.width / 2 - contentX.get() - dragX.get()),
       y: from.top + from.height / 2 - (to.top + to.height / 2 - contentY.get() - dragY.get()),
     };
-  }, [contentX, contentY, dragX, dragY]);
+  }, [contentX, contentY, dragX, dragY, thumbnailRadius]);
 
   const isOpeningRef = useRef(false);
 
@@ -199,6 +217,7 @@ export function CaseCoverModal({
     void Promise.all([
       animate(dragX, 0, caseViewTransition),
       animate(dragY, 0, caseViewTransition),
+      animate(shadowAlpha, 0, caseViewTransition),
       animate(contentScale, pose.scale, caseViewTransition),
       animate(contentRadius, pose.radius, caseViewTransition),
       animate(contentY, pose.y, caseViewTransition),
@@ -217,6 +236,7 @@ export function CaseCoverModal({
     phase,
     playTap,
     prefersReducedMotion,
+    shadowAlpha,
   ]);
 
   useLayoutEffect(() => {
@@ -230,10 +250,14 @@ export function CaseCoverModal({
     animate(backdropOpacity, 1, { duration: 0.2, ease: "easeOut" });
 
     if (!pose) {
+      shadowAlpha.set(caseViewShadowAlpha);
       contentOpacity.set(0);
       animate(contentOpacity, 1, { duration: 0.18, ease: "easeOut" });
       return;
     }
+
+    shadowAlpha.set(0);
+    animate(shadowAlpha, caseViewShadowAlpha, caseViewTransition);
 
     contentOpacity.set(1);
     contentX.set(pose.x);
@@ -266,9 +290,13 @@ export function CaseCoverModal({
 
   const expandedScale = coverSize ? expandedWidth / coverSize.width : 1;
 
+  const debugProps = mediaOnly
+    ? { "data-debug-media": true }
+    : { "data-debug-frame": true };
+
   if (isMobile && phase === "closed") {
     return (
-      <div className={className} data-debug-frame style={style}>
+      <div className={className} {...debugProps} style={style}>
         {renderMedia(false)}
       </div>
     );
@@ -278,7 +306,8 @@ export function CaseCoverModal({
     <m.button
       aria-label={`Open ${label}`}
       className={className}
-      data-debug-frame
+      data-expanded={phase === "closed" ? undefined : true}
+      {...debugProps}
       onClick={() => void open()}
       onFocus={expandedSrc ? () => void preloadCaseImage(expandedSrc) : undefined}
       onPointerEnter={expandedSrc ? () => void preloadCaseImage(expandedSrc) : undefined}
@@ -301,7 +330,11 @@ export function CaseCoverModal({
             <>
               <m.div
                 aria-hidden="true"
-                className={styles.caseImageBackdrop}
+                className={
+                  plainBackdrop
+                    ? `${styles.caseImageBackdrop} ${styles.caseImageBackdropPlain}`
+                    : styles.caseImageBackdrop
+                }
                 onClick={close}
                 style={{ opacity: backdropOpacity }}
               />
@@ -337,6 +370,7 @@ export function CaseCoverModal({
                     role="dialog"
                     style={{
                       borderRadius: contentRadius,
+                      boxShadow: contentShadow,
                       height: expandedWidth * (coverSize.height / coverSize.width),
                       opacity: contentOpacity,
                       scale: contentScale,
@@ -362,6 +396,7 @@ export function CaseCoverModal({
                         {renderMedia(true)}
                       </div>
                     </div>
+                    {renderExpandedOverlay?.()}
                   </m.div>
                 </m.div>
               </div>
