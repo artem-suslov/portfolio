@@ -199,7 +199,7 @@ export const portfolioCases: PortfolioCaseData[] = [
     cover: {
       expandable: true,
       poster: "/images/video-posters/ccp-white.webp",
-      src: "/videos/CCP_White_BG_compress.mp4?v=20261001-fs",
+      src: "/videos/CCP_White_BG_compress.mp4?v=20261001-2",
       type: "video",
       variant: "ccp",
     },
