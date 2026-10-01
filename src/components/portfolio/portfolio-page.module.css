@@ -2,10 +2,10 @@
   min-height: 100vh;
   position: relative;
   overflow-x: clip;
-  background: #f2f2f2;
-  color: #051e1d;
+  background: var(--color-page);
+  color: var(--color-text-primary);
   font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
-  padding: 24px max(24px, calc((100vw - 700px) / 2));
+  padding: var(--space-6) max(24px, calc((100vw - 700px) / 2));
 }
 
 .portfolio {
@@ -15,22 +15,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-6);
   margin: 0 auto;
-  padding: 0 32px 32px;
+  padding: 0 var(--space-8) var(--space-8);
   overflow: hidden;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow:
-    0 1px 3px rgb(0 0 0 / 10%),
-    0 1px 2px rgb(0 0 0 / 6%);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 
 .heroTabs {
   max-width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 24px;
+  margin-top: var(--space-6);
 }
 
 .heroTabs > div {
@@ -54,22 +52,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  gap: var(--space-12);
 }
 
 .aboutSection {
   width: min(700px, 100%);
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin: 48px auto 0;
-  padding: 0 88px 72px;
+  gap: var(--space-4);
+  margin: var(--space-12) auto 0;
+  padding: 0 88px var(--space-18);
 }
 
 .aboutHeading {
   margin: 0;
-  color: #051e1d;
-  font-size: 14px;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
   font-weight: 400;
   line-height: 20px;
   letter-spacing: -0.14px;
@@ -83,8 +81,8 @@
 
 @media (max-width: 1040px) {
   .viewport {
-    padding-inline: 24px;
-    padding-top: 24px;
+    padding-inline: var(--space-6);
+    padding-top: var(--space-6);
   }
 }
 
@@ -96,41 +94,41 @@
   .viewport {
     min-height: 100vh;
     padding: 0;
-    background: #fff;
+    background: var(--color-surface);
   }
 
   .portfolio {
     width: 100%;
     min-height: 100vh;
     margin: 0;
-    gap: 24px;
-    padding: 0 16px 72px;
+    gap: var(--space-6);
+    padding: 0 var(--space-4) var(--space-18);
     border-radius: 0;
     box-shadow: none;
   }
 
   .aboutSection {
     width: 100%;
-    margin-top: 40px;
-    padding: 0 16px 24px;
+    margin-top: var(--space-10);
+    padding: 0 var(--space-4) var(--space-6);
   }
 
   .heroTabs {
     width: 100%;
-    margin-top: 32px;
+    margin-top: var(--space-8);
   }
 
   .heroTabs > div {
     width: fit-content;
     justify-content: flex-start;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .heroTabs button {
     width: auto;
     height: auto;
-    padding: 6px 12px;
-    font-size: 14px;
+    padding: 6px var(--space-3);
+    font-size: var(--font-size-sm);
     line-height: 20px;
     letter-spacing: -0.14px;
   }

@@ -18,6 +18,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 - `src/app` holds routes only (plus route-private `_components/`). Reusable UI lives in `src/components/<area>/`, each component next to its own CSS module; shared helpers (media queries, site links, analytics, modal hooks) live in `src/lib`; portfolio card data and tabs live in `src/data/portfolio-cases.ts`.
 - Use `TextLink` for inline external links, `CaseStudyLayout`/`CaseOverview`/`CaseMeta`/`CaseLabel` with `case-study.module.css` for case-study pages, and `useEscapeKey`/`useScrollLock` for modals.
+- Design tokens (colors, radii, spacing, font sizes, shadows, easings) live in `:root` in `src/app/globals.css`. Use `var(--color-*)`, `var(--radius-*)`, `var(--space-*)`, `var(--font-size-*)` instead of raw values in site CSS; self-contained visuals (dashboard mock, interactive card, paper intro, dev panels) keep their own palettes.
 - framer-motion runs through `MotionProvider` (`LazyMotion strict`): use `m.*`, not `motion.*`.
 - The dev-only `/api/debug/case-media` route writes overrides between the `CASE_MEDIA_DEBUG_OVERRIDES` markers in `src/components/portfolio-case/portfolio-case.module.css`; keep those markers.
 

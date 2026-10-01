@@ -6,13 +6,13 @@
 }
 
 .emphasis {
-  color: var(--case-primary) !important;
+  color: var(--color-text-primary) !important;
 }
 
 .mediaTriptych {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .mediaTriptych img {

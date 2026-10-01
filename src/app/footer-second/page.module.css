@@ -3,7 +3,7 @@
   min-height: 100dvh;
   place-items: center;
   overflow: hidden;
-  background: #0b0b0e;
+  background: var(--color-surface-darkest);
 }
 
 .logo {
