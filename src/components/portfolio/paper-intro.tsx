@@ -43,7 +43,7 @@ export function PaperIntro() {
       }
       window.history.scrollRestoration = previousScrollRestoration;
     };
-    // Any user input (or the timer) dismisses the cover; one signal removes every listener.
+    // A pointer press, a resize or the timer dismisses the cover; one signal removes every listener.
     const listeners = new AbortController();
     const skip = () => {
       if (hasFinished) return;
@@ -57,7 +57,9 @@ export function PaperIntro() {
       window.dispatchEvent(new Event(PAPER_INTRO_FINISHED_EVENT));
     };
 
-    for (const event of ["wheel", "touchstart", "pointerdown", "keydown", "focusin", "resize"]) {
+    // Scrolling and typing are left alone: the page scrolls natively under the
+    // cover while the unroll plays to the end.
+    for (const event of ["touchstart", "pointerdown", "resize"]) {
       window.addEventListener(event, skip, { passive: true, signal: listeners.signal });
     }
     const introTimer = window.setTimeout(skip, 2600);
