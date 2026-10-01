@@ -1,0 +1,717 @@
+.case {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.caseLinkOverlay {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 5;
+  width: 100%;
+  aspect-ratio: 636 / 348.19;
+  border-radius: 12px;
+}
+
+.caseLinkOverlay:focus-visible {
+  outline: 2px solid #051e1d;
+  outline-offset: 4px;
+}
+
+.caseVisual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 636 / 348.19;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 12px;
+  background: #f7f8f8;
+}
+
+.caseVisual:where(button) {
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.caseVisual:where(button):focus-visible {
+  outline: 2px solid #051e1d;
+  outline-offset: 4px;
+}
+
+/* Cards that open a case page: the whole card is covered by the link overlay. */
+.linkedCase .caseVisual {
+  z-index: 6;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linkedCase:has(.caseLinkOverlay:hover) .caseVisual {
+    opacity: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linkedCase .caseVisual {
+    transition: none;
+  }
+}
+
+.steamifyCaseVisual {
+  background-image: url("/images/AI_Bg_01.webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.loopCaseVisual {
+  background-image: url("/images/AI_Bg_02.webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.ccpCaseVisual {
+  background-image: url("/images/AI_Bg_03.webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.interactiveCaseVisual {
+  background: #0e1010;
+}
+
+.phantomCaseVisual {
+  background: #0b0b0e;
+}
+
+.placeholderCaseVisual {
+  background: #e5e5e5;
+}
+
+.backgroundCaseVisual {
+  background-position: center;
+  background-size: cover;
+}
+
+.screenCaseVisual {
+  background: #f7f8f8;
+}
+
+.screenCaseImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 81%;
+  height: auto;
+  max-width: none;
+  border-radius: 6px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.backgroundCaseImage {
+  width: min(88%, 560px);
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.caseImageBackdrop {
+  position: fixed;
+  z-index: 1100;
+  inset: 0;
+  background: rgb(0 0 0 / 40%);
+  cursor: zoom-out;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.caseImageModal {
+  position: fixed;
+  z-index: 1110;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: none;
+}
+
+.caseImageModalDragTarget {
+  cursor: grab;
+  touch-action: none;
+  perspective: 1200px;
+  pointer-events: auto;
+}
+
+.caseImageModalDragTarget:active {
+  cursor: grabbing;
+}
+
+.caseImageModalContent {
+  overflow: hidden;
+  background: #f7f8f8;
+  box-shadow: 0 18px 56px rgb(0 0 0 / 18%);
+}
+
+.caseImageModalContent > .case {
+  pointer-events: none;
+  user-select: none;
+}
+
+.interactiveCaseMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.phantomCaseLogo {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.phantomCaseTarget {
+  aspect-ratio: 1823 / 1518;
+  max-width: calc(100% - 48px);
+  cursor: default;
+}
+
+.phantomCaseGlow {
+  transition: opacity 150ms ease-out;
+  mix-blend-mode: screen;
+}
+
+.phantomCaseHint {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 4;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+}
+
+.caseImage {
+  display: block;
+  flex: 0 0 auto;
+  max-width: none;
+  object-fit: contain;
+}
+
+.steamifyCaseImage {
+  position: absolute;
+  inset: auto;
+  top: 9px;
+  left: 44px;
+  width: 543px;
+  height: 332px;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  flex: none;
+  object-fit: contain;
+  transform: none;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.steamifyExperimentCaseImage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  flex: none !important;
+  object-fit: contain !important;
+  transform: none !important;
+}
+
+.steamifyExperimentCaseVisual {
+  aspect-ratio: auto;
+  background: transparent;
+}
+
+.steamifyExperimentPicture {
+  display: block;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.case[data-case-id="steamify-case"] .steamifyExperimentCaseImage {
+  position: static !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  object-fit: contain !important;
+}
+
+.case[data-case-id="steamify-case"]:has(.steamifyExperimentCaseVisual) .caseLinkOverlay {
+  aspect-ratio: 1272 / 620;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .linkedCase:has(.caseLinkOverlay:hover) .steamifyCaseImage,
+  .linkedCase:has(.caseLinkOverlay:focus-visible) .steamifyCaseImage {
+    transform: scale(1.015);
+  }
+}
+
+.loopCaseImage {
+  width: min(512px, calc(100% - 32px));
+  height: auto;
+}
+
+
+.ccpCaseImage {
+  width: auto;
+  height: calc(100% - 16px);
+  object-fit: contain;
+}
+
+.safeCaseImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  object-fit: cover;
+  object-position: left top;
+  transform: none;
+}
+
+.caseVideo {
+  position: absolute;
+  display: block;
+  border-radius: inherit;
+  clip-path: inset(0 round 12px);
+  object-fit: cover;
+  background-color: #0e1010;
+  background-image: var(--case-poster, none);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 760px) {
+  .caseVideo {
+    background-image: var(--case-poster-mobile, var(--case-poster, none));
+  }
+}
+
+.caseVideoControl {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-height: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(17 17 17 / 56%);
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 140ms ease-out,
+    background-color 160ms ease;
+}
+
+.caseVideoControl svg {
+  width: 16px;
+  height: 16px;
+}
+
+.caseVideoControl:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.caseVideoControl:active {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .caseVideoControl:hover {
+    background: rgb(43 43 43 / 56%);
+  }
+}
+
+.loopCaseVideo {
+  top: 16px;
+  left: 16px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  border-radius: 8px 0 0;
+}
+
+.ccpCaseVideo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.025);
+}
+
+.steamifyCaseVideo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.02);
+}
+
+.animatorCaseVideo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: transparent;
+  clip-path: inset(0 round 12px);
+  transform: none;
+}
+
+.quickStickersCaseVideo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: transparent;
+  z-index: 1;
+}
+
+.freelanceTrackerCaseVideo {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: none;
+}
+
+.caseDetails {
+  width: 100%;
+  padding: 0;
+  color: #051e1d;
+}
+
+.caseDetails h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  text-wrap: balance;
+}
+
+.case[data-case-id="steamify-case"] .caseDetails h3 {
+  text-wrap: nowrap;
+}
+
+.caseDetails > p {
+  max-width: 580px;
+  margin: 8px 0 16px;
+  color: #616b6a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-wrap: pretty;
+}
+
+.caseDetails dl {
+  margin: 0;
+}
+
+.caseDetails dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  padding: 10px 0;
+  border-top: 1px solid #eef1f1;
+}
+
+.caseDetails dl > div:first-child {
+  border-top: 0;
+}
+
+.caseDetails dl > div:last-child {
+  border-bottom: 1px solid #eef1f1;
+}
+
+.caseDetails dt {
+  color: #616b6a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.caseDetails dd {
+  margin: 0;
+  color: #051e1d;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: right;
+}
+
+.caseDetails .detailsLink,
+.caseDetails .detailsLink:active {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .caseDetails .detailsLink:hover {
+    color: #616b6a;
+    transform: none;
+  }
+}
+
+/* CASE_MEDIA_DEBUG_OVERRIDES_START */
+/* northstar */
+.case[data-case-id="northstar"] [data-debug-media] {
+  position: absolute;
+  inset: auto;
+  top: -2px;
+  left: 38px;
+  width: 560px;
+  height: 363px;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  flex: none;
+  object-fit: contain;
+  transform: none;
+}
+/* ccp-design-system */
+.case[data-case-id="ccp-design-system"] [data-debug-media] {
+  position: absolute;
+  inset: auto;
+  top: 0px;
+  left: 0px;
+  width: 636px;
+  height: 348px;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  flex: none;
+  object-fit: cover;
+  transform: none;
+}
+/* telegram-quick-stickers */
+.case[data-case-id="telegram-quick-stickers"] [data-debug-media] {
+  position: absolute;
+  inset: auto;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  flex: none;
+  object-fit: cover;
+  transform: none;
+}
+/* CASE_MEDIA_DEBUG_OVERRIDES_END */
+
+.caseCaption {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.caseTitle {
+  position: relative;
+  display: inline-block;
+  color: #051e1d;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+.caseShortDescription {
+  max-width: 620px;
+  margin: 0;
+  color: #616b6a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+@media (max-width: 760px) {
+  .case {
+    gap: 16px;
+  }
+
+  .caseDetails {
+    padding: 0;
+  }
+
+  .caseDetails h3 {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  /* The single-line title is a desktop layout; phones are too narrow for it. */
+  .case[data-case-id="steamify-case"] .caseDetails h3 {
+    text-wrap: balance;
+  }
+
+  .caseDetails > p {
+    margin: 8px 0 16px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .caseDetails dl > div {
+    gap: 16px;
+    padding: 12px 0;
+  }
+
+  .caseVisual {
+    aspect-ratio: 37 / 30;
+    padding: 0;
+    border-radius: 12px;
+  }
+
+  .case[data-case-id="telegram-quick-stickers"] [data-debug-media] {
+    left: 50%;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    transform: translateX(-50%);
+  }
+
+  .case[data-case-id="steamify-case"] .steamifyExperimentCaseVisual {
+    aspect-ratio: auto;
+    align-items: stretch;
+  }
+
+  .case[data-case-id="steamify-case"] .steamifyExperimentPicture {
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .case[data-case-id="steamify-case"] .steamifyExperimentCaseImage {
+    aspect-ratio: 1120 / 726;
+    width: 100% !important;
+    min-width: 100%;
+  }
+
+  .case[data-case-id="steamify-case"]:has(.steamifyExperimentCaseVisual) .caseLinkOverlay {
+    aspect-ratio: 1120 / 726;
+  }
+
+  .screenCaseImage {
+    width: 90%;
+    border-radius: 4px;
+  }
+
+  .case[data-case-id="freelance-tracker"] .caseVisual {
+    aspect-ratio: 16 / 9;
+  }
+
+  .caseLinkOverlay {
+    aspect-ratio: 37 / 30;
+  }
+
+  .caseVisualFlushBottom {
+    align-items: center;
+    padding-bottom: 0;
+  }
+
+  .phantomCaseHint {
+    display: none;
+  }
+
+  .steamifyCaseImage,
+  .loopCaseImage,
+  .ccpCaseImage,
+  .safeCaseImage,
+  .phantomCaseLogo {
+    position: static;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform: none;
+  }
+
+  .steamifyCaseImage {
+    position: absolute !important;
+    inset: auto !important;
+    top: 15.16% !important;
+    left: 4.15% !important;
+    width: 91.8% !important;
+    height: 69.3% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+
+  .ccpCaseImage {
+    width: 88.65% !important;
+    height: 75.36% !important;
+  }
+
+  .safeCaseImage {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: cover !important;
+    transform: none !important;
+  }
+
+  .phantomCaseLogo {
+    width: 100%;
+  }
+
+  .caseTitle {
+    width: auto;
+    max-width: min(292px, 100%);
+    letter-spacing: -0.14px;
+  }
+}

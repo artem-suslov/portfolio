@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL, YANDEX_METRIKA_ID } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,16 +15,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://artem-portfolio.layero.ru"),
-  title: "Artem Suslov — Software Designer",
-  description:
-    "Software designer focused on B2C web and mobile products.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Artem Suslov — Software Designer",
-    description: "Software designer focused on B2C web and mobile products.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     siteName: "Artem Suslov",
     type: "website",
     url: "/",
@@ -57,7 +57,7 @@ export default function RootLayout({
               k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
             })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-            ym(110413593, "init", {
+            ym(${YANDEX_METRIKA_ID}, "init", {
               clickmap:true,
               trackLinks:true,
               accurateTrackBounce:true,
@@ -68,7 +68,7 @@ export default function RootLayout({
         <noscript
           dangerouslySetInnerHTML={{
             __html:
-              '<div><img src="https://mc.yandex.ru/watch/110413593" style="position:absolute; left:-9999px;" alt="" /></div>',
+              `<div><img src="https://mc.yandex.ru/watch/${YANDEX_METRIKA_ID}" style="position:absolute; left:-9999px;" alt="" /></div>`,
           }}
         />
       </body>

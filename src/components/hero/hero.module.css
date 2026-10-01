@@ -1,0 +1,406 @@
+.intro {
+  width: calc(100% + 64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 16px;
+  column-gap: 0;
+  text-align: center;
+}
+
+.heroToolbar {
+  z-index: 1;
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-inline: -32px;
+  margin-bottom: -16px;
+  padding: 24px 32px 0;
+  border-radius: 12px 12px 0 0;
+  background: rgb(255 255 255 / 50%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.heroIdentity,
+.heroActions {
+  display: flex;
+  align-items: center;
+}
+
+.heroIdentity {
+  justify-content: center;
+  gap: 8px;
+}
+
+.identityMark {
+  width: 15px;
+  height: 8px;
+  display: block;
+  flex: 0 0 auto;
+  border-radius: 36px;
+  background: #051e1d;
+}
+
+.heroActions {
+  gap: 8px;
+}
+
+.iconButton,
+.contactButton {
+  border: 0;
+  color: #051e1d;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms ease,
+    background-color 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.iconButton {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+  border: 0.5px solid #e6e6e6;
+  border-radius: 21px;
+  background: #fff;
+}
+
+
+.contactButton {
+  width: 100px;
+  height: 32px;
+  padding: 0;
+  border: 0.5px solid #e6e6e6;
+  border-radius: 21px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+  white-space: nowrap;
+}
+
+.iconButton:focus-visible,
+.contactButton:focus-visible {
+  outline: 2px solid #051e1d;
+  outline-offset: 2px;
+}
+
+.iconButton:active,
+.contactButton:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconButton:hover,
+  .contactButton:hover {
+    border-color: #d7dddd;
+    background-color: #f7f9f9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconButton,
+  .contactButton {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .iconButton:active,
+  .contactButton:active {
+    transform: none;
+  }
+}
+
+.heroContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.name {
+  margin: 0;
+  color: #051e1d;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.intro h1 {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  color: #051e1d;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+  text-align: center;
+}
+
+.heroDivider {
+  width: 49px;
+  height: 9px;
+  display: block;
+  margin-top: 24px;
+  background: url("/svg/Line.svg") center / contain no-repeat;
+}
+
+
+.v2Hero {
+  width: calc(100% + 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.v2Toolbar {
+  width: 100%;
+  min-height: 213px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 32px 32px 0 16px;
+}
+
+.v2Content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 32px;
+}
+
+.v2Description p,
+.v2Tagline {
+  margin: 0;
+  color: #616b6a;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+}
+
+.v2Name {
+  margin: 0;
+  color: #051e1d;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.02em;
+}
+
+.v2Identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.v2Description {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.v2Description p:first-child {
+  max-width: 540px;
+}
+
+.v2Description p:nth-child(2) {
+  max-width: 577px;
+}
+
+
+.v2Actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.v2ResumeButton,
+.v2ContactButton {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border-radius: 21px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.v2ResumeButton {
+  border: 0;
+  background: #051e1d;
+  color: #fff;
+}
+
+.v2ContactButton {
+  border: 0.5px solid #e6e6e6;
+  background: #fff;
+  color: #051e1d;
+  cursor: pointer;
+}
+
+.v2ResumeButton:focus-visible,
+.v2ContactButton:focus-visible {
+  outline: 2px solid #051e1d;
+  outline-offset: 2px;
+}
+
+.v2ResumeButton:active,
+.v2ContactButton:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .v2ResumeButton:hover {
+    background: #164846;
+  }
+
+  .v2ContactButton:hover {
+    border-color: #d7dddd;
+    background: #f7f9f9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2ResumeButton,
+  .v2ContactButton {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .v2ResumeButton:active,
+  .v2ContactButton:active {
+    transform: none;
+  }
+}
+
+.v2Divider {
+  width: calc(100% - 64px);
+  height: 1px;
+  display: block;
+  margin: 16px 32px 0;
+  background: #eef1f1;
+}
+
+@media (max-width: 760px) {
+  .intro {
+    width: calc(100% + 32px);
+    gap: 0;
+  }
+
+  .v2Hero {
+    width: calc(100% + 32px);
+  }
+
+  .v2Toolbar {
+    min-height: 197px;
+    padding: 16px 16px 0;
+  }
+
+  .v2Content {
+    padding: 0 16px;
+  }
+
+  .v2Divider {
+    width: calc(100% - 32px);
+    margin-inline: 16px;
+  }
+
+  .heroToolbar {
+    width: 100%;
+    min-height: 60px;
+    margin-inline: 0;
+    margin-bottom: 0;
+    padding: 12px 16px;
+  }
+
+  .heroIdentity {
+    gap: 8px;
+  }
+
+  .identityMark {
+    width: 16px;
+    height: 8px;
+  }
+
+  .name {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: -0.14px;
+  }
+
+  .heroActions {
+    gap: 8px;
+  }
+
+  .iconButton {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0.5px solid #e6e6e6;
+    border-radius: 21px;
+    background: #fff;
+  }
+
+  .contactButton {
+    width: 99px;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.14px;
+  }
+
+  .heroContent {
+    gap: 0;
+  }
+
+  .intro h1 {
+    font-size: 25px;
+    line-height: 1.2;
+    letter-spacing: -0.25px;
+  }
+
+  .heroDivider {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 411px) {
+  .heroActions {
+    gap: max(4px, calc((100vw - 370px) / 4));
+  }
+}

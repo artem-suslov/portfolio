@@ -1,0 +1,151 @@
+.viewport {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+  background: #f2f2f2;
+  color: #051e1d;
+  font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
+  padding: 24px max(24px, calc((100vw - 700px) / 2));
+}
+
+.portfolio {
+  position: relative;
+  width: 700px;
+  min-height: calc(100vh - 144px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin: 0 auto;
+  padding: 0 32px 32px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 10%),
+    0 1px 2px rgb(0 0 0 / 6%);
+}
+
+.heroTabs {
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.heroTabs > div {
+  max-width: 100%;
+  overflow: visible;
+}
+
+.heroTabs button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.v2Portfolio .heroTabs {
+  width: 100%;
+  justify-content: flex-start;
+  margin-top: 0;
+}
+
+.work {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+.aboutSection {
+  width: min(700px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 48px auto 0;
+  padding: 0 88px 72px;
+}
+
+.aboutHeading {
+  margin: 0;
+  color: #051e1d;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+}
+
+.anchor {
+  position: absolute;
+  inset: auto;
+}
+
+
+@media (max-width: 1040px) {
+  .viewport {
+    padding-inline: 24px;
+    padding-top: 24px;
+  }
+}
+
+@media (max-width: 760px) {
+  .viewport :global([data-sound-toggle]) {
+    display: none !important;
+  }
+
+  .viewport {
+    min-height: 100vh;
+    padding: 0;
+    background: #fff;
+  }
+
+  .portfolio {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    gap: 24px;
+    padding: 0 16px 72px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .aboutSection {
+    width: 100%;
+    margin-top: 40px;
+    padding: 0 16px 24px;
+  }
+
+  .heroTabs {
+    width: 100%;
+    margin-top: 32px;
+  }
+
+  .heroTabs > div {
+    width: fit-content;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .heroTabs button {
+    width: auto;
+    height: auto;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.14px;
+  }
+
+  .work {
+    gap: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    scroll-behavior: auto;
+  }
+}
+
+.tabPanel {
+  width: 100%;
+}

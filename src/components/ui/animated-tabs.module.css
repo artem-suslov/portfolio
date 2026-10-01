@@ -1,0 +1,35 @@
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  position: relative;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #051e1d;
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab:focus-visible {
+  outline: 2px solid #051e1d;
+}
+
+@media (hover: hover) {
+  .tab:not([aria-selected="true"]):hover {
+    color: rgb(5 30 29 / 50%);
+  }
+}
+
+.bubble {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  border-radius: 999px;
+  background: #f4f4f6;
+  mix-blend-mode: darken;
+}

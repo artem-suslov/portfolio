@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { SoundProvider } from "../sound-provider";
-import { SteamifyCaseContent } from "../steamify-case-content";
+import { SoundProvider } from "@/components/sound/sound-provider";
+import { SteamifyCaseContent } from "./_components/steamify-case-content";
 
 export const metadata: Metadata = {
   title: "Steamify — Skins Cashout | Artem Suslov",

@@ -1,23 +1,12 @@
-import type { Metadata } from "next";
-import { PortfolioPage } from "./portfolio-page";
-import { V2Hero } from "./v2-hero";
-import { PaperIntro } from "./paper-intro";
+import { V2Hero } from "@/components/hero/v2-hero";
+import { PaperIntro } from "@/components/portfolio/paper-intro";
+import { PortfolioPage } from "@/components/portfolio/portfolio-page";
 
-export const metadata: Metadata = {
-  title: "Artem Suslov — Software Designer",
-  description: "Software designer focused on B2C web and mobile products.",
-};
-
-export default function NewPortfolioPage() {
+export default function HomePage() {
   return (
     <>
       <PaperIntro />
-      <PortfolioPage
-        hero={<V2Hero />}
-        showAbout={false}
-        showTabs
-        variant="v2"
-      />
+      <PortfolioPage hero={<V2Hero />} showAbout={false} variant="v2" />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { SoundProvider } from "../sound-provider";
-import { CashoutCase } from "../steamify-skins-cashout-2/cashout-case";
+import { SoundProvider } from "@/components/sound/sound-provider";
+import { CashoutCase } from "./_components/cashout-case";
 
 export const metadata: Metadata = {
   title: "Steamify — Web-to-Telegram Conversion | Artem Suslov",
