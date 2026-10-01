@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { AnimatorCaseRussianContent } from "../../animator-case-content";
-import { SoundProvider } from "../../sound-provider";
+import { SoundProvider } from "@/components/sound/sound-provider";
+import { AnimatorCaseRussianContent } from "../_components/animator-case-ru";
 
 export const metadata: Metadata = {
   title: "Animator | Артём Суслов",
@@ -8,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function AnimatorRussianPage() {
-  return <SoundProvider><AnimatorCaseRussianContent /></SoundProvider>;
+  return (
+    <SoundProvider>
+      <AnimatorCaseRussianContent />
+    </SoundProvider>
+  );
 }

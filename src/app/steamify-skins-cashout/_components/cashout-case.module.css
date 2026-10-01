@@ -1,0 +1,64 @@
+/* Page-specific additions on top of the shared case-study styles. */
+
+.metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-18);
+}
+
+.metrics > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-2);
+}
+
+.metrics dd {
+  font-size: var(--font-size-4xl);
+  line-height: 36px;
+}
+
+.metrics dt {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 24px;
+}
+
+.hypotheses .hypothesisList {
+  margin-top: var(--space-2);
+}
+
+.comparison figure + figure {
+  margin-top: var(--space-6);
+}
+
+.comparison .after {
+  gap: var(--space-4);
+}
+
+.caption {
+  max-width: 560px;
+}
+
+@media (max-width: 760px) {
+  .metrics {
+    gap: var(--space-5) var(--space-8);
+  }
+
+  .metrics > div {
+    flex: 1 1 140px;
+  }
+
+  .metrics dt {
+    font-size: var(--font-size-sm);
+    line-height: 20px;
+  }
+
+  .metrics dd {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  section.results {
+    padding: var(--space-8) 0 0;
+  }
+}

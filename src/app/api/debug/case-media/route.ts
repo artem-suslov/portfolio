@@ -5,7 +5,7 @@ import path from "node:path";
 
 export const runtime = "nodejs";
 
-const sourcePath = path.join(process.cwd(), "src/app/page.module.css");
+const sourcePath = path.join(process.cwd(), "src/components/portfolio-case/portfolio-case.module.css");
 const startMarker = "/* CASE_MEDIA_DEBUG_OVERRIDES_START */";
 const endMarker = "/* CASE_MEDIA_DEBUG_OVERRIDES_END */";
 const validCaseId = /^[a-z0-9-]+$/;

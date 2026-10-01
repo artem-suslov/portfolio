@@ -1,0 +1,404 @@
+.localDashboardStage {
+  --local-dashboard-scale: 0.8773584906;
+
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  left: 20px;
+  width: 1116px;
+  height: 612px;
+  animation: local-dashboard-reveal 240ms ease both;
+  object-fit: fill;
+  pointer-events: auto;
+}
+
+.localDashboard {
+  --dashboard-background: #0a0a0b;
+  --dashboard-surface-100: #0f0f10;
+  --dashboard-surface-200: #161618;
+  --dashboard-surface-hover: #1b1b1d;
+  --dashboard-border: #222226;
+  --dashboard-text-primary: #f5f5f5;
+  --dashboard-text-secondary: #bbbbc3;
+  --dashboard-text-tertiary: #8a8a93;
+
+  width: 1272px;
+  height: 697px;
+  display: flex;
+  overflow: hidden;
+  transform: scale(var(--local-dashboard-scale));
+  transform-origin: top left;
+  background: var(--dashboard-background);
+  color: var(--dashboard-text-primary);
+  font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+}
+
+.localDashboard .mockButton {
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+
+.localDashboardSidebar {
+  width: 220px;
+  height: 100%;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  background: var(--dashboard-background);
+}
+
+.localDashboardProject {
+  height: 56px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--dashboard-border);
+  color: var(--dashboard-text-primary);
+  font-weight: 500;
+}
+
+.localDashboardProjectMark {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 4px;
+  background: var(--dashboard-border);
+  color: var(--dashboard-text-secondary);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+}
+
+.localDashboardNavigation {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 8px 0;
+}
+
+.localDashboardSectionLabel {
+  margin: 0;
+  padding: 0 8px 2px;
+  color: var(--dashboard-text-tertiary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.localDashboardNavItem {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dashboard-text-secondary);
+  text-align: left;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.localDashboardNavItem span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.localDashboardNavItem:hover,
+.localDashboardNavItemActive {
+  background: var(--dashboard-surface-200);
+  color: var(--dashboard-text-primary);
+}
+
+.localDashboardRunNavigation {
+  padding-left: 12px;
+}
+
+.localDashboardSidebarFooter {
+  padding: 0 8px 16px;
+}
+
+.localDashboardMain {
+  min-width: 0;
+  flex: 1;
+  padding: 2px 4px 2px 0;
+}
+
+.localDashboardPanel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 8px;
+  background: var(--dashboard-surface-100);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 32%);
+}
+
+.localDashboardHeader {
+  height: 52px;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--dashboard-border);
+}
+
+.localDashboardHeaderTitle,
+.localDashboardHelp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--dashboard-text-secondary);
+}
+
+.localDashboardHelp {
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.localDashboardHelp:hover {
+  background: var(--dashboard-surface-200);
+  color: var(--dashboard-text-primary);
+}
+
+.localDashboardContent {
+  min-height: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+  padding: 16px;
+}
+
+.localDashboardGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.localDashboardStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dashboard-text-primary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.localDashboardStatusDot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 2px;
+}
+
+.localDashboardTask {
+  display: flex;
+  flex-direction: column;
+}
+
+.localDashboardTaskMain {
+  position: relative;
+  z-index: 1;
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--dashboard-surface-200);
+  transition: background-color 150ms ease;
+}
+
+.localDashboardTaskMain:hover {
+  background: var(--dashboard-surface-hover);
+}
+
+.localDashboardTaskInfo {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.localDashboardTaskTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  color: var(--dashboard-text-primary);
+  font-weight: 500;
+}
+
+.localDashboardTaskTitle > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.localDashboardMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.localDashboardPill {
+  height: 24px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 999px;
+  color: var(--dashboard-text-tertiary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.localDashboardDiff {
+  height: 24px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 999px;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+}
+
+.localDashboardDiff span:first-child {
+  color: #10b981;
+}
+
+.localDashboardDiff span:last-child {
+  color: #ef4444;
+}
+
+.localDashboardActions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.localDashboardActions .mockButton {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dashboard-text-secondary);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    transform 140ms ease;
+}
+
+.localDashboardActions .mockButton:hover {
+  background: var(--dashboard-border);
+  color: var(--dashboard-text-primary);
+}
+
+.localDashboardActions .mockButton:active {
+  transform: scale(0.97);
+}
+
+.localDashboardActions .localDashboardPrimaryAction {
+  background: var(--dashboard-text-primary);
+  color: var(--dashboard-background);
+  font-weight: 500;
+}
+
+.localDashboardActions .localDashboardPrimaryAction:hover {
+  background: #fff;
+  color: #000;
+}
+
+.localDashboardTaskDetail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: -8px;
+  padding: 16px 12px 8px;
+  border: 1px solid var(--dashboard-border);
+  border-radius: 0 0 8px 8px;
+  background: var(--dashboard-surface-100);
+  color: var(--dashboard-text-secondary);
+}
+
+.localDashboardShimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--dashboard-text-tertiary) 0%,
+    var(--dashboard-text-tertiary) 42%,
+    var(--dashboard-text-primary) 50%,
+    var(--dashboard-text-tertiary) 58%,
+    var(--dashboard-text-tertiary) 100%
+  );
+  background-size: 420% 100%;
+  background-clip: text;
+  animation: local-dashboard-shimmer 2.8s linear infinite;
+}
+
+@keyframes local-dashboard-reveal {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes local-dashboard-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  72%,
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .localDashboardStage {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .localDashboardStage,
+  .localDashboardShimmer {
+    animation: none;
+  }
+}

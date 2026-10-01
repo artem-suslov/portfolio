@@ -1,0 +1,18 @@
+.dashboardCaseEmbed {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dashboardCasePreview {
+  z-index: 0;
+  object-fit: cover;
+  object-position: left top;
+}
+
+@media (max-width: 760px) {
+  .dashboardCaseEmbed {
+    inset: 0;
+  }
+}

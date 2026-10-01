@@ -1,0 +1,31 @@
+/* Page-specific additions on top of the shared case-study styles. */
+
+.heroVideo {
+  aspect-ratio: 1852 / 1080;
+  object-fit: cover;
+}
+
+.emphasis {
+  color: var(--color-text-primary) !important;
+}
+
+.mediaTriptych {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.mediaTriptych img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 508 / 298;
+  object-fit: cover;
+  object-position: left center;
+}
+
+@media (max-width: 760px) {
+  .mediaTriptych {
+    grid-template-columns: 1fr;
+  }
+}

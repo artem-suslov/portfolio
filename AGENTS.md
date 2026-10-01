@@ -10,9 +10,17 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Use the root scripts for validation and serving: `npm run dev`, `npm run build`, `npm run start`, `npm run lint`.
 - There is no separate root test script or Playwright config right now; for pre-handoff validation, use `npm run build` and `npx eslint src`.
 - For root-app-only lint checks, prefer `npx eslint src` until the workspace lint ignores are tightened; it avoids traversing the nested copy's generated files.
-- Current validation baseline: `npm run build` passes at the workspace root, while `npx eslint src` still reports the root-app `react-hooks/set-state-in-effect` error in `src/components/language-provider.tsx` plus `@next/next/no-img-element` warnings in `src/app/about/page.tsx` and `src/components/case-card.tsx`.
+- Current validation baseline: `npm run build` passes and `npx eslint src` reports no problems. `npx react-doctor@latest --verbose --scope changed` should not regress.
 - `next.config.ts` sets `turbopack.root` to the workspace root. Keep that in place unless the app is intentionally moved.
 - Preserve the global scrollbar-stability approach in `src/app/globals.css`: keep scroll ownership on `html`, not on an inner layout wrapper.
+
+## Code layout
+
+- `src/app` holds routes only (plus route-private `_components/`). Reusable UI lives in `src/components/<area>/`, each component next to its own CSS module; shared helpers (media queries, site links, analytics, modal hooks) live in `src/lib`; portfolio card data and tabs live in `src/data/portfolio-cases.ts`.
+- Use `TextLink` for inline external links, `CaseStudyLayout`/`CaseOverview`/`CaseMeta`/`CaseLabel` with `case-study.module.css` for case-study pages, and `useEscapeKey`/`useScrollLock` for modals.
+- Design tokens (colors, radii, spacing, font sizes, shadows, easings) live in `:root` in `src/app/globals.css`. Use `var(--color-*)`, `var(--radius-*)`, `var(--space-*)`, `var(--font-size-*)` instead of raw values in site CSS; self-contained visuals (dashboard mock, interactive card, paper intro, dev panels) keep their own palettes.
+- framer-motion runs through `MotionProvider` (`LazyMotion strict`): use `m.*`, not `motion.*`.
+- The dev-only `/api/debug/case-media` route writes overrides between the `CASE_MEDIA_DEBUG_OVERRIDES` markers in `src/components/portfolio-case/portfolio-case.module.css`; keep those markers.
 
 ## UI conventions
 
