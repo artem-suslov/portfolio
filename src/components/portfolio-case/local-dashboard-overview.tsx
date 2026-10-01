@@ -126,6 +126,9 @@ export function LocalDashboardOverview() {
   return (
     <div
       ref={stageRef}
+      // A decorative mock: it sits inside the cover's open button, so it
+      // must not contain real controls or be exposed to assistive tech.
+      aria-hidden="true"
       className={styles.localDashboardStage}
       data-debug-media
     >
@@ -140,19 +143,17 @@ export function LocalDashboardOverview() {
           <nav className={styles.localDashboardNavigation}>
             <section>
               <p className={styles.localDashboardSectionLabel}>Runs</p>
-              <button
-                className={`${styles.localDashboardNavItem} ${styles.localDashboardNavItemActive}`}
-                type="button"
+              <span
+                className={`${styles.mockButton} ${styles.localDashboardNavItem} ${styles.localDashboardNavItemActive}`}
               >
                 <Layers aria-hidden="true" size={16} strokeWidth={1.8} />
                 <span>All runs</span>
-              </button>
+              </span>
               <div className={styles.localDashboardRunNavigation}>
                 {runs.map((run) => (
-                  <button
-                    className={styles.localDashboardNavItem}
+                  <span
+                    className={`${styles.mockButton} ${styles.localDashboardNavItem}`}
                     key={run.name}
-                    type="button"
                     >
                       <span
                         aria-hidden="true"
@@ -160,7 +161,7 @@ export function LocalDashboardOverview() {
                         style={{ background: run.groupColor }}
                       />
                       <span>{run.name}</span>
-                    </button>
+                    </span>
                 ))}
               </div>
             </section>
@@ -168,28 +169,26 @@ export function LocalDashboardOverview() {
             <section>
               <p className={styles.localDashboardSectionLabel}>Tools</p>
               {sidebarItems.map(([label, Icon]) => (
-                <button
-                  className={styles.localDashboardNavItem}
+                <span
+                  className={`${styles.mockButton} ${styles.localDashboardNavItem}`}
                   key={label}
-                  type="button"
                 >
                   <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
                   <span>{label}</span>
-                </button>
+                </span>
               ))}
             </section>
           </nav>
 
           <footer className={styles.localDashboardSidebarFooter}>
             {footerItems.map(([label, Icon]) => (
-              <button
-                className={styles.localDashboardNavItem}
+              <span
+                className={`${styles.mockButton} ${styles.localDashboardNavItem}`}
                 key={label}
-                type="button"
               >
                 <Icon aria-hidden="true" size={16} strokeWidth={1.8} />
                 <span>{label}</span>
-              </button>
+              </span>
             ))}
           </footer>
         </aside>
@@ -201,10 +200,10 @@ export function LocalDashboardOverview() {
                 <Layers aria-hidden="true" size={16} strokeWidth={1.8} />
                 All runs
               </span>
-              <button className={styles.localDashboardHelp} type="button">
+              <span className={`${styles.mockButton} ${styles.localDashboardHelp}`}>
                 <CircleHelp aria-hidden="true" size={16} strokeWidth={1.8} />
                 Help
-              </button>
+              </span>
             </header>
 
             <div className={styles.localDashboardContent}>
@@ -281,13 +280,12 @@ export function LocalDashboardOverview() {
 
                       {run.variant === "review" ? (
                         <div className={styles.localDashboardActions}>
-                          <button type="button">See changes</button>
-                          <button
-                            className={styles.localDashboardPrimaryAction}
-                            type="button"
+                          <span className={styles.mockButton}>See changes</span>
+                          <span
+                            className={`${styles.mockButton} ${styles.localDashboardPrimaryAction}`}
                           >
                             Create PR
-                          </button>
+                          </span>
                         </div>
                       ) : null}
                     </div>
@@ -307,13 +305,12 @@ export function LocalDashboardOverview() {
                           after API timeout failure
                         </span>
                         <div className={styles.localDashboardActions}>
-                          <button type="button">Deny</button>
-                          <button
-                            className={styles.localDashboardPrimaryAction}
-                            type="button"
+                          <span className={styles.mockButton}>Deny</span>
+                          <span
+                            className={`${styles.mockButton} ${styles.localDashboardPrimaryAction}`}
                           >
                             Approve
-                          </button>
+                          </span>
                         </div>
                       </div>
                     ) : null}

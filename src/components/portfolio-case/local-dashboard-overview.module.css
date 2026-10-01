@@ -36,7 +36,7 @@
   text-align: left;
 }
 
-.localDashboard button {
+.localDashboard .mockButton {
   border: 0;
   color: inherit;
   font: inherit;
@@ -306,7 +306,10 @@
   gap: 8px;
 }
 
-.localDashboardActions button {
+.localDashboardActions .mockButton {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
   height: 28px;
   padding: 0 12px;
   border-radius: 999px;
@@ -318,12 +321,12 @@
     transform 140ms ease;
 }
 
-.localDashboardActions button:hover {
+.localDashboardActions .mockButton:hover {
   background: var(--dashboard-border);
   color: var(--dashboard-text-primary);
 }
 
-.localDashboardActions button:active {
+.localDashboardActions .mockButton:active {
   transform: scale(0.97);
 }
 
