@@ -26,18 +26,19 @@ export const portfolioCases: PortfolioCaseData[] = [
     },
     title: "Quick stickers for Telegram on iPhone",
   },
-  {
-    cover: {
-      poster: "/images/video-posters/freelance-tracker.webp",
-      src: "/videos/freelance_tracker_demo_2.mp4?v=20260903-fs",
-      type: "video",
-      variant: "freelance-tracker",
-    },
-    description:
-      "A personal macOS app for freelance work that brings time, project rates, and earnings into one place — making workload and monthly income easier to plan with confidence.",
-    id: "freelance-tracker",
-    title: "Personal freelance tracker",
-  },
+  // Hidden for now; uncomment together with "freelance-tracker" in the craft tab.
+  // {
+  //   cover: {
+  //     poster: "/images/video-posters/freelance-tracker.webp",
+  //     src: "/videos/freelance_tracker_demo_2.mp4?v=20260903-fs",
+  //     type: "video",
+  //     variant: "freelance-tracker",
+  //   },
+  //   description:
+  //     "A personal macOS app for freelance work that brings time, project rates, and earnings into one place — making workload and monthly income easier to plan with confidence.",
+  //   id: "freelance-tracker",
+  //   title: "Personal freelance tracker",
+  // },
   {
     // Static cover retained for a quick rollback.
     // cover: {
@@ -241,7 +242,7 @@ export const portfolioTabs = [
     label: "Craft",
     caseIds: [
       "telegram-quick-stickers",
-      "freelance-tracker",
+      // "freelance-tracker",
       "mesh-card-demo",
       "steamify-case-2",
       "glow-hover-effect",
