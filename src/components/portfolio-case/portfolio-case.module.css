@@ -682,6 +682,30 @@
     aspect-ratio: 37 / 30;
   }
 
+  /* The phone frame is taller than the footage: fit the whole iPad instead of
+     cropping its sides. The footage's backdrop is a shade off the frame's, so
+     its top and bottom edges fade out rather than end in a seam. */
+  .ccpCaseVideo {
+    object-fit: contain;
+    background-color: transparent;
+    background-size: contain;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 15.5%,
+      #000 18.5%,
+      #000 81.5%,
+      transparent 84.5%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 15.5%,
+      #000 18.5%,
+      #000 81.5%,
+      transparent 84.5%
+    );
+    transform: scale(1.29);
+  }
+
   .caseVisualFlushBottom {
     align-items: center;
     padding-bottom: 0;
