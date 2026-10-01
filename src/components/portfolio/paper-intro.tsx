@@ -43,10 +43,13 @@ export function PaperIntro() {
       }
       window.history.scrollRestoration = previousScrollRestoration;
     };
+    // Any user input (or the timer) dismisses the cover; one signal removes every listener.
+    const listeners = new AbortController();
     const skip = () => {
       if (hasFinished) return;
 
       hasFinished = true;
+      listeners.abort();
       restoreScrollRestoration();
       cover.hidden = true;
       delete document.documentElement.dataset.paperIntro;
@@ -54,16 +57,14 @@ export function PaperIntro() {
       window.dispatchEvent(new Event(PAPER_INTRO_FINISHED_EVENT));
     };
 
-    const events = ["wheel", "touchstart", "pointerdown", "keydown", "focusin", "resize"] as const;
-    const cleanup = () => {
-      events.forEach((event) => window.removeEventListener(event, skip));
-    };
-    events.forEach((event) => window.addEventListener(event, skip, { passive: true }));
+    for (const event of ["wheel", "touchstart", "pointerdown", "keydown", "focusin", "resize"]) {
+      window.addEventListener(event, skip, { passive: true, signal: listeners.signal });
+    }
     const introTimer = window.setTimeout(skip, 2600);
 
     return () => {
       window.clearTimeout(introTimer);
-      cleanup();
+      listeners.abort();
       restoreScrollRestoration();
     };
   }, []);

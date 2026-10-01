@@ -13,6 +13,7 @@ import {
 import { Dithering, MeshGradient } from "@paper-design/shaders-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { isMouseHover, matchesMedia, REDUCED_MOTION_QUERY } from "@/lib/media";
+import { useEscapeKey, useScrollLock } from "@/lib/modal";
 import styles from "./interactive-card-demo.module.css";
 
 const RESET_TRANSFORM =
@@ -125,22 +126,8 @@ export default function InteractiveCardDemo() {
     return () => window.cancelAnimationFrame(frame);
   }, [modalState]);
 
-  useEffect(() => {
-    if (!isModalVisible) return;
-
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeModal();
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeModal, isModalVisible]);
+  useEscapeKey(isModalVisible, closeModal);
+  useScrollLock(isModalVisible);
 
   useEffect(
     () => () => {

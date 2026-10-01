@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, Copy, ExternalLink, X } from "lucide-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { HoverShimmer } from "@/components/ui/hover-shimmer";
 import { useMouseHover } from "@/components/ui/use-mouse-hover";
 import { FINE_HOVER_QUERY, matchesMedia } from "@/lib/media";
+import { useEscapeKey } from "@/lib/modal";
 import { EMAIL, links } from "@/lib/site";
 import styles from "./contact-button.module.css";
 
@@ -158,23 +159,7 @@ export function ContactButton({ className }: { className: string }) {
     }
   }, [modalState]);
 
-  const onEscape = useEffectEvent(closeModal);
-
-  useEffect(() => {
-    if (!isModalVisible) {
-      return;
-    }
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onEscape();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isModalVisible]);
+  useEscapeKey(isModalVisible, closeModal);
 
   useEffect(
     () => () => {

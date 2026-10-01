@@ -6,6 +6,7 @@ import { ChevronLeft, Maximize2, X } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
+import { useEscapeKey, useScrollLock } from "@/lib/modal";
 import styles from "./steamify-case.module.css";
 
 export function SteamifyCaseContent() {
@@ -201,26 +202,8 @@ function ExpandableCaseImage({
     return () => window.cancelAnimationFrame(frame);
   }, [modalState]);
 
-  useEffect(() => {
-    if (!isModalVisible) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeModal, isModalVisible]);
+  useEscapeKey(isModalVisible, closeModal);
+  useScrollLock(isModalVisible);
 
   useEffect(
     () => () => {
@@ -356,26 +339,8 @@ function ExpandableCaseVideo({
     return () => window.cancelAnimationFrame(frame);
   }, [modalState]);
 
-  useEffect(() => {
-    if (!isModalVisible) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeModal, isModalVisible]);
+  useEscapeKey(isModalVisible, closeModal);
+  useScrollLock(isModalVisible);
 
   useEffect(
     () => () => {

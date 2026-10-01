@@ -12,7 +12,6 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
-  useEffectEvent,
   useLayoutEffect,
   useRef,
   useState,
@@ -20,6 +19,7 @@ import {
 import { createPortal } from "react-dom";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { MOBILE_QUERY, useMediaQuery } from "@/lib/media";
+import { useEscapeKey, useScrollLock } from "@/lib/modal";
 import styles from "./portfolio-case.module.css";
 
 const caseViewTransition = {
@@ -248,33 +248,21 @@ export function CaseCoverModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
-  const onEscape = useEffectEvent(close);
+  const isVisible = phase !== "closed" && coverSize !== null;
+
+  useEscapeKey(isVisible, close);
+  useScrollLock(isVisible);
 
   useEffect(() => {
-    if (phase === "closed" || !coverSize) {
+    if (!isVisible || !coverSize) {
       return;
     }
 
-    // Scroll is owned by <html> (see globals.css), so lock it there.
-    const root = document.documentElement;
-    const previousOverflow = root.style.overflow;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onEscape();
-      }
-    };
     const onResize = () => setExpandedWidth(getCaseViewWidth(coverSize));
 
-    root.style.overflow = "hidden";
-    document.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", onResize);
-
-    return () => {
-      root.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("resize", onResize);
-    };
-  }, [coverSize, phase]);
+    return () => window.removeEventListener("resize", onResize);
+  }, [coverSize, isVisible]);
 
   const expandedScale = coverSize ? expandedWidth / coverSize.width : 1;
 
