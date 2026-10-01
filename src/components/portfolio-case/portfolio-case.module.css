@@ -654,24 +654,19 @@
     transform: translateX(-50%);
   }
 
+  /* Phones use the shared frame; the muted fill continues the image's own backdrop. */
   .case[data-case-id="steamify-case"] .steamifyExperimentCaseVisual {
-    aspect-ratio: auto;
-    align-items: stretch;
+    aspect-ratio: 37 / 30;
+    background: var(--color-surface-muted);
   }
 
-  .case[data-case-id="steamify-case"] .steamifyExperimentPicture {
-    width: 100%;
-    align-self: stretch;
-  }
-
+  /* Overflows the frame sideways so the phones keep the side margins of the other covers. */
   .case[data-case-id="steamify-case"] .steamifyExperimentCaseImage {
-    aspect-ratio: 1120 / 726;
-    width: 100% !important;
-    min-width: 100%;
+    width: 118% !important;
   }
 
   .case[data-case-id="steamify-case"]:has(.steamifyExperimentCaseVisual) .caseLinkOverlay {
-    aspect-ratio: 1120 / 726;
+    aspect-ratio: 37 / 30;
   }
 
   .screenCaseTrigger {
