@@ -20,7 +20,10 @@ export function CaseStudyLayout({
   );
 }
 
-/** Centered eyebrow and title, followed by the hero media and project meta. */
+/**
+ * Centered eyebrow and title, followed by the hero media and project meta.
+ * Anchored as `#overview`, so an "Overview" rail item scrolls back to the top.
+ */
 export function CaseOverview({
   children,
   eyebrow,
@@ -31,7 +34,7 @@ export function CaseOverview({
   title: ReactNode;
 }) {
   return (
-    <section className={styles.overview}>
+    <section id="overview" className={styles.overview}>
       <header className={styles.intro}>
         <p className={styles.eyebrow}>{eyebrow}</p>
         <h1>{title}</h1>

@@ -1,16 +1,17 @@
-import Image from "next/image";
 import {
   CaseLabel,
   CaseMeta,
   CaseOverview,
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
+import { CaseImage } from "@/components/case-study/case-media";
 import shared from "@/components/case-study/case-study.module.css";
 import styles from "./cashout-case.module.css";
 
 const assets = "/images/steamify-case-v2";
 
 const sections = [
+  { id: "overview", label: "Overview" },
   { id: "about-product", label: "About product" },
   { id: "understanding-the-task", label: "Understanding the Task" },
   { id: "discovery", label: "Usability Testing" },
@@ -36,7 +37,7 @@ function Metrics() {
 export function CashoutCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Steamify · B2C, eCom" title={<>How I turned payout waiting into <br />Telegram conversion</>}>
-        <Image className={shared.media} src={`${assets}/steamify_before_after.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 736px" preload alt="Before and after Steamify payout screens, showing the Telegram offer introduced earlier in the flow" />
+        <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_before_after.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 636px" preload alt="Before and after Steamify payout screens, showing the Telegram offer introduced earlier in the flow" />
         <CaseMeta items={meta} />
       </CaseOverview>
 
@@ -111,11 +112,11 @@ export function CashoutCase() {
         <h2 id="before-after-heading">Before/After</h2>
         <figure className={shared.block}>
           <figcaption className={styles.caption}>Before: Telegram appeared only after the payout was complete, when some users had already left the page.</figcaption>
-          <Image className={shared.media} src={`${assets}/steamify_before.png`} width={1470} height={802} sizes="(max-width: 760px) calc(100vw - 32px), 736px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_before.png`} width={1470} height={802} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
         </figure>
         <figure className={`${shared.block} ${styles.after}`}>
           <figcaption className={styles.caption}>After: Telegram appeared earlier, while users waited for their payout, becoming a channel for updates and follow-ups.</figcaption>
-          <Image className={shared.media} src={`${assets}/steamify_after.png`} width={1478} height={807} sizes="(max-width: 760px) calc(100vw - 32px), 736px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_after.png`} width={1478} height={807} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
         </figure>
       </section>
 
@@ -130,7 +131,7 @@ export function CashoutCase() {
           <p>The test ran for 1.5 weeks with a 50/50 traffic split. Together, the two offers received approximately 1,500–2,000 impressions.</p>
           <p>The reward-led offer performed best, with an 85% CTR, and became our primary message.</p>
         </div>
-        <Image className={shared.media} src={`${assets}/AB_test.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 736px" alt="A/B test: offer A, Get free skin, achieved approximately 85% CTR. Offer B, Open Telegram to track a payout, had a lower CTR." />
+        <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/AB_test.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="A/B test: offer A, Get free skin, achieved approximately 85% CTR. Offer B, Open Telegram to track a payout, had a lower CTR." />
       </section>
 
       <section id="results" className={`${shared.divided} ${styles.results}`}>

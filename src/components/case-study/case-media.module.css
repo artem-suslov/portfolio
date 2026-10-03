@@ -1,0 +1,32 @@
+/* Clickable frame around case media; callers add radius and background via frameClassName. */
+.frame {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Zero-specificity default so a caller's frameClassName background always wins. */
+:where(.frame) {
+  background: transparent;
+}
+
+.frame:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.media {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The expanded video shows the captured current frame until its own first frame paints. */
+.video {
+  background: var(--case-poster, none) center / cover no-repeat;
+}

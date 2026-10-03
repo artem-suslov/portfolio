@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { CashoutCase } from "./_components/cashout-case";
 
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
 export default function SteamifySkinsCashoutPage() {
   return (
     <SoundProvider>
-      <CashoutCase />
+      <MotionProvider>
+        <CashoutCase />
+      </MotionProvider>
     </SoundProvider>
   );
 }

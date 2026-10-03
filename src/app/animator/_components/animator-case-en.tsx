@@ -16,6 +16,7 @@ import {
 import styles from "./animator-case.module.css";
 
 const railSections = [
+  { id: "overview", label: "Overview" },
   { id: "about-product", label: "About product" },
   { id: "understanding-the-task", label: "Understanding the Task" },
   { id: "mvp", label: "MVP" },

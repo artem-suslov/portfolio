@@ -2,7 +2,8 @@
 
 .page {
   min-height: 100vh;
-  padding: var(--space-14) var(--space-6);
+  /* Same 24px top inset as the home page card. */
+  padding: var(--space-6) var(--space-8);
   overflow-x: clip;
   background: var(--color-page);
   color: var(--color-text-primary);
@@ -11,13 +12,12 @@
   line-height: 1.6;
 }
 
+/* Equal side columns keep the article centered in the viewport; the rail sits in the left one. */
 .layout {
   display: grid;
-  grid-template-columns: 200px minmax(0, 800px);
+  grid-template-columns: minmax(160px, 1fr) minmax(0, 700px) minmax(160px, 1fr);
   align-items: start;
   gap: var(--space-8);
-  max-width: 1032px;
-  margin: 0 auto;
 }
 
 .article {
@@ -25,7 +25,7 @@
   flex-direction: column;
   gap: var(--space-8);
   width: 100%;
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
   padding: var(--space-8);
   border-radius: var(--radius-lg);
@@ -187,63 +187,68 @@
 
 .rail {
   position: sticky;
-  top: 56px;
+  top: var(--space-6);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-6);
 }
 
-.home {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  border-radius: var(--radius-full);
+/* Back is a bare chevron and label: no outline, fill or padding, so the chevron's
+   stroke lines up with the first letter of every table-of-contents item below. */
+.rail .back,
+.rail .back:hover {
+  border: 0;
+  background: transparent;
+}
+
+/* Muted like the inactive items; the label and chevron (currentColor) darken on hover. */
+.rail .back {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: 20px;
-  text-decoration: none;
+  transition:
+    color 150ms ease,
+    transform 140ms var(--ease-out-snappy);
 }
 
-.home::before {
-  position: absolute;
-  inset: -10px -8px;
-  border-radius: var(--radius-full);
-  content: "";
+@media (hover: hover) {
+  .rail .back:hover {
+    color: var(--color-text-primary);
+  }
 }
 
-.home:hover {
-  color: var(--color-text-primary);
+.rail .back:has(> svg:first-child) {
+  padding: 0;
 }
 
-.home:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 8px;
+/* The chevron's stroke starts about 5.4px into its 16px icon box, while the items'
+   first-letter stems start about 1.3px into theirs, so pull the icon 4px left. */
+.rail .back svg {
+  margin-inline-start: -4px;
 }
 
 .railItems {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   width: 100%;
 }
 
+/* Each item is a 32px tall target; items sit flush, so the rhythm is 32px. */
 .railItem {
   position: relative;
   display: block;
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
-  line-height: 24px;
-  letter-spacing: -0.32px;
+  font-size: var(--font-size-sm);
+  line-height: 32px;
+  letter-spacing: -0.14px;
   text-decoration: none;
   transition: color 150ms ease;
 }
 
 .railItem::before {
   position: absolute;
-  inset: -8px;
+  inset: 0 -8px;
   border-radius: var(--radius-full);
   content: "";
 }
@@ -252,15 +257,21 @@
   color: var(--color-text-primary);
 }
 
-.railItem[aria-current="location"]::after {
+.railDot {
   position: absolute;
-  top: 10px;
+  top: 0;
   left: -12px;
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: currentcolor;
-  content: "";
+  background: var(--color-text-primary);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.railDot[data-ready] {
+  opacity: 1;
+  transition: transform 300ms var(--ease-in-out-cubic);
 }
 
 .railItem:focus-visible {
@@ -320,18 +331,14 @@
     padding: var(--space-6) var(--space-4) 0;
   }
 
-  .home {
-    min-height: 40px;
-    padding-inline: var(--space-2);
-  }
-
   .railItems {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .railItem {
+  .railItem,
+  .railDot[data-ready] {
     transition: none;
   }
 

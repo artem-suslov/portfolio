@@ -50,7 +50,7 @@ function captureFrame(video: HTMLVideoElement) {
  * The copy shown in the expanded view. It picks up where the cover video is,
  * so the cover appears to grow instead of restarting.
  */
-function ExpandedCaseVideo({
+export function ExpandedCaseVideo({
   className,
   sourceRef,
   style,
