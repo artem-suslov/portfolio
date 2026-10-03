@@ -4,6 +4,7 @@ import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { portfolioCases, portfolioTabs } from "@/data/portfolio-cases";
 import { AboutMeContent } from "./about-me-content";
+import { ConceptsGallery } from "./concepts-gallery";
 import styles from "./portfolio-page.module.css";
 import { PortfolioTabs } from "./portfolio-tabs";
 
@@ -62,6 +63,8 @@ export async function PortfolioPage({
             ))}
             <span className={styles.anchor} id="tools" aria-hidden="true" />
           </article>
+
+          <ConceptsGallery className={styles.concepts} />
 
           {showAbout ? (
             <section className={styles.aboutSection} aria-labelledby="about-me">

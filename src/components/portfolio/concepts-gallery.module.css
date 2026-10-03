@@ -1,0 +1,47 @@
+/* The marquee renders only after mount, so the strip reserves its height up front. */
+.gallery {
+  --concept-height: 414px;
+
+  height: var(--concept-height);
+  overflow: hidden;
+}
+
+/* A margin rather than a gap keeps the spacing even across the loop seam. */
+.slot {
+  margin-right: var(--space-3);
+}
+
+/* The expanded view reuses this class and sets its own height. */
+.conceptTrigger {
+  display: block;
+  height: var(--concept-height);
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.conceptTrigger:where(button) {
+  cursor: pointer;
+}
+
+.conceptTrigger:where(button):focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 4px;
+}
+
+.concept {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+@media (max-width: 760px) {
+  .gallery {
+    --concept-height: 210px;
+  }
+}

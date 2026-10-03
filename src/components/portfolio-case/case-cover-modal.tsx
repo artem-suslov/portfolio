@@ -74,9 +74,11 @@ export function CaseCoverModal({
   expandedSrc,
   label,
   mediaOnly = false,
+  onOpenChange,
   plainBackdrop = false,
   renderExpandedOverlay,
   renderMedia,
+  scaleOnHover = true,
   style,
   thumbnailRadius = caseViewRadius,
 }: {
@@ -86,11 +88,15 @@ export function CaseCoverModal({
   label: string;
   /** The trigger is the media itself, sitting inside a static cover frame. */
   mediaOnly?: boolean;
+  /** Called when the expanded view appears and once it has fully settled back. */
+  onOpenChange?: (isOpen: boolean) => void;
   /** Dim the page without blurring it; a live blur tears under playing video. */
   plainBackdrop?: boolean;
   /** Controls drawn over the expanded view at their natural size. */
   renderExpandedOverlay?: () => ReactNode;
   renderMedia: (isExpanded: boolean) => ReactNode;
+  /** Grow the trigger slightly on hover. */
+  scaleOnHover?: boolean;
   style?: CSSProperties;
   /** Corner radius of the trigger, so the expanded view starts from it. */
   thumbnailRadius?: number;
@@ -274,6 +280,10 @@ export function CaseCoverModal({
 
   const isVisible = phase !== "closed" && coverSize !== null;
 
+  useEffect(() => {
+    onOpenChange?.(isVisible);
+  }, [isVisible, onOpenChange]);
+
   useEscapeKey(isVisible, close);
   useScrollLock(isVisible);
 
@@ -315,7 +325,7 @@ export function CaseCoverModal({
       style={{ ...style, visibility: phase === "closed" ? undefined : "hidden" }}
       transition={caseViewTransition}
       type="button"
-      whileHover={prefersReducedMotion ? undefined : { scale: 1.01 }}
+      whileHover={prefersReducedMotion || !scaleOnHover ? undefined : { scale: 1.01 }}
     >
       {renderMedia(false)}
     </m.button>
