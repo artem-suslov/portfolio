@@ -1,20 +1,17 @@
 .page {
   min-height: 100vh;
-  padding: var(--space-6) max(24px, calc((100vw - 700px) / 2));
+  padding: var(--space-6) var(--space-8);
   overflow-x: clip;
   background: var(--color-page);
   color: var(--color-text-primary);
   font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
 }
-.caseStudy { width: 700px; min-height: calc(100vh - 48px); margin: 0 auto; padding: var(--space-8); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-card); opacity: 1; transform: translateY(0); transition: opacity 180ms var(--ease-out-snappy), transform 180ms var(--ease-out-snappy); }
+/* Equal side columns keep the article centered in the viewport; the rail sits in the left one. */
+.layout { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(0, 700px) minmax(160px, 1fr); align-items: start; gap: var(--space-8); }
+/* The card doubles as the Overview anchor; its scroll margin equals the page's top padding, so it scrolls to the very top. */
+.caseStudy { scroll-margin-top: var(--space-6); width: 100%; min-height: calc(100vh - 48px); padding: var(--space-8); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: var(--shadow-card); opacity: 1; transform: translateY(0); transition: opacity 180ms var(--ease-out-snappy), transform 180ms var(--ease-out-snappy); }
 @starting-style { .caseStudy { opacity: 0; transform: translateY(8px); } }
-.caseToolbar { width: 100%; display: flex; justify-content: flex-start; padding-bottom: var(--space-2); }
 .caseLogo { width: 24px; height: 24px; }
-.homeButton { min-height: 32px; display: inline-flex; align-items: center; gap: var(--space-1); padding: 0 var(--space-3) 0 var(--space-2); border: 0.5px solid var(--color-border); border-radius: var(--radius-full); background: var(--color-surface); color: var(--color-text-primary); font-size: var(--font-size-sm); line-height: 20px; text-decoration: none; transition: transform 140ms var(--ease-out-snappy), border-color 160ms ease, background-color 160ms ease; }
-.homeButton svg { flex: 0 0 auto; }
-.homeButton:hover { border-color: var(--color-border-hover); background: var(--color-surface-hover); }
-.homeButton:active { transform: scale(.97); }
-.homeButton:focus-visible { outline: 2px solid var(--color-text-primary); outline-offset: 2px; }
 .intro { display: flex; flex-direction: column; gap: 22px; }
 .introTitleRow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); }
 .intro h1, .section h2 { margin: 0; font-weight: 500; }
@@ -27,39 +24,21 @@
 .details div { display: grid; gap: var(--space-1); }
 .details dd { margin: 0; color: var(--color-text-primary); font-size: var(--font-size-base); line-height: 22px; }
 .details dd span { display: block; }
-.heroVideo, .mediaVideo, .media { width: 100%; height: auto; display: block; border-radius: var(--radius-lg); background: var(--color-surface-subtle); }
-.expandableMedia { position: relative; width: 100%; }
-.expandButton, .closeButton { display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.expandButton { position: absolute; z-index: 1; right: 12px; bottom: 12px; width: 32px; height: 32px; background: #ededed; color: var(--color-text-primary); opacity: 1; transition: opacity 160ms ease, transform 140ms var(--ease-out-snappy), background-color 160ms ease; }
-.expandButton:active, .closeButton:active { transform: scale(.96); }
-.expandButton:focus-visible, .closeButton:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; }
-.modalBackdrop { position: fixed; z-index: 1000; inset: 0; display: grid; place-items: center; padding: var(--space-6); background: rgb(5 30 29 / 56%); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); opacity: 0; pointer-events: none; transition: opacity var(--modal-open-dur) var(--modal-ease); }
-.modalBackdropOpen { opacity: 1; pointer-events: auto; }
-.modalBackdropClosing { opacity: 0; pointer-events: none; transition: opacity var(--modal-close-dur) var(--modal-ease); }
-.modalPanel { position: relative; width: min(1100px, calc(100vw - 48px)); max-height: calc(100vh - 48px); display: grid; place-items: center; overflow: hidden; border-radius: var(--radius-xl); background: var(--color-surface-subtle); box-shadow: 0 32px 96px rgb(0 0 0 / 35%); }
-:global(.t-modal) { transform-origin: center; transform: scale(var(--modal-scale)); opacity: 0; pointer-events: none; transition: transform var(--modal-open-dur) var(--modal-ease), opacity var(--modal-open-dur) var(--modal-ease); will-change: transform, opacity; }
-:global(.t-modal.is-open) { transform: scale(1); opacity: 1; pointer-events: auto; }
-:global(.t-modal.is-closing) { transform: scale(var(--modal-scale-close)); opacity: 0; pointer-events: none; transition: transform var(--modal-close-dur) var(--modal-ease), opacity var(--modal-close-dur) var(--modal-ease); }
-.modalImage, .modalVideo { display: block; width: 100%; max-height: calc(100vh - 48px); object-fit: contain; }
-.closeButton { position: absolute; z-index: 1; top: 12px; right: 12px; width: 32px; height: 32px; background: var(--color-border); color: var(--color-text-primary); transition: transform 140ms var(--ease-out-snappy), background-color 160ms ease; }
+/* Each image and video is wrapped in a button that opens the shared expanding view used by home page covers. */
+.mediaFrame { border-radius: var(--radius-lg); background: var(--color-surface-subtle); }
+.heroVideo, .mediaVideo { width: 100%; height: auto; display: block; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-top: 22px; }
 .metrics > div { min-height: 84px; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-1); padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-surface-subtle); }
 .metrics strong { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-3xl); font-weight: 500; line-height: 32px; letter-spacing: -.039em; }
 .metrics strong svg { flex: 0 0 auto; }
 .metrics > div > span { color: #68716e; font-size: var(--font-size-sm); line-height: 18px; }
 .heroVideo { margin-top: 0; aspect-ratio: 2048 / 1117; object-fit: cover; }
-.section { display: flex; flex-direction: column; gap: var(--space-5); margin-top: 116px; }
+.section { display: flex; flex-direction: column; gap: var(--space-5); margin-top: 116px; scroll-margin-top: 56px; }
 .section h2 { max-width: var(--case-copy-measure); font-size: var(--case-heading-size); line-height: var(--case-heading-line-height); letter-spacing: -.02em; text-wrap: balance; }
 .section h2.compactHeading { font-size: var(--font-size-3xl); }
 .subheading { margin: 10px 0 0; font-size: var(--font-size-3xl); font-weight: 500; line-height: 1.1; letter-spacing: -.035em; }
 .section p:not(.eyebrow) { max-width: var(--case-copy-measure); margin: 0; color: var(--color-text-secondary); font-size: var(--case-body-size); line-height: var(--case-body-line-height); letter-spacing: 0; }
 .section p.compactCopy { font-size: var(--font-size-base); }
-.impactSection { gap: var(--space-6); }
-.section h2.achievementsHeading { font-size: var(--font-size-4xl); letter-spacing: -.045em; }
-.impactList { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid #e7eae9; }
-.impactList li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-4); padding: 18px 0; border-bottom: 1px solid #e7eae9; }
-.impactList span { color: #747c79; font-size: var(--font-size-xs); line-height: 1.4; }
-.impactList p { max-width: none; margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-base); line-height: 1.6; letter-spacing: 0; }
 .numberedList { display: grid; gap: 0; margin: var(--space-1) 0; padding: 0; list-style: none; border-top: 1px solid #e7eae9; }
 .numberedList li { display: grid; grid-template-columns: 64px 1fr; gap: var(--space-4); padding: 18px 0; border-bottom: 1px solid #e7eae9; }
 .numberedList span, .solutionGrid span { color: #747c79; font-size: var(--font-size-xs); }
@@ -70,32 +49,22 @@
 .solutionGrid p { margin: 0; color: var(--color-text-secondary); font-size: var(--font-size-base); line-height: 1.6; letter-spacing: 0; }
 @media (max-width: 760px) {
   .page { padding: 0; background: var(--color-surface); }
+  .layout { display: flex; flex-direction: column; gap: var(--space-6); }
   .caseStudy { width: 100%; min-height: 100vh; margin: 0; padding: 0 var(--space-4) var(--space-18); border-radius: 0; box-shadow: none; }
-  .caseToolbar { padding-top: var(--space-3); }
   .introTitleRow { align-items: flex-start; flex-direction: column; gap: 10px; }
   .intro h1 { font-size: var(--case-title-size-mobile); }
   .lede { font-size: var(--font-size-lg); }
   .details { gap: var(--space-4); }
   .metrics { grid-template-columns: 1fr; margin-top: 28px; }
   .metrics > div { min-height: 0; }
-  .modalBackdrop { padding: var(--space-3); }
-  .modalPanel { width: calc(100vw - 24px); max-height: calc(100vh - 24px); }
-  .modalImage, .modalVideo { max-height: calc(100vh - 24px); }
-  .section { margin-top: var(--space-18); }
+  .section { margin-top: var(--space-18); scroll-margin-top: 24px; }
   .section h2 { font-size: var(--case-heading-size); }
   .section p:not(.eyebrow) { font-size: var(--font-size-base); }
-  .section h2.achievementsHeading { font-size: var(--font-size-4xl); }
   .solutionGrid > div, .solutionGrid > div + div { min-height: auto; padding: 18px 0; border-left: 0; }
   .solutionGrid h3 { margin-top: 18px; }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .expandButton:hover, .closeButton:hover { background: #d8d8d8; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .caseStudy { transform: none; transition: opacity 120ms ease; }
   @starting-style { .caseStudy { opacity: 0; transform: none; } }
-  :global(.t-modal) { transition: none !important; }
-  .modalBackdrop, .modalBackdropClosing, .expandButton, .closeButton { transition: none !important; }
 }

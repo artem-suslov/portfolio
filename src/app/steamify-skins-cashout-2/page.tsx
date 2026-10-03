@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { SteamifyCaseContent } from "./_components/steamify-case-content";
 
@@ -10,5 +11,11 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <SoundProvider><SteamifyCaseContent /></SoundProvider>;
+  return (
+    <SoundProvider>
+      <MotionProvider>
+        <SteamifyCaseContent />
+      </MotionProvider>
+    </SoundProvider>
+  );
 }
