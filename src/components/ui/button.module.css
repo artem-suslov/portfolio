@@ -1,0 +1,89 @@
+/* Shared pill and circle buttons. Layout (margins, widths) stays with the caller. */
+
+.button {
+  min-height: 32px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-full);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.14px;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 140ms var(--ease-out-snappy),
+    border-color 160ms ease,
+    background-color 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.button svg {
+  flex: 0 0 auto;
+}
+
+/* A leading icon sits closer to the edge than text does. */
+.button:has(> svg:first-child) {
+  padding-inline-start: var(--space-2);
+}
+
+.iconOnly {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.iconOnly:has(> svg:first-child) {
+  padding: 0;
+}
+
+.outline {
+  border: 0.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.primary {
+  border: 0;
+  background: var(--color-action-primary);
+  color: var(--color-text-inverse);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.button:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .outline:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-surface-hover);
+  }
+
+  .primary:hover {
+    background: var(--color-action-primary-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .button:active {
+    transform: none;
+  }
+}

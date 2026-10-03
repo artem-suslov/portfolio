@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, Copy, ExternalLink, X } from "lucide-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
+import { Button } from "@/components/ui/button";
 import { HoverShimmer } from "@/components/ui/hover-shimmer";
 import { useMouseHover } from "@/components/ui/use-mouse-hover";
 import { FINE_HOVER_QUERY, matchesMedia } from "@/lib/media";
@@ -78,7 +79,7 @@ function ContactOptionContent({
   );
 }
 
-export function ContactButton({ className }: { className: string }) {
+export function ContactButton({ className }: { className?: string }) {
   const { hoverProps, isHovered } = useMouseHover();
   const [modalState, setModalState] = useState<ModalState>("closed");
   const [copyState, setCopyState] = useState<CopyState>("idle");
@@ -176,17 +177,17 @@ export function ContactButton({ className }: { className: string }) {
 
   return (
     <>
-      <button
+      <Button
         aria-expanded={isModalVisible}
         aria-haspopup="dialog"
         className={className}
         onClick={openModal}
         ref={triggerRef}
-        type="button"
+        variant="outline"
         {...hoverProps}
       >
         <HoverShimmer isActive={isHovered}>Contact me</HoverShimmer>
-      </button>
+      </Button>
 
       {isModalVisible
         ? createPortal(

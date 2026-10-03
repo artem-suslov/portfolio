@@ -10,7 +10,7 @@ export function V2Hero({ showDivider = true }: { showDivider?: boolean }) {
     <header className={styles.v2Hero}>
       <div className={styles.v2Toolbar}>
         <HeroVideo compact />
-        <SoundToggleButton className={styles.iconButton} />
+        <SoundToggleButton />
       </div>
       <div className={styles.v2Content}>
         <div className={styles.v2Identity}>
@@ -21,8 +21,8 @@ export function V2Hero({ showDivider = true }: { showDivider?: boolean }) {
         </div>
         <V2Description />
         <div className={styles.v2Actions}>
-          <ResumeButton className={styles.v2ResumeButton} />
-          <ContactButton className={styles.v2ContactButton} />
+          <ResumeButton />
+          <ContactButton />
         </div>
       </div>
       {showDivider ? <span className={styles.v2Divider} aria-hidden="true" /> : null}

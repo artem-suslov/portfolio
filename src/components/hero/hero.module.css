@@ -48,80 +48,6 @@
   gap: var(--space-2);
 }
 
-.iconButton,
-.contactButton {
-  border: 0;
-  color: var(--color-text-primary);
-  font: inherit;
-  cursor: pointer;
-  transition:
-    transform 140ms var(--ease-out-snappy),
-    border-color 160ms ease,
-    background-color 160ms ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.iconButton {
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  overflow: hidden;
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-}
-
-
-.contactButton {
-  width: 100px;
-  height: 32px;
-  padding: 0;
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  font-size: var(--font-size-sm);
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.14px;
-  white-space: nowrap;
-}
-
-.iconButton:focus-visible,
-.contactButton:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 2px;
-}
-
-.iconButton:active,
-.contactButton:active {
-  transform: scale(0.97);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .iconButton:hover,
-  .contactButton:hover {
-    border-color: var(--color-border-hover);
-    background-color: var(--color-surface-hover);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .iconButton,
-  .contactButton {
-    transition:
-      border-color 160ms ease,
-      background-color 160ms ease;
-  }
-
-  .iconButton:active,
-  .contactButton:active {
-    transform: none;
-  }
-}
-
 .heroContent {
   width: 100%;
   display: flex;
@@ -232,77 +158,6 @@
   align-items: center;
 }
 
-.v2ResumeButton,
-.v2ContactButton {
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--space-3);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-sm);
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.14px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    transform 140ms var(--ease-out-snappy),
-    border-color 160ms ease,
-    background-color 160ms ease,
-    box-shadow 160ms ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.v2ResumeButton {
-  border: 0;
-  background: var(--color-action-primary);
-  color: var(--color-text-inverse);
-}
-
-.v2ContactButton {
-  border: 0.5px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  cursor: pointer;
-}
-
-.v2ResumeButton:focus-visible,
-.v2ContactButton:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 2px;
-}
-
-.v2ResumeButton:active,
-.v2ContactButton:active {
-  transform: scale(0.97);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .v2ResumeButton:hover {
-    background: var(--color-action-primary-hover);
-  }
-
-  .v2ContactButton:hover {
-    border-color: var(--color-border-hover);
-    background: var(--color-surface-hover);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .v2ResumeButton,
-  .v2ContactButton {
-    transition:
-      border-color 160ms ease,
-      background-color 160ms ease;
-  }
-
-  .v2ResumeButton:active,
-  .v2ContactButton:active {
-    transform: none;
-  }
-}
-
 .v2Divider {
   width: calc(100% - 64px);
   height: 1px;
@@ -361,27 +216,6 @@
 
   .heroActions {
     gap: var(--space-2);
-  }
-
-  .iconButton {
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    border: 0.5px solid var(--color-border);
-    border-radius: var(--radius-full);
-    background: var(--color-surface);
-  }
-
-  .contactButton {
-    width: 99px;
-    height: 36px;
-    padding: 0 var(--space-3);
-    font-size: var(--font-size-sm);
-    line-height: 20px;
-    letter-spacing: -0.14px;
   }
 
   .heroContent {

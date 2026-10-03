@@ -14,8 +14,8 @@ export function DefaultHero() {
         </div>
 
         <div className={styles.heroActions}>
-          <SoundToggleButton className={styles.iconButton} />
-          <ContactButton className={styles.contactButton} />
+          <SoundToggleButton />
+          <ContactButton />
         </div>
       </div>
 
