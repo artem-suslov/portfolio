@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { CashoutCase } from "./_components/cashout-case";
@@ -15,6 +16,7 @@ export default function SteamifySkinsCashoutPage() {
     <SoundProvider>
       <MotionProvider>
         <CashoutCase />
+        <FeedbackWidget />
       </MotionProvider>
     </SoundProvider>
   );

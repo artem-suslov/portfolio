@@ -1,0 +1,317 @@
+/* Floating feedback button and its popover, pinned to the bottom-left corner. */
+
+.root {
+  --panel-max-height: calc(100dvh - 44px - var(--space-6) * 2 - var(--space-3));
+
+  position: fixed;
+  z-index: var(--z-floating);
+  left: var(--space-6);
+  bottom: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.root > * {
+  pointer-events: auto;
+}
+
+/* Shape, border and hover come from Button; only the lift is specific to this button. */
+.trigger {
+  box-shadow: 0 6px 20px rgb(5 30 29 / 10%);
+}
+
+.trigger[data-active] {
+  border-color: var(--color-border-hover);
+  background: var(--color-surface-subtle);
+}
+
+.panel {
+  width: min(360px, calc(100vw - 2 * var(--space-4)));
+  /* Height comes from the measured content (inline style); the border sits outside it. */
+  box-sizing: content-box;
+  overflow: hidden;
+  border: 0.5px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: 0 20px 60px rgb(5 30 29 / 16%);
+}
+
+.content {
+  max-height: var(--panel-max-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Grows out of the trigger rather than from the panel's center. */
+.panel {
+  transform-origin: bottom left;
+  transform: scale(var(--modal-scale));
+  opacity: 0;
+  transition:
+    transform var(--modal-open-dur) var(--modal-ease),
+    opacity var(--modal-open-dur) var(--modal-ease);
+}
+
+.panel[data-state="open"] {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Switching steps morphs the panel to the new step's height. */
+.panel[data-state="open"][data-animate-height] {
+  transition:
+    transform var(--modal-open-dur) var(--modal-ease),
+    opacity var(--modal-open-dur) var(--modal-ease),
+    height 240ms var(--ease-out-snappy);
+}
+
+.panel[data-state="closing"] {
+  pointer-events: none;
+  transition:
+    transform var(--modal-close-dur) var(--modal-ease),
+    opacity var(--modal-close-dur) var(--modal-ease);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-4) 0 var(--space-5);
+}
+
+.title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--line-height-xl);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-5) var(--space-5);
+}
+
+/* Each step fades in when the panel switches between them. */
+.panel[data-state="open"] .body {
+  animation: stepIn 200ms var(--ease-out-quint);
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.options {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform var(--duration-press) var(--ease-out-snappy),
+    border-color var(--duration-hover) ease,
+    background-color var(--duration-hover) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.optionIcon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-subtle);
+}
+
+.optionIcon[data-kind="bug"] {
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
+}
+
+.optionIcon[data-kind="idea"] {
+  background: var(--color-warning-surface);
+  color: var(--color-warning);
+}
+
+.optionText {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  gap: 2px;
+}
+
+.optionLabel {
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  line-height: var(--line-height-md);
+}
+
+.optionDescription {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-sm);
+}
+
+.optionChevron {
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  text-wrap: pretty;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.label {
+  color: var(--color-text-body);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: var(--line-height-md);
+}
+
+.optional {
+  margin-left: var(--space-1);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.control {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  /* Below 16px iOS Safari zooms in on focus; fine while the widget is desktop-only. */
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  transition:
+    border-color var(--duration-hover) ease,
+    box-shadow var(--duration-hover) ease;
+}
+
+.control::placeholder {
+  color: var(--color-text-placeholder);
+}
+
+.control:focus-visible {
+  border-color: var(--color-text-secondary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(5 30 29 / 8%);
+}
+
+.textarea {
+  min-height: 104px;
+  max-height: 240px;
+  resize: none;
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-sm);
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-sm);
+}
+
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submit {
+  justify-self: end;
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.option:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .option:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-surface-hover);
+  }
+
+  .control:hover:not(:focus-visible) {
+    border-color: var(--color-border-hover);
+  }
+}
+
+/* Hidden on phones: the floating button would cover the page content there. */
+@media (max-width: 760px) {
+  .root {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel[data-state="closing"],
+  .panel[data-state="open"][data-animate-height] {
+    transform: none;
+    transition: opacity 120ms ease;
+  }
+
+  .option,
+  .control {
+    transition: none;
+  }
+
+  .panel[data-state="open"] .body {
+    animation: none;
+  }
+
+  .option:active {
+    transform: none;
+  }
+}

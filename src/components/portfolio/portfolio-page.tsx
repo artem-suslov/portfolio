@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
@@ -74,6 +75,7 @@ export async function PortfolioPage({
               <AboutMeContent />
             </section>
           ) : null}
+          <FeedbackWidget />
           {DebugPanel ? (
             <DebugPanel cases={portfolioCases.map(({ id, title }) => ({ id, label: title }))} />
           ) : null}
