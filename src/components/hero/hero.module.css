@@ -40,7 +40,7 @@
   height: 8px;
   display: block;
   flex: 0 0 auto;
-  border-radius: 36px;
+  border-radius: var(--radius-full);
   background: var(--color-action-primary);
 }
 
@@ -62,7 +62,7 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   letter-spacing: 0;
 }
 
@@ -118,8 +118,8 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.14px;
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .v2Name {
@@ -127,7 +127,7 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-xl);
   font-weight: 500;
-  line-height: 24px;
+  line-height: var(--line-height-xl);
   letter-spacing: -0.02em;
 }
 
@@ -210,8 +210,8 @@
   .name {
     font-size: var(--font-size-sm);
     font-weight: 500;
-    line-height: 20px;
-    letter-spacing: -0.14px;
+    line-height: var(--line-height-md);
+    letter-spacing: var(--letter-spacing-tight);
   }
 
   .heroActions {

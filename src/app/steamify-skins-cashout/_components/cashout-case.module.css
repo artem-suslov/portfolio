@@ -20,7 +20,7 @@
 .metrics dt {
   color: var(--color-text-secondary);
   font-size: var(--font-size-base);
-  line-height: 24px;
+  line-height: var(--line-height-xl);
 }
 
 .hypotheses .hypothesisList {
@@ -50,7 +50,7 @@
 
   .metrics dt {
     font-size: var(--font-size-sm);
-    line-height: 20px;
+    line-height: var(--line-height-md);
   }
 
   .metrics dd {

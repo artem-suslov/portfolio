@@ -54,7 +54,7 @@
 .article h2 {
   font-size: var(--font-size-2xl);
   font-weight: 500;
-  line-height: 24px;
+  line-height: var(--line-height-xl);
   letter-spacing: -0.44px;
 }
 
@@ -97,7 +97,7 @@
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  line-height: 24px;
+  line-height: var(--line-height-xl);
 }
 
 .overviewContent {
@@ -131,16 +131,16 @@
 .meta dt {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  line-height: 20px;
-  letter-spacing: -0.14px;
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .meta dd {
   margin: 0;
   color: var(--color-text-primary);
   font-size: var(--font-size-base);
-  line-height: 22px;
-  letter-spacing: -0.14px;
+  line-height: var(--line-height-lg);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 /* Content blocks. */
@@ -175,12 +175,12 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
 }
 
 .article .prominentLabel {
   font-size: var(--font-size-base);
-  line-height: 24px;
+  line-height: var(--line-height-xl);
 }
 
 /* Sticky table of contents. */
@@ -206,8 +206,8 @@
 .rail .back {
   color: var(--color-text-secondary);
   transition:
-    color 150ms ease,
-    transform 140ms var(--ease-out-snappy);
+    color var(--duration-hover) ease,
+    transform var(--duration-press) var(--ease-out-snappy);
 }
 
 @media (hover: hover) {
@@ -240,10 +240,10 @@
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  line-height: 32px;
-  letter-spacing: -0.14px;
+  line-height: var(--line-height-2xl);
+  letter-spacing: var(--letter-spacing-tight);
   text-decoration: none;
-  transition: color 150ms ease;
+  transition: color var(--duration-hover) ease;
 }
 
 .railItem::before {
@@ -263,7 +263,7 @@
   left: -12px;
   width: 4px;
   height: 4px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   background: var(--color-text-primary);
   opacity: 0;
   pointer-events: none;

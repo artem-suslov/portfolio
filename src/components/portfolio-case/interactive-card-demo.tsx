@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Maximize2, X } from "lucide-react";
-import { createPortal } from "react-dom";
+import { Maximize2 } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -12,8 +11,8 @@ import {
 } from "react";
 import { Dithering, MeshGradient } from "@paper-design/shaders-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
+import { Dialog, DialogClose } from "@/components/ui/dialog";
 import { isMouseHover, matchesMedia, REDUCED_MOTION_QUERY } from "@/lib/media";
-import { useEscapeKey, useScrollLock } from "@/lib/modal";
 import styles from "./interactive-card-demo.module.css";
 
 const RESET_TRANSFORM =
@@ -24,7 +23,6 @@ const CARD_GRAIN_OVERLAY = 0.27;
 const CARD_GRAIN_MIXER = 0.46;
 
 type ThemeId = "ember" | "gold" | "cyan" | "pink";
-type ModalState = "closed" | "opening" | "open" | "closing";
 
 interface CardTheme {
   id: ThemeId;
@@ -47,12 +45,10 @@ const rawCardThemes: Array<{
 const cardThemes: CardTheme[] = rawCardThemes.map(normalizeTheme);
 
 export default function InteractiveCardDemo() {
-  const [modalState, setModalState] = useState<ModalState>("closed");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedThemeId, setSelectedThemeId] =
     useState<ThemeId>("ember");
   const { playTap } = useInteractionSound();
-  const closeTimerRef = useRef<number | null>(null);
-  const isModalVisible = modalState !== "closed";
 
   const selectedTheme = useMemo(
     () =>
@@ -73,70 +69,6 @@ export default function InteractiveCardDemo() {
     playTap();
     setSelectedThemeId(themeId);
   }, [playTap, selectedThemeId]);
-
-  const finishClose = useCallback(() => {
-    if (closeTimerRef.current !== null) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-
-    setModalState("closed");
-  }, []);
-
-  const openModal = useCallback(() => {
-    if (modalState === "open" || modalState === "opening") {
-      return;
-    }
-
-    if (closeTimerRef.current !== null) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-
-    playTap();
-    setModalState("opening");
-  }, [modalState, playTap]);
-
-  const closeModal = useCallback(() => {
-    if (modalState === "closed" || modalState === "closing") {
-      return;
-    }
-
-    playTap();
-    setModalState("closing");
-    const closeDuration =
-      Number.parseFloat(
-        window
-          .getComputedStyle(document.documentElement)
-          .getPropertyValue("--modal-close-dur"),
-      ) || 150;
-    closeTimerRef.current = window.setTimeout(
-      finishClose,
-      closeDuration + 50,
-    );
-  }, [finishClose, modalState, playTap]);
-
-  useEffect(() => {
-    if (modalState !== "opening") {
-      return;
-    }
-
-    const frame = window.requestAnimationFrame(() => setModalState("open"));
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [modalState]);
-
-  useEscapeKey(isModalVisible, closeModal);
-  useScrollLock(isModalVisible);
-
-  useEffect(
-    () => () => {
-      if (closeTimerRef.current !== null) {
-        window.clearTimeout(closeTimerRef.current);
-      }
-    },
-    [],
-  );
 
   return (
     <div className={styles.demo}>
@@ -174,60 +106,31 @@ export default function InteractiveCardDemo() {
         <button
           aria-label="Open card in modal"
           className={styles.expandButton}
-          onClick={openModal}
+          onClick={() => {
+            playTap();
+            setIsModalOpen(true);
+          }}
           type="button"
         >
           <Maximize2 aria-hidden="true" size={16} strokeWidth={1.5} />
         </button>
       </div>
 
-      {isModalVisible
-        ? createPortal(
-            <div
-              aria-label="Interactive card preview"
-              aria-modal="true"
-              className={`${styles.modalBackdrop} ${
-                modalState === "open" ? styles.modalBackdropOpen : ""
-              } ${
-                modalState === "closing" ? styles.modalBackdropClosing : ""
-              }`}
-              onClick={closeModal}
-              role="dialog"
-            >
-              <div
-                className={`${styles.modalPanel} t-modal ${
-                  modalState === "open"
-                    ? "is-open"
-                    : modalState === "closing"
-                      ? "is-closing"
-                      : ""
-                }`}
-                onClick={(event) => event.stopPropagation()}
-                onTransitionEnd={(event) => {
-                  if (
-                    modalState === "closing" &&
-                    event.currentTarget === event.target &&
-                    event.propertyName === "opacity"
-                  ) {
-                    finishClose();
-                  }
-                }}
-              >
-                <button
-                  aria-label="Close card preview"
-                  autoFocus
-                  className={styles.closeButton}
-                  onClick={closeModal}
-                  type="button"
-                >
-                  <X aria-hidden="true" size={18} strokeWidth={1.75} />
-                </button>
-                <CardStage modal theme={animatedTheme} />
-              </div>
-            </div>,
-            document.body,
-          )
-        : null}
+      <Dialog
+        aria-label="Interactive card preview"
+        backdropClassName={styles.modalBackdrop}
+        className={styles.modalPanel}
+        onClose={() => setIsModalOpen(false)}
+        open={isModalOpen}
+      >
+        <DialogClose
+          aria-label="Close card preview"
+          className={styles.closeButton}
+          iconSize={18}
+          size="md"
+        />
+        <CardStage modal theme={animatedTheme} />
+      </Dialog>
     </div>
   );
 }

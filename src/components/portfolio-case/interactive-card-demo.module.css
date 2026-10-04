@@ -95,8 +95,7 @@
 }
 
 .hint,
-.expandButton,
-.closeButton {
+.expandButton {
   min-height: 36px;
   border: 1px solid rgb(255 255 255 / 12%);
   color: #fff;
@@ -119,8 +118,7 @@
   pointer-events: none;
 }
 
-.expandButton,
-.closeButton {
+.expandButton {
   width: 36px;
   display: inline-flex;
   align-items: center;
@@ -143,92 +141,48 @@
   border-radius: 999px;
 }
 
-.closeButton {
-  border: 0;
-  border-radius: 999px;
-}
 
-.expandButton:active,
-.closeButton:active {
+.expandButton:active {
   transform: scale(0.94);
 }
 
-.expandButton:focus-visible,
-.closeButton:focus-visible {
+.expandButton:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
 
 .modalBackdrop {
-  position: fixed;
-  z-index: 1000;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: rgb(0 0 0 / 72%);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--modal-open-dur) var(--modal-ease);
-}
-
-.modalBackdropOpen {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modalBackdropClosing {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--modal-close-dur) var(--modal-ease);
+  --dialog-backdrop: rgb(0 0 0 / 72%);
+  --dialog-backdrop-blur: 16px;
 }
 
 .modalPanel {
-  position: relative;
-  width: min(680px, calc(100vw - 48px));
+  --dialog-width: min(680px, calc(100vw - 48px));
+  --dialog-radius: 20px;
+  --dialog-surface: #0e1010;
+  --dialog-shadow: 0 32px 96px rgb(0 0 0 / 45%);
+
   min-height: min(480px, calc(100vh - 48px));
   display: grid;
   place-items: center;
-  overflow: hidden;
   border: 1px solid rgb(255 255 255 / 12%);
-  border-radius: 20px;
-  background: #0e1010;
-  box-shadow: 0 32px 96px rgb(0 0 0 / 45%);
 }
 
-:global(.t-modal) {
-  transform-origin: center;
-  transform: scale(var(--modal-scale));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    transform var(--modal-open-dur) var(--modal-ease),
-    opacity var(--modal-open-dur) var(--modal-ease);
-  will-change: transform, opacity;
-}
-
-:global(.t-modal.is-open) {
-  transform: scale(1);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-:global(.t-modal.is-closing) {
-  transform: scale(var(--modal-scale-close));
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    transform var(--modal-close-dur) var(--modal-ease),
-    opacity var(--modal-close-dur) var(--modal-ease);
-}
-
+/* Two classes so the glass look wins over the shared Button outline style. */
 .modalPanel .closeButton {
   position: absolute;
   z-index: 50;
   top: 16px;
   right: 16px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background: rgb(255 255 255 / 10%);
+  color: #fff;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.modalPanel .closeButton:focus-visible {
+  outline-color: #fff;
 }
 
 .modalStage {
@@ -290,8 +244,13 @@
     border-color: rgb(255 255 255 / 90%);
   }
 
-  .expandButton:hover,
-  .closeButton:hover {
+  .expandButton:hover {
+    border-color: rgb(255 255 255 / 24%);
+    background: rgb(255 255 255 / 16%);
+  }
+
+  /* The extra :not(:disabled) outranks Button's own hover rule. */
+  .modalPanel .closeButton:hover:not(:disabled) {
     border-color: rgb(255 255 255 / 24%);
     background: rgb(255 255 255 / 16%);
   }
@@ -321,11 +280,7 @@
   .card,
   .swatch,
   .spotlight,
-  .expandButton,
-  .closeButton,
-  .modalBackdrop,
-  .modalBackdropClosing,
-  :global(.t-modal) {
+  .expandButton {
     transition: none !important;
   }
 }

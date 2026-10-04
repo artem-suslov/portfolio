@@ -55,7 +55,7 @@
 .linkedCase .caseVisual {
   z-index: 6;
   pointer-events: none;
-  transition: opacity 160ms ease;
+  transition: opacity var(--duration-hover) ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -151,7 +151,7 @@
 
 .caseImageBackdrop {
   position: fixed;
-  z-index: 1100;
+  z-index: var(--z-lightbox);
   inset: 0;
   background: rgb(0 0 0 / 40%);
   cursor: zoom-out;
@@ -167,7 +167,7 @@
 
 .caseImageModal {
   position: fixed;
-  z-index: 1110;
+  z-index: calc(var(--z-lightbox) + 10);
   inset: 0;
   display: flex;
   align-items: center;
@@ -234,7 +234,7 @@
   color: var(--color-text-inverse);
   font-size: var(--font-size-xs);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   letter-spacing: -0.01em;
   pointer-events: none;
 }
@@ -353,34 +353,13 @@
   }
 }
 
+/* Look and states come from Button's overlay variant; this only places it on the media. */
 .caseVideoControl {
   position: absolute;
   right: 12px;
   bottom: 12px;
   z-index: 6;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  min-height: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-full);
-  background: rgb(17 17 17 / 56%);
-  color: var(--color-text-inverse);
-  cursor: pointer;
   pointer-events: auto;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  transition:
-    transform 140ms ease-out,
-    background-color 160ms ease;
-}
-
-.caseVideoFrame {
-  position: relative;
-  width: 100%;
 }
 
 .caseVisual[data-expanded] + .caseVideoControl {
@@ -390,21 +369,6 @@
 .caseVideoControl svg {
   width: 16px;
   height: 16px;
-}
-
-.caseVideoControl:focus-visible {
-  outline: 2px solid var(--color-text-inverse);
-  outline-offset: 2px;
-}
-
-.caseVideoControl:active {
-  transform: scale(0.94);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .caseVideoControl:hover {
-    background: rgb(43 43 43 / 56%);
-  }
 }
 
 .loopCaseVideo {
@@ -466,7 +430,7 @@
   margin: 0;
   font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   text-wrap: balance;
 }
 
@@ -480,7 +444,7 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   text-wrap: pretty;
 }
 
@@ -508,7 +472,7 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
 }
 
 .caseDetails dd {
@@ -516,7 +480,7 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   text-align: right;
 }
 
@@ -594,7 +558,7 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   letter-spacing: 0;
   text-align: left;
 }
@@ -605,7 +569,7 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
+  line-height: var(--line-height-md);
   text-align: left;
   text-wrap: pretty;
 }
@@ -621,7 +585,7 @@
 
   .caseDetails h3 {
     font-size: var(--font-size-md);
-    line-height: 20px;
+    line-height: var(--line-height-md);
   }
 
   /* The single-line title is a desktop layout; phones are too narrow for it. */
@@ -632,7 +596,7 @@
   .caseDetails > p {
     margin: var(--space-2) 0 var(--space-4);
     font-size: var(--font-size-sm);
-    line-height: 20px;
+    line-height: var(--line-height-md);
   }
 
   .caseDetails dl > div {
@@ -767,6 +731,6 @@
   .caseTitle {
     width: auto;
     max-width: min(292px, 100%);
-    letter-spacing: -0.14px;
+    letter-spacing: var(--letter-spacing-tight);
   }
 }

@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
+import { Button } from "@/components/ui/button";
 import { CaseCoverModal } from "./case-cover-modal";
 import styles from "./portfolio-case.module.css";
 import type { CaseVideoCover, CaseVideoVariant } from "./types";
@@ -173,9 +174,10 @@ export function CaseVideo({
   );
 
   const renderControl = (isExpanded: boolean) => (
-    <button
+    <Button
       aria-label={isPaused ? "Play case video" : "Pause case video"}
       className={styles.caseVideoControl}
+      iconOnly
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -185,7 +187,7 @@ export function CaseVideo({
       onPointerDownCapture={
         isExpanded ? (event) => event.stopPropagation() : undefined
       }
-      type="button"
+      variant="overlay"
     >
       <MorphIcon
         aria-hidden="true"
@@ -194,7 +196,7 @@ export function CaseVideo({
         strokeWidth={1.75}
         viewBox="0 0 24 24"
       />
-    </button>
+    </Button>
   );
 
   if (expandable) {

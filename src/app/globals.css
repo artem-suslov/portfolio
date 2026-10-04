@@ -18,6 +18,8 @@ html {
   --color-text-primary: #051e1d;
   --color-text-secondary: #616b6a;
   --color-text-body: #2e3837;
+  --color-text-muted: #afb6b5;
+  --color-text-placeholder: #9aa3a2;
   --color-text-inverse: #fff;
 
   /* Colors: surfaces */
@@ -41,6 +43,12 @@ html {
   --color-action-primary: #051e1d;
   --color-action-primary-hover: #164846;
   --color-selection: #00abf5;
+
+  /* Colors: status */
+  --color-danger: #b42318;
+  --color-danger-surface: #fdf0ee;
+  --color-warning: #a15c07;
+  --color-warning-surface: #fdf6e3;
 
   /* Radii */
   --radius-xs: 4px;
@@ -77,6 +85,14 @@ html {
   --font-size-5xl: 32px;
   --font-size-6xl: 40px;
 
+  --line-height-sm: 18px;
+  --line-height-md: 20px;
+  --line-height-lg: 22px;
+  --line-height-xl: 24px;
+  --line-height-2xl: 32px;
+
+  --letter-spacing-tight: -0.14px;
+
   /* Shadows */
   --shadow-card:
     0 1px 3px rgb(0 0 0 / 10%),
@@ -87,6 +103,15 @@ html {
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-snappy: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Press feedback (scale) and hover color changes. */
+  --duration-press: 140ms;
+  --duration-hover: 160ms;
+
+  /* Layers: page-level overlays only; local stacking stays as small numbers. */
+  --z-floating: 900;
+  --z-modal: 1000;
+  --z-lightbox: 1100;
 
   /* ── Component settings ──────────────────────────────────────── */
   --case-copy-measure: 65ch;

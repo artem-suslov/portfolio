@@ -1,7 +1,9 @@
 /* Shared pill and circle buttons. Layout (margins, widths) stays with the caller. */
 
 .button {
-  min-height: 32px;
+  --button-size: 32px;
+
+  min-height: var(--button-size);
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -12,15 +14,15 @@
   font: inherit;
   font-size: var(--font-size-sm);
   font-weight: 400;
-  line-height: 20px;
-  letter-spacing: -0.14px;
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-tight);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    transform 140ms var(--ease-out-snappy),
-    border-color 160ms ease,
-    background-color 160ms ease;
+    transform var(--duration-press) var(--ease-out-snappy),
+    border-color var(--duration-hover) ease,
+    background-color var(--duration-hover) ease;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -33,9 +35,21 @@
   padding-inline-start: var(--space-2);
 }
 
+.sm {
+  --button-size: 28px;
+}
+
+.md {
+  --button-size: 32px;
+}
+
+.lg {
+  --button-size: 44px;
+}
+
 .iconOnly {
-  width: 32px;
-  height: 32px;
+  width: var(--button-size);
+  height: var(--button-size);
   padding: 0;
   overflow: hidden;
 }
@@ -56,34 +70,55 @@
   color: var(--color-text-inverse);
 }
 
+.overlay {
+  border: 0;
+  background: rgb(17 17 17 / 56%);
+  color: var(--color-text-inverse);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
 .button:focus-visible {
   outline: 2px solid var(--color-text-primary);
   outline-offset: 2px;
 }
 
-.button:active {
+.overlay:focus-visible {
+  outline-color: var(--color-text-inverse);
+}
+
+.button:active:not(:disabled) {
   transform: scale(0.97);
 }
 
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 @media (hover: hover) and (pointer: fine) {
-  .outline:hover {
+  .outline:hover:not(:disabled) {
     border-color: var(--color-border-hover);
     background: var(--color-surface-hover);
   }
 
-  .primary:hover {
+  .primary:hover:not(:disabled) {
     background: var(--color-action-primary-hover);
+  }
+
+  .overlay:hover:not(:disabled) {
+    background: rgb(43 43 43 / 56%);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .button {
     transition:
-      border-color 160ms ease,
-      background-color 160ms ease;
+      border-color var(--duration-hover) ease,
+      background-color var(--duration-hover) ease;
   }
 
-  .button:active {
+  .button:active:not(:disabled) {
     transform: none;
   }
 }

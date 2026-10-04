@@ -6,7 +6,7 @@
   text-decoration: none;
   transform: translateY(0);
   transition:
-    color 160ms ease,
+    color var(--duration-hover) ease,
     transform 160ms var(--ease-out-snappy);
 }
 
@@ -21,7 +21,7 @@
   opacity: 0.6;
   transform: scaleX(1);
   transform-origin: center;
-  transition: opacity 160ms ease;
+  transition: opacity var(--duration-hover) ease;
 }
 
 .link:focus-visible {
