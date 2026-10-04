@@ -1,9 +1,52 @@
 /* The marquee renders only after mount, so the strip reserves its height up front. */
 .gallery {
   --concept-height: 414px;
+  /* Width of the edge fades and blur; matches `gradientWidth` on the marquee. */
+  --concepts-edge: 120px;
 
+  position: relative;
   height: var(--concept-height);
-  overflow: hidden;
+  /* Clip only sideways, so the edge fades can reach past the strip's top and bottom. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* The library clips with `overflow-x: hidden`, which turns the other axis into a scroller. */
+.gallery :global(.rfm-marquee-container) {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* The marquee's own color fades: 20% taller than the strip, split evenly above and below. */
+.gallery :global(.rfm-overlay) {
+  top: -10%;
+  height: 120%;
+}
+
+.edgeBlur {
+  position: absolute;
+  z-index: 2;
+  inset-block: -10%;
+  width: var(--concepts-edge);
+  pointer-events: none;
+}
+
+.edgeBlur[data-side="left"] {
+  left: 0;
+  --edge-direction: to right;
+}
+
+.edgeBlur[data-side="right"] {
+  right: 0;
+  --edge-direction: to left;
+}
+
+.edgeBlurLayer {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+  mask-image: linear-gradient(var(--edge-direction), #000, transparent var(--reach));
 }
 
 /* A margin rather than a gap keeps the spacing even across the loop seam. */
@@ -43,5 +86,6 @@
 @media (max-width: 760px) {
   .gallery {
     --concept-height: 210px;
+    --concepts-edge: 32px;
   }
 }

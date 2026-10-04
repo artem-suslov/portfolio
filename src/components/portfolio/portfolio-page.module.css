@@ -61,7 +61,8 @@
   --concepts-fade: var(--color-page);
 
   width: 100vw;
-  margin: var(--space-14) calc(50% - 50vw) 0;
+  /* 100px above and below; the viewport's own bottom padding counts toward the lower gap. */
+  margin: 100px calc(50% - 50vw) calc(100px - var(--space-6));
 }
 
 .aboutSection {
@@ -119,7 +120,9 @@
   .concepts {
     --concepts-fade: var(--color-surface);
 
-    margin-top: 0;
+    /* The full-screen card already ends with 72px of padding below the last case. */
+    margin-top: calc(100px - var(--space-18));
+    margin-bottom: 100px;
   }
 
   .aboutSection {

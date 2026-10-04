@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { type CSSProperties, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { CaseCoverModal } from "@/components/portfolio-case/case-cover-modal";
 import { concepts } from "@/data/concepts";
@@ -10,6 +10,27 @@ import styles from "./concepts-gallery.module.css";
 
 // Matches `--radius-md` on `.conceptTrigger`.
 const conceptRadius = 8;
+// Each layer blurs harder over a shorter stretch, so the blur ramps up to 32px at the window edge.
+const edgeBlurLayers = [2, 4, 8, 16, 32];
+// Off while trying the strip without edge treatment; flip back to restore the fades and blur.
+const showEdgeFades = false;
+
+function EdgeBlur({ side }: { side: "left" | "right" }) {
+  return (
+    <div aria-hidden="true" className={styles.edgeBlur} data-side={side}>
+      {edgeBlurLayers.map((blur, index) => (
+        <div
+          className={styles.edgeBlurLayer}
+          key={blur}
+          style={{
+            "--blur": `${blur}px`,
+            "--reach": `${100 - (index * 100) / edgeBlurLayers.length}%`,
+          } as CSSProperties}
+        />
+      ))}
+    </div>
+  );
+}
 
 export function ConceptsGallery({ className }: { className?: string }) {
   const isMobile = useMediaQuery(MOBILE_QUERY);
@@ -23,10 +44,18 @@ export function ConceptsGallery({ className }: { className?: string }) {
       aria-label="Concepts"
       className={className ? `${styles.gallery} ${className}` : styles.gallery}
     >
+      {/* Painted before the marquee's color fades, so the fades sit on top of the blur. */}
+      {showEdgeFades ? (
+        <>
+          <EdgeBlur side="left" />
+          <EdgeBlur side="right" />
+        </>
+      ) : null}
       <Marquee
         autoFill
-        gradient
+        gradient={showEdgeFades}
         gradientColor="var(--concepts-fade, var(--color-surface))"
+        // Keep in sync with `--concepts-edge` in the CSS module.
         gradientWidth={isMobile ? 32 : 120}
         play={!prefersReducedMotion && !isViewing}
         speed={48}
