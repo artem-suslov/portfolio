@@ -1,7 +1,7 @@
 /* Floating feedback button and its popover, pinned to the bottom-left corner. */
 
 .root {
-  --panel-max-height: calc(100dvh - 44px - var(--space-6) * 2 - var(--space-3));
+  --panel-max-height: calc(100dvh - var(--space-6) * 2);
 
   position: fixed;
   z-index: var(--z-floating);
@@ -21,14 +21,22 @@
 /* Shape, border and hover come from Button; only the lift is specific to this button. */
 .trigger {
   box-shadow: 0 6px 20px rgb(5 30 29 / 10%);
+  /* framer-motion owns transform during the morph; a CSS transform transition would lag it. */
+  transition:
+    border-color var(--duration-hover) ease,
+    background-color var(--duration-hover) ease;
 }
 
-.trigger[data-active] {
-  border-color: var(--color-border-hover);
-  background: var(--color-surface-subtle);
+.triggerIcon {
+  display: grid;
+  place-items: center;
 }
 
+/* The panel opens on top of the button, so the button morphs straight into it. */
 .panel {
+  position: absolute;
+  left: 0;
+  bottom: 0;
   width: min(360px, calc(100vw - 2 * var(--space-4)));
   /* Height comes from the measured content (inline style); the border sits outside it. */
   box-sizing: content-box;
@@ -45,34 +53,9 @@
   overscroll-behavior: contain;
 }
 
-/* Grows out of the trigger rather than from the panel's center. */
-.panel {
-  transform-origin: bottom left;
-  transform: scale(var(--modal-scale));
-  opacity: 0;
-  transition:
-    transform var(--modal-open-dur) var(--modal-ease),
-    opacity var(--modal-open-dur) var(--modal-ease);
-}
-
-.panel[data-state="open"] {
-  transform: scale(1);
-  opacity: 1;
-}
-
 /* Switching steps morphs the panel to the new step's height. */
-.panel[data-state="open"][data-animate-height] {
-  transition:
-    transform var(--modal-open-dur) var(--modal-ease),
-    opacity var(--modal-open-dur) var(--modal-ease),
-    height 240ms var(--ease-out-snappy);
-}
-
-.panel[data-state="closing"] {
-  pointer-events: none;
-  transition:
-    transform var(--modal-close-dur) var(--modal-ease),
-    opacity var(--modal-close-dur) var(--modal-ease);
+.panel[data-animate-height] {
+  transition: height 240ms var(--ease-out-snappy);
 }
 
 .header {
@@ -101,7 +84,7 @@
 }
 
 /* Each step fades in when the panel switches between them. */
-.panel[data-state="open"] .body {
+.body {
   animation: stepIn 200ms var(--ease-out-quint);
 }
 
@@ -295,11 +278,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel,
-  .panel[data-state="closing"],
-  .panel[data-state="open"][data-animate-height] {
-    transform: none;
-    transition: opacity 120ms ease;
+  /* The morph itself is switched off by <MotionConfig reducedMotion="user">. */
+  .panel[data-animate-height] {
+    transition: none;
   }
 
   .option,
@@ -307,7 +288,7 @@
     transition: none;
   }
 
-  .panel[data-state="open"] .body {
+  .body {
     animation: none;
   }
 

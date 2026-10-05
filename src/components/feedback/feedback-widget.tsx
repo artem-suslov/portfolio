@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, type FormEvent } from "react";
+import { AnimatePresence, m, MotionConfig, type Transition } from "framer-motion";
 import { Bug, ChevronLeft, ChevronRight, Lightbulb, X } from "lucide-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { Button } from "@/components/ui/button";
@@ -8,13 +9,27 @@ import { HoverShimmer } from "@/components/ui/hover-shimmer";
 import { useMouseHover } from "@/components/ui/use-mouse-hover";
 import { trackGoal } from "@/lib/analytics";
 import { FINE_HOVER_QUERY, matchesMedia } from "@/lib/media";
-import { useEscapeKey, useModalPhase } from "@/lib/modal";
+import { useEscapeKey } from "@/lib/modal";
 import styles from "./feedback-widget.module.css";
 
 type SendState = "idle" | "sending" | "sent" | "error";
 type FeedbackKind = "bug" | "idea";
 
 const MAX_MESSAGE_LENGTH = 2000;
+/**
+ * The button and the panel share one surface that morphs between the two shapes. Crossfade is off
+ * on both, so the surface hands over at once instead of showing a stretched copy of the button.
+ */
+const SURFACE_LAYOUT_ID = "feedback-surface";
+const morphTransition: Transition = {
+  type: "spring",
+  duration: 0.35,
+  bounce: 0,
+};
+const TRIGGER_RADIUS = 22;
+const PANEL_RADIUS = 16;
+
+const MotionButton = m.create(Button);
 
 /**
  * Telegram usernames use only Latin letters, digits and "_". Keeps an optional leading "@"
@@ -79,28 +94,25 @@ export function FeedbackWidget() {
   const telegramHintId = useId();
   const contentRef = useRef<HTMLDivElement>(null);
   const measuredStepRef = useRef<string | null>(null);
-  const [panelHeight, setPanelHeight] = useState<{ animate: boolean; value: number } | null>(null);
+  const [panelHeight, setPanelHeight] = useState<{
+    animate: boolean;
+    value: number;
+  } | null>(null);
   const step = !kind ? "choose" : sendState === "sent" ? "sent" : kind;
   const canSubmit = message.trim() !== "" && sendState !== "sending";
 
-  const {
-    handleTransitionEnd,
-    isMounted: isPanelVisible,
-    phase: panelState,
-  } = useModalPhase(isOpen, {
-    // A sent form starts over from the first step; an unsent draft stays where it was.
-    onClosed: () => {
-      if (sendState === "sent") {
-        setMessage("");
-      }
-      if (sendState === "sent" || !message.trim()) {
-        setKind(null);
-      }
-      if (sendState !== "sending") {
-        setSendState("idle");
-      }
-    },
-  });
+  // A sent form starts over from the first step; an unsent draft stays where it was.
+  const handleClosed = () => {
+    if (sendState === "sent") {
+      setMessage("");
+    }
+    if (sendState === "sent" || !message.trim()) {
+      setKind(null);
+    }
+    if (sendState !== "sending") {
+      setSendState("idle");
+    }
+  };
 
   const closePanel = () => setIsOpen(false);
 
@@ -135,7 +147,13 @@ export function FeedbackWidget() {
 
     try {
       const response = await fetch("/api/feedback", {
-        body: JSON.stringify({ kind, message, page: window.location.href, telegram, website }),
+        body: JSON.stringify({
+          kind,
+          message,
+          page: window.location.href,
+          telegram,
+          website,
+        }),
         headers: { "Content-Type": "application/json" },
         method: "POST",
       });
@@ -152,10 +170,12 @@ export function FeedbackWidget() {
   };
 
   useEffect(() => {
-    if (panelState === "open" && matchesMedia(FINE_HOVER_QUERY)) {
-      (messageRef.current ?? firstOptionRef.current)?.focus();
+    if (isOpen && matchesMedia(FINE_HOVER_QUERY)) {
+      (messageRef.current ?? firstOptionRef.current)?.focus({
+        preventScroll: true,
+      });
     }
-  }, [panelState]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!shouldMoveFocusRef.current) {
@@ -163,7 +183,9 @@ export function FeedbackWidget() {
     }
 
     shouldMoveFocusRef.current = false;
-    (kind ? messageRef.current : firstOptionRef.current)?.focus({ preventScroll: true });
+    (kind ? messageRef.current : firstOptionRef.current)?.focus({
+      preventScroll: true,
+    });
   }, [kind]);
 
   // The panel gets an explicit height that follows its content, so a step change can transition
@@ -175,7 +197,7 @@ export function FeedbackWidget() {
 
   useEffect(() => {
     const content = contentRef.current;
-    if (!isPanelVisible || !content) {
+    if (!isOpen || !content) {
       measuredStepRef.current = null;
       return;
     }
@@ -190,10 +212,10 @@ export function FeedbackWidget() {
 
     observer.observe(content);
     return () => observer.disconnect();
-  }, [isPanelVisible]);
+  }, [isOpen]);
 
   useEffect(() => {
-    if (panelState !== "open") {
+    if (!isOpen) {
       return;
     }
 
@@ -205,9 +227,9 @@ export function FeedbackWidget() {
 
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [panelState]);
+  }, [isOpen]);
 
-  useEscapeKey(isPanelVisible, () => {
+  useEscapeKey(isOpen, () => {
     closePanel();
     if (matchesMedia(FINE_HOVER_QUERY)) {
       triggerRef.current?.focus();
@@ -215,182 +237,227 @@ export function FeedbackWidget() {
   });
 
   return (
-    <div className={styles.root} ref={rootRef}>
-      {isPanelVisible ? (
-        <section
-          aria-labelledby={titleId}
-          className={styles.panel}
-          data-state={panelState}
-          onTransitionEnd={handleTransitionEnd}
-          role="dialog"
-          style={panelHeight ? { height: panelHeight.value } : undefined}
-          data-animate-height={panelHeight?.animate || undefined}
+    <MotionConfig reducedMotion="user">
+      <div className={styles.root} ref={rootRef}>
+        <MotionButton
+          aria-expanded={isOpen}
+          aria-haspopup="dialog"
+          aria-label="Report a bug or leave feedback"
+          className={styles.trigger}
+          iconOnly
+          layoutCrossfade={false}
+          layoutId={SURFACE_LAYOUT_ID}
+          onClick={togglePanel}
+          ref={triggerRef}
+          size="lg"
+          style={{ borderRadius: TRIGGER_RADIUS }}
+          tabIndex={isOpen ? -1 : undefined}
+          transition={morphTransition}
         >
-          <div className={styles.content} ref={contentRef}>
-            <header className={styles.header}>
-              {kind && sendState !== "sent" ? (
-                <Button aria-label="Back to choosing a topic" iconOnly onClick={goBack} size="sm">
-                  <ChevronLeft aria-hidden="true" size={16} strokeWidth={1.8} />
-                </Button>
-              ) : null}
-              <h2 className={styles.title} id={titleId}>
-                {kind ? (sendState === "sent" ? kindCopy[kind].sentTitle : kindCopy[kind].title) : "Bug or feature?"}
-              </h2>
-              <Button
-                aria-label="Close feedback form"
-                iconOnly
-                onClick={() => {
-                  playTap();
-                  closePanel();
+          <m.span
+            animate={{ opacity: isOpen ? 0 : 1 }}
+            className={styles.triggerIcon}
+            initial={false}
+            transition={{ delay: isOpen ? 0 : 0.15, duration: 0.15 }}
+          >
+            <Bug aria-hidden="true" size={18} strokeWidth={1.8} />
+          </m.span>
+        </MotionButton>
+
+        <AnimatePresence onExitComplete={handleClosed}>
+          {isOpen ? (
+            <m.section
+              aria-labelledby={titleId}
+              className={styles.panel}
+              data-animate-height={panelHeight?.animate || undefined}
+              // Only the open/close morph is a layout animation; step changes resize with CSS.
+              layoutDependency={0}
+              layoutCrossfade={false}
+              layoutId={SURFACE_LAYOUT_ID}
+              role="dialog"
+              style={{
+                borderRadius: PANEL_RADIUS,
+                height: panelHeight?.value,
+              }}
+              transition={morphTransition}
+            >
+              <m.div
+                animate={{
+                  opacity: 1,
+                  transition: { delay: 0.08, duration: 0.2 },
                 }}
-                size="sm"
+                className={styles.content}
+                exit={{ opacity: 0, transition: { duration: 0.08 } }}
+                initial={{ opacity: 0 }}
+                // Counter-scaled during the morph, so the content is revealed rather than squashed.
+                layout
+                layoutDependency={0}
+                ref={contentRef}
               >
-                <X aria-hidden="true" size={16} strokeWidth={1.7} />
-              </Button>
-            </header>
-
-            {!kind ? (
-              <div className={styles.body} key="choose">
-                <p className={styles.description}>
-                  Found something broken, or have an idea for the portfolio? Pick one and tell me
-                  about it; the message goes straight to my Telegram.
-                </p>
-                <div className={styles.options}>
-                  {kindOptions.map(({ description, icon: Icon, kind: optionKind, label }, index) => (
-                    <button
-                      className={styles.option}
-                      key={optionKind}
-                      onClick={() => chooseKind(optionKind)}
-                      ref={index === 0 ? firstOptionRef : undefined}
-                      type="button"
+                <header className={styles.header}>
+                  {kind && sendState !== "sent" ? (
+                    <Button
+                      aria-label="Back to choosing a topic"
+                      iconOnly
+                      onClick={goBack}
+                      size="sm"
                     >
-                      <span className={styles.optionIcon} data-kind={optionKind}>
-                        <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
-                      </span>
-                      <span className={styles.optionText}>
-                        <span className={styles.optionLabel}>{label}</span>
-                        <span className={styles.optionDescription}>{description}</span>
-                      </span>
-                      <ChevronRight
-                        aria-hidden="true"
-                        className={styles.optionChevron}
-                        size={16}
-                        strokeWidth={1.8}
+                      <ChevronLeft aria-hidden="true" size={16} strokeWidth={1.8} />
+                    </Button>
+                  ) : null}
+                  <h2 className={styles.title} id={titleId}>
+                    {kind
+                      ? sendState === "sent"
+                        ? kindCopy[kind].sentTitle
+                        : kindCopy[kind].title
+                      : "Bug or feature?"}
+                  </h2>
+                  <Button
+                    aria-label="Close feedback form"
+                    iconOnly
+                    onClick={() => {
+                      playTap();
+                      closePanel();
+                    }}
+                    size="sm"
+                  >
+                    <X aria-hidden="true" size={16} strokeWidth={1.7} />
+                  </Button>
+                </header>
+
+                {!kind ? (
+                  <div className={styles.body} key="choose">
+                    <p className={styles.description}>
+                      Found something broken, or have an idea for the portfolio? Pick one and tell
+                      me about it; the message goes straight to my Telegram.
+                    </p>
+                    <div className={styles.options}>
+                      {kindOptions.map(
+                        ({ description, icon: Icon, kind: optionKind, label }, index) => (
+                          <button
+                            className={styles.option}
+                            key={optionKind}
+                            onClick={() => chooseKind(optionKind)}
+                            ref={index === 0 ? firstOptionRef : undefined}
+                            type="button"
+                          >
+                            <span className={styles.optionIcon} data-kind={optionKind}>
+                              <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
+                            </span>
+                            <span className={styles.optionText}>
+                              <span className={styles.optionLabel}>{label}</span>
+                              <span className={styles.optionDescription}>{description}</span>
+                            </span>
+                            <ChevronRight
+                              aria-hidden="true"
+                              className={styles.optionChevron}
+                              size={16}
+                              strokeWidth={1.8}
+                            />
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  </div>
+                ) : sendState === "sent" ? (
+                  <div className={styles.body} key="sent">
+                    <p className={styles.description}>
+                      {telegram.trim()
+                        ? "The message is already in my Telegram, and I'll write back to you there."
+                        : "The message is already in my Telegram. Leave your username next time if you'd like an answer."}
+                    </p>
+                    <Button
+                      className={styles.submit}
+                      onClick={() => {
+                        playTap();
+                        closePanel();
+                      }}
+                      variant="primary"
+                    >
+                      Close
+                    </Button>
+                  </div>
+                ) : (
+                  <form className={styles.body} key={kind} noValidate onSubmit={handleSubmit}>
+                    <p className={styles.description}>{kindCopy[kind].description}</p>
+
+                    <div className={styles.field}>
+                      <label className={styles.label} htmlFor={messageId}>
+                        {kindCopy[kind].label}
+                      </label>
+                      <textarea
+                        className={`${styles.control} ${styles.textarea}`}
+                        id={messageId}
+                        maxLength={MAX_MESSAGE_LENGTH}
+                        name="message"
+                        onChange={(event) => setMessage(event.target.value)}
+                        placeholder={kindCopy[kind].placeholder}
+                        ref={messageRef}
+                        required
+                        rows={4}
+                        value={message}
                       />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : sendState === "sent" ? (
-              <div className={styles.body} key="sent">
-                <p className={styles.description}>
-                  {telegram.trim()
-                    ? "The message is already in my Telegram, and I'll write back to you there."
-                    : "The message is already in my Telegram. Leave your username next time if you'd like an answer."}
-                </p>
-                <Button
-                  className={styles.submit}
-                  onClick={() => {
-                    playTap();
-                    closePanel();
-                  }}
-                  variant="primary"
-                >
-                  Close
-                </Button>
-              </div>
-            ) : (
-              <form className={styles.body} key={kind} noValidate onSubmit={handleSubmit}>
-                <p className={styles.description}>{kindCopy[kind].description}</p>
+                    </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor={messageId}>
-                    {kindCopy[kind].label}
-                  </label>
-                  <textarea
-                    className={`${styles.control} ${styles.textarea}`}
-                    id={messageId}
-                    maxLength={MAX_MESSAGE_LENGTH}
-                    name="message"
-                    onChange={(event) => setMessage(event.target.value)}
-                    placeholder={kindCopy[kind].placeholder}
-                    ref={messageRef}
-                    required
-                    rows={4}
-                    value={message}
-                  />
-                </div>
+                    <div className={styles.field}>
+                      <label className={styles.label} htmlFor={telegramId}>
+                        Your Telegram <span className={styles.optional}>optional</span>
+                      </label>
+                      <input
+                        aria-describedby={telegramHintId}
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        className={styles.control}
+                        id={telegramId}
+                        maxLength={33}
+                        name="telegram"
+                        onChange={(event) => setTelegram(sanitizeTelegram(event.target.value))}
+                        placeholder="@username"
+                        spellCheck={false}
+                        type="text"
+                        value={telegram}
+                      />
+                      <p className={styles.hint} id={telegramHintId}>
+                        Only if you want a reply.
+                      </p>
+                    </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label} htmlFor={telegramId}>
-                    Your Telegram <span className={styles.optional}>optional</span>
-                  </label>
-                  <input
-                    aria-describedby={telegramHintId}
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    className={styles.control}
-                    id={telegramId}
-                    maxLength={33}
-                    name="telegram"
-                    onChange={(event) => setTelegram(sanitizeTelegram(event.target.value))}
-                    placeholder="@username"
-                    spellCheck={false}
-                    type="text"
-                    value={telegram}
-                  />
-                  <p className={styles.hint} id={telegramHintId}>
-                    Only if you want a reply.
-                  </p>
-                </div>
+                    {/* Honeypot for bots; hidden from people and assistive tech. */}
+                    <input
+                      aria-hidden="true"
+                      autoComplete="off"
+                      className={styles.honeypot}
+                      name="website"
+                      tabIndex={-1}
+                      type="text"
+                    />
 
-                {/* Honeypot for bots; hidden from people and assistive tech. */}
-                <input
-                  aria-hidden="true"
-                  autoComplete="off"
-                  className={styles.honeypot}
-                  name="website"
-                  tabIndex={-1}
-                  type="text"
-                />
+                    {sendState === "error" ? (
+                      <p className={styles.error} role="alert">
+                        It didn&apos;t go through. Try once more, or write to me directly at
+                        @art_ew.
+                      </p>
+                    ) : null}
 
-                {sendState === "error" ? (
-                  <p className={styles.error} role="alert">
-                    It didn&apos;t go through. Try once more, or write to me directly at @art_ew.
-                  </p>
-                ) : null}
-
-                <Button
-                  className={styles.submit}
-                  disabled={!canSubmit}
-                  type="submit"
-                  variant="primary"
-                  {...submitHoverProps}
-                >
-                  <HoverShimmer isActive={isSubmitHovered && canSubmit}>
-                    {sendState === "sending" ? "Sending…" : "Send"}
-                  </HoverShimmer>
-                </Button>
-              </form>
-            )}
-          </div>
-        </section>
-      ) : null}
-
-      <Button
-        aria-expanded={isPanelVisible}
-        aria-haspopup="dialog"
-        aria-label="Report a bug or leave feedback"
-        className={styles.trigger}
-        data-active={isPanelVisible || undefined}
-        iconOnly
-        onClick={togglePanel}
-        ref={triggerRef}
-        size="lg"
-      >
-        <Bug aria-hidden="true" size={18} strokeWidth={1.8} />
-      </Button>
-    </div>
+                    <Button
+                      className={styles.submit}
+                      disabled={!canSubmit}
+                      type="submit"
+                      variant="primary"
+                      {...submitHoverProps}
+                    >
+                      <HoverShimmer isActive={isSubmitHovered && canSubmit}>
+                        {sendState === "sending" ? "Sending…" : "Send"}
+                      </HoverShimmer>
+                    </Button>
+                  </form>
+                )}
+              </m.div>
+            </m.section>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </MotionConfig>
   );
 }
