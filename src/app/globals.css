@@ -9,6 +9,14 @@ html {
   overflow-y: scroll;
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
+  /* Match the page so overscroll/bounce areas don't flash a different color */
+  background: var(--color-page);
+}
+
+@media (max-width: 760px) {
+  html {
+    background: var(--color-surface);
+  }
 }
 
 :root {
