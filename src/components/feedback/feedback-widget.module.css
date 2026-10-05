@@ -27,9 +27,20 @@
     background-color var(--duration-hover) ease;
 }
 
+/*
+ * The icon hides at once while the button morphs into the panel and fades back in once the
+ * button has almost shrunk to a circle. A CSS transition, unlike a JS animation, still lands on
+ * its end state after the tab was in the background.
+ */
 .triggerIcon {
   display: grid;
   place-items: center;
+  transition: opacity 150ms ease 150ms;
+}
+
+.trigger[aria-expanded="true"] .triggerIcon {
+  opacity: 0;
+  transition-delay: 0ms;
 }
 
 /* The panel opens on top of the button, so the button morphs straight into it. */
@@ -215,6 +226,26 @@
   border-color: var(--color-text-secondary);
   outline: none;
   box-shadow: 0 0 0 3px rgb(5 30 29 / 8%);
+}
+
+/* A fixed "@" sits inside the field; the input itself holds only the bare username. */
+.prefixedControl {
+  position: relative;
+}
+
+.prefix {
+  position: absolute;
+  top: 50%;
+  left: var(--space-3);
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  pointer-events: none;
+}
+
+.prefixedControl .control {
+  padding-left: calc(var(--space-3) + 1ch + 2px);
 }
 
 .textarea {

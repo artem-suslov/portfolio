@@ -32,24 +32,25 @@ const PANEL_RADIUS = 16;
 const MotionButton = m.create(Button);
 
 /**
- * Telegram usernames use only Latin letters, digits and "_". Keeps an optional leading "@"
- * and turns a pasted t.me link into "@name".
+ * Returns the bare username: the field shows its own "@" prefix, so a typed "@" is dropped,
+ * a pasted t.me link is cut down to the name, and only Latin letters, digits and "_" remain.
  */
 function sanitizeTelegram(value: string) {
-  const withoutLink = value.trimStart().replace(/^(https?:\/\/)?(t|telegram)\.me\//i, "@");
-  const hasAt = withoutLink.startsWith("@");
-  return (hasAt ? "@" : "") + withoutLink.replace(/[^a-z0-9_]/gi, "");
+  return value
+    .trim()
+    .replace(/^(https?:\/\/)?(t|telegram)\.me\//i, "")
+    .replace(/[^a-z0-9_]/gi, "");
 }
 
 const kindOptions = [
   {
-    description: "A glitch, a broken link, a layout that fell apart",
+    description: "A glitch or a layout that fell apart",
     icon: Bug,
     kind: "bug",
     label: "Something's broken",
   },
   {
-    description: "A detail to add or something to do better",
+    description: "Something to add or improve",
     icon: Lightbulb,
     kind: "idea",
     label: "I have an idea",
@@ -58,14 +59,14 @@ const kindOptions = [
 
 const kindCopy = {
   bug: {
-    description: "Just describe what broke; I'll get the page and your browser automatically.",
+    description: "Describe what broke. I'll see the page and browser on my side.",
     label: "What went wrong?",
     placeholder: "The video in the Steamify case froze on my iPhone",
     sentTitle: "Got it, I'll take a look",
     title: "Report a bug",
   },
   idea: {
-    description: "Anything from a missing detail in a case study to how the site feels on a phone.",
+    description: "Anything from a missing detail to a case that didn't land.",
     label: "What would you change?",
     placeholder: "Show the final numbers at the top of each case",
     sentTitle: "Thanks for the idea",
@@ -151,7 +152,7 @@ export function FeedbackWidget() {
           kind,
           message,
           page: window.location.href,
-          telegram,
+          telegram: telegram ? `@${telegram}` : "",
           website,
         }),
         headers: { "Content-Type": "application/json" },
@@ -254,14 +255,9 @@ export function FeedbackWidget() {
           tabIndex={isOpen ? -1 : undefined}
           transition={morphTransition}
         >
-          <m.span
-            animate={{ opacity: isOpen ? 0 : 1 }}
-            className={styles.triggerIcon}
-            initial={false}
-            transition={{ delay: isOpen ? 0 : 0.15, duration: 0.15 }}
-          >
+          <span className={styles.triggerIcon}>
             <Bug aria-hidden="true" size={18} strokeWidth={1.8} />
-          </m.span>
+          </span>
         </MotionButton>
 
         <AnimatePresence onExitComplete={handleClosed}>
@@ -328,8 +324,8 @@ export function FeedbackWidget() {
                 {!kind ? (
                   <div className={styles.body} key="choose">
                     <p className={styles.description}>
-                      Found something broken, or have an idea for the portfolio? Pick one and tell
-                      me about it; the message goes straight to my Telegram.
+                      Tell me what&apos;s broken or what could be better. It goes straight to my
+                      Telegram.
                     </p>
                     <div className={styles.options}>
                       {kindOptions.map(
@@ -363,8 +359,8 @@ export function FeedbackWidget() {
                   <div className={styles.body} key="sent">
                     <p className={styles.description}>
                       {telegram.trim()
-                        ? "The message is already in my Telegram, and I'll write back to you there."
-                        : "The message is already in my Telegram. Leave your username next time if you'd like an answer."}
+                        ? "It's already in my Telegram. I'll reply to you there."
+                        : "It's already in my Telegram. Add your username next time if you want a reply."}
                     </p>
                     <Button
                       className={styles.submit}
@@ -403,21 +399,26 @@ export function FeedbackWidget() {
                       <label className={styles.label} htmlFor={telegramId}>
                         Your Telegram <span className={styles.optional}>optional</span>
                       </label>
-                      <input
-                        aria-describedby={telegramHintId}
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        autoCorrect="off"
-                        className={styles.control}
-                        id={telegramId}
-                        maxLength={33}
-                        name="telegram"
-                        onChange={(event) => setTelegram(sanitizeTelegram(event.target.value))}
-                        placeholder="@username"
-                        spellCheck={false}
-                        type="text"
-                        value={telegram}
-                      />
+                      <div className={styles.prefixedControl}>
+                        <span aria-hidden="true" className={styles.prefix}>
+                          @
+                        </span>
+                        <input
+                          aria-describedby={telegramHintId}
+                          autoCapitalize="none"
+                          autoComplete="off"
+                          autoCorrect="off"
+                          className={styles.control}
+                          id={telegramId}
+                          maxLength={32}
+                          name="telegram"
+                          onChange={(event) => setTelegram(sanitizeTelegram(event.target.value))}
+                          placeholder="username"
+                          spellCheck={false}
+                          type="text"
+                          value={telegram}
+                        />
+                      </div>
                       <p className={styles.hint} id={telegramHintId}>
                         Only if you want a reply.
                       </p>
@@ -435,8 +436,7 @@ export function FeedbackWidget() {
 
                     {sendState === "error" ? (
                       <p className={styles.error} role="alert">
-                        It didn&apos;t go through. Try once more, or write to me directly at
-                        @art_ew.
+                        It didn&apos;t go through. Try again or message me at @art_ew.
                       </p>
                     ) : null}
 
