@@ -362,6 +362,11 @@
   pointer-events: auto;
 }
 
+.caseVideoFrame {
+  position: relative;
+  width: 100%;
+}
+
 .caseVisual[data-expanded] + .caseVideoControl {
   visibility: hidden;
 }
