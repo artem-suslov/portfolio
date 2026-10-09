@@ -151,6 +151,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       role: "Product Designer",
       title: "Open-source design system used by 1,500+ people",
     },
+    href: "/safe-design-system",
     title: "Open-source design system used by 1,500+ people",
   },
   {

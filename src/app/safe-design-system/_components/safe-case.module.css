@@ -1,0 +1,73 @@
+/* Page-specific additions on top of the shared case-study styles. */
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-10);
+}
+
+.metrics > div {
+  display: flex;
+  flex-direction: column-reverse;
+  /* Pins the figures to the top of each row when a label wraps (the axis is reversed). */
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.metrics dd {
+  font-size: var(--font-size-4xl);
+  line-height: 36px;
+}
+
+.metrics dt {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-xl);
+}
+
+.goals {
+  margin: 0;
+  padding-left: var(--space-6);
+  list-style: decimal;
+}
+
+.goals > li {
+  color: var(--color-text-body);
+}
+
+.goals > li + li {
+  margin-top: var(--space-2);
+}
+
+/* The spacing-token snippet is a narrow portrait shot; keep it at its natural 1x size. */
+.tokens {
+  width: 264px;
+  max-width: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.screens {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (max-width: 760px) {
+  .metrics {
+    gap: var(--space-5) var(--space-8);
+  }
+
+  .metrics dt {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-md);
+  }
+
+  .metrics dd {
+    font-size: var(--font-size-3xl);
+    line-height: 32px;
+  }
+
+  section.results {
+    padding: var(--space-8) 0 0;
+  }
+}
