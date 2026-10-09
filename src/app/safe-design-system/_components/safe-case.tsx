@@ -5,6 +5,7 @@ import {
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
 import { CaseImage } from "@/components/case-study/case-media";
+import { CaseMorph } from "@/components/case-study/case-morph";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import styles from "./safe-case.module.css";
@@ -47,7 +48,9 @@ function Metrics() {
 export function SafeCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Safe{Wallet} · Web3, Design System" title={<>Open-source design system <br />for Safe{"{"}Wallet{"}"}</>}>
-        <CaseImage caseId="safe-design-system" className={shared.media} src="/images/safe_design_system_thumbnail.png" width={3816} height={2082} preload alt="Tag component from the Safe design system in light and dark themes" />
+        <CaseMorph slug="safe-design-system">
+          <CaseImage caseId="safe-design-system" className={shared.media} src="/images/safe_design_system_thumbnail.png" width={3816} height={2082} preload alt="Tag component from the Safe design system in light and dark themes" />
+        </CaseMorph>
         <CaseMeta items={meta} />
       </CaseOverview>
 

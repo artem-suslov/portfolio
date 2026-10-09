@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef } from "react";
+import { CaseMorph } from "@/components/case-study/case-morph";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { CaseCover } from "./case-cover";
 import { CaseInfo } from "./case-info";
@@ -33,7 +34,13 @@ export function PortfolioCase({
       data-case-id={id}
       ref={cardRef}
     >
-      <CaseCover caseId={id} cover={cover} isLinked={Boolean(href)} title={title} />
+      {href ? (
+        <CaseMorph slug={href.slice(1)}>
+          <CaseCover caseId={id} cover={cover} isLinked title={title} />
+        </CaseMorph>
+      ) : (
+        <CaseCover caseId={id} cover={cover} isLinked={false} title={title} />
+      )}
       <CaseInfo description={description} details={details} title={title} />
 
       {href && title ? (
