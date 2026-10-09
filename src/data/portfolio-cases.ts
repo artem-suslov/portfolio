@@ -171,6 +171,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       role: "Product Designer",
       title: "Steam trading management dashboard",
     },
+    href: "/steamify-trading-bot",
     title: "Steam trading management dashboard",
   },
   // Hidden for now; uncomment together with "northstar" in the case-study tab.
