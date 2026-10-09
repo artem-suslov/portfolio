@@ -47,7 +47,7 @@ function Metrics() {
 export function SafeCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Safe{Wallet} · Web3, Design System" title={<>Open-source design system <br />for Safe{"{"}Wallet{"}"}</>}>
-        <CaseImage caseId="safe-design-system" className={shared.media} src={`${assets}/hero.jpg`} width={2560} height={1396} preload alt="Alert and table cell row components from the Safe design system, dark theme" />
+        <CaseImage caseId="safe-design-system" className={shared.media} src="/images/safe_design_system_thumbnail.png" width={3816} height={2082} preload alt="Tag component from the Safe design system in light and dark themes" />
         <CaseMeta items={meta} />
       </CaseOverview>
 
