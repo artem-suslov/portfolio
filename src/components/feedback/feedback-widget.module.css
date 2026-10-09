@@ -45,223 +45,395 @@
 
 /* The panel opens on top of the button, so the button morphs straight into it. */
 .panel {
+  /* The panel's own palette from the Figma mock: a gray frame around a white card. */
+  --feedback-frame: #f7f7f7;
+  --feedback-frame-border: #f0f0f0;
+  --feedback-field-border: #ececec;
+  --feedback-field-border-focus: #b8b8b8;
+
   position: absolute;
   left: 0;
   bottom: 0;
-  width: min(360px, calc(100vw - 2 * var(--space-4)));
+  width: min(400px, calc(100vw - 2 * var(--space-4)));
   /* Height comes from the measured content (inline style); the border sits outside it. */
   box-sizing: content-box;
   overflow: hidden;
-  border: 0.5px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  box-shadow: 0 20px 60px rgb(5 30 29 / 16%);
+  border: 1px solid var(--feedback-frame-border);
+  border-radius: var(--radius-lg);
+  background: var(--feedback-frame);
+  box-shadow:
+    0 10px 15px rgb(0 0 0 / 5%),
+    0 4px 6px rgb(0 0 0 / 5%);
 }
 
 .content {
+  position: relative;
   max-height: var(--panel-max-height);
   overflow-y: auto;
   overscroll-behavior: contain;
+  padding: var(--space-1);
 }
 
-/* Switching steps morphs the panel to the new step's height. */
-.panel[data-animate-height] {
-  transition: height 240ms var(--ease-out-snappy);
-}
-
-.header {
+/* White card inset in the frame; its radius is the frame's minus the 4px inset. */
+.card {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-end;
   gap: var(--space-2);
-  padding: var(--space-4) var(--space-4) 0 var(--space-5);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 4%),
+    0 1px 2px rgb(0 0 0 / 6%);
 }
 
-.title {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: var(--line-height-xl);
-}
-
-.body {
+/* Shown on the gray frame once the card has rolled away. */
+.thanks {
+  position: absolute;
+  inset: 0;
   display: grid;
-  gap: var(--space-4);
-  padding: var(--space-2) var(--space-5) var(--space-5);
+  place-items: center;
+  margin: 0;
 }
 
-/* Each step fades in when the panel switches between them. */
-.body {
-  animation: stepIn 200ms var(--ease-out-quint);
+/*
+ * Written out left to right once the roll has climbed past the middle of the frame, as if
+ * someone were jotting it down. The slight tilt keeps it from looking typeset.
+ */
+.thanksNote {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  padding: 4px;
+  color: var(--color-text-primary);
+  font-size: 30px;
+  line-height: 36px;
+  transform: rotate(-3deg);
 }
 
-@keyframes stepIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
+/* A cover in the frame's colour slides off to the right; a transform keeps it off the main thread. */
+.thanksNote::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--feedback-frame);
+  animation: writeNote 700ms cubic-bezier(0.45, 0, 0.55, 1) 650ms both;
+}
+
+@keyframes writeNote {
+  to {
+    transform: translate3d(101%, 0, 0);
   }
 }
 
-.options {
-  display: grid;
-  gap: var(--space-2);
+/*
+ * The roll-up after sending, a reverse of the paper intro: a roll rises from under the card,
+ * settles on its bottom edge and climbs to the top edge, where it stays, and the card is clipped
+ * at the roll's axis as if it were wound onto it. Both animations share keyframe stops and curves, so the clip edge
+ * stays under the roll the whole way. Sizes are in px from --sheet-height (the card's height).
+ *
+ * The clip is a frame (.wind) that slides up while the card inside slides down by the same
+ * amount: the card holds still and the frame's bottom edge rises. Both are transforms, so the
+ * whole roll-up runs on the compositor; animating clip-path would repaint the card every frame.
+ */
+.sheet {
+  --roll-size: 22px;
+  --roll-duration: 1200ms;
+
+  position: relative;
+  /* Keeps the frame's negative top margin inside, instead of collapsing through to the panel. */
+  display: flow-root;
 }
 
-.option {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  color: var(--color-text-primary);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    transform var(--duration-press) var(--ease-out-snappy),
-    border-color var(--duration-hover) ease,
-    background-color var(--duration-hover) ease;
-  -webkit-tap-highlight-color: transparent;
+/*
+ * The frame reaches a card's height above the card and 4px past its other edges (the panel's
+ * padding, so nothing overflows into a scrollbar), with matching padding, so layout is unchanged.
+ */
+.sheet[data-rolled] .wind {
+  margin: calc(var(--sheet-height) * -1) calc(var(--space-1) * -1) calc(var(--space-1) * -1);
+  padding: var(--sheet-height) var(--space-1) var(--space-1);
+  overflow: hidden;
+  animation: windFrame var(--roll-duration) both;
 }
 
-.optionIcon {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+.sheet[data-rolled] .card {
+  animation: windCard var(--roll-duration) both;
+}
+
+.roll {
+  position: absolute;
+  top: 0;
+  left: -2px;
+  right: -2px;
+  height: var(--roll-size);
+  border-radius: 50% / 3px;
+  background: linear-gradient(
+    to bottom,
+    #dededc 0%,
+    #f6f6f4 9%,
+    #fff 27%,
+    #fafaf9 46%,
+    #eaeae7 70%,
+    #cececa 89%,
+    #b9b9b5 97%,
+    #e1e1df 100%
+  );
+  box-shadow:
+    0 -1px 1px rgb(0 0 0 / 5%),
+    0 4px 5px -3px rgb(0 0 0 / 20%),
+    0 10px 12px -8px rgb(0 0 0 / 16%);
+  pointer-events: none;
+  will-change: transform;
+  animation: climbRoll var(--roll-duration) both;
+}
+
+/* End caps, as on the intro roll. */
+.roll::before,
+.roll::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 4px;
+  border: 1px solid rgb(0 0 0 / 9%);
+  border-radius: 50%;
+  background: linear-gradient(90deg, #dededb, #fafaf8 65%, #d1d1ce);
+}
+
+.roll::before {
+  left: 0;
+}
+
+.roll::after {
+  right: 0;
+}
+
+/*
+ * A wax seal stamped onto the settled roll: it drops in slightly large and tilted, squashes past
+ * its size on impact and settles. The bug is embossed with a dark inner edge and a light lip.
+ */
+/*
+ * Two twine tails drop from under the roll once it settles, each drawing itself along its path.
+ * The twine stays hidden until then: an undrawn path with round caps still paints a dot.
+ */
+.twine {
+  opacity: 0;
+  animation: showTwist 1ms linear var(--roll-duration) both;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 52px;
+  height: 74px;
+  overflow: visible;
+  transform: translateX(-50%);
+  fill: none;
+  stroke-linecap: round;
+}
+
+.twineStrand path {
+  stroke: #a8814f;
+  stroke-width: 2.4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawStrand 320ms ease-out var(--roll-duration) both;
+}
+
+.twineStrand .twineTwist {
+  stroke: rgb(70 42 15 / 38%);
+  stroke-dasharray: 1.2 1.8;
+  stroke-dashoffset: 0;
+  opacity: 0;
+  animation: showTwist 1ms linear calc(var(--roll-duration) + 320ms) both;
+}
+
+@keyframes drawStrand {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes showTwist {
+  to {
+    opacity: 1;
+  }
+}
+
+.seal {
+  position: absolute;
+  /* Sits on the twine tails just under the roll. */
+  top: 46px;
+  left: 50%;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
-  border-radius: var(--radius-full);
-  background: var(--color-surface-subtle);
+  /* Uneven, like poured wax. */
+  border-radius: 48% 52% 50% 50% / 53% 47% 52% 48%;
+  background: radial-gradient(circle at 36% 30%, #dc4f43 0%, #b3271d 48%, #861910 100%);
+  box-shadow:
+    0 2px 3px rgb(0 0 0 / 22%),
+    0 6px 10px -4px rgb(80 10 5 / 35%),
+    inset 0 -2px 3px rgb(0 0 0 / 22%),
+    inset 0 2px 2px rgb(255 255 255 / 22%);
+  color: rgb(84 10 6 / 72%);
+  /* Stamped once the tails have dropped. */
+  animation: stampSeal 420ms cubic-bezier(0.34, 1.2, 0.64, 1) calc(var(--roll-duration) + 260ms) both;
 }
 
-.optionIcon[data-kind="bug"] {
-  background: var(--color-danger-surface);
-  color: var(--color-danger);
+/* The pressed ring around the emblem. */
+.seal::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 1.5px rgb(0 0 0 / 30%),
+    0 1px 0 rgb(255 255 255 / 18%);
 }
 
-.optionIcon[data-kind="idea"] {
-  background: var(--color-warning-surface);
-  color: var(--color-warning);
+.seal svg {
+  filter: drop-shadow(0 1px 0 rgb(255 255 255 / 22%));
 }
 
-.optionText {
-  min-width: 0;
-  flex: 1 1 auto;
+@keyframes stampSeal {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.7) rotate(-24deg);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.92) rotate(-6deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(-8deg);
+  }
+}
+
+@keyframes climbRoll {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, calc(var(--sheet-height) + 8px), 0);
+    /* Speeds up into the card's edge instead of braking there, so the climb follows without a stop. */
+    animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.5);
+  }
+
+  12% {
+    opacity: 1;
+    transform: translate3d(0, calc(var(--sheet-height) - var(--roll-size) / 2), 0);
+    /* The climb starts at about the arrival speed and eases out only at the top; shared with the clip. */
+    animation-timing-function: cubic-bezier(0.3, 0.33, 0.25, 1);
+  }
+
+  /* Rests on the card's top edge, inside the gray frame. */
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/*
+ * Until the roll lands, the frame's bottom edge sits 4px under the card to keep its shadow; it
+ * then jumps to the card's edge (under the roll) and follows the roll's axis to the top.
+ */
+@keyframes windFrame {
+  0%,
+  11.99% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  12% {
+    transform: translate3d(0, -4px, 0);
+    /* The climb starts at about the arrival speed and eases out only at the top; shared with the clip. */
+    animation-timing-function: cubic-bezier(0.3, 0.33, 0.25, 1);
+  }
+
+  99.9% {
+    visibility: visible;
+  }
+
+  100% {
+    transform: translate3d(0, calc((var(--sheet-height) + 4px - var(--roll-size) / 2) * -1), 0);
+    visibility: hidden;
+  }
+}
+
+/* The exact opposite of the frame, so the card itself never moves. */
+@keyframes windCard {
+  0%,
+  11.99% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  12% {
+    transform: translate3d(0, 4px, 0);
+    /* The climb starts at about the arrival speed and eases out only at the top; shared with the clip. */
+    animation-timing-function: cubic-bezier(0.3, 0.33, 0.25, 1);
+  }
+
+  100% {
+    transform: translate3d(0, calc(var(--sheet-height) + 4px - var(--roll-size) / 2), 0);
+  }
+}
+
+.heading {
+  width: 100%;
   display: grid;
-  gap: 2px;
+  gap: var(--space-1);
 }
 
-.optionLabel {
-  font-size: var(--font-size-md);
+.title {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-base);
   font-weight: 500;
-  line-height: var(--line-height-md);
-}
-
-.optionDescription {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-sm);
-}
-
-.optionChevron {
-  flex: 0 0 auto;
-  color: var(--color-text-muted);
+  letter-spacing: -0.16px;
+  line-height: 26px;
 }
 
 .description {
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-md);
   text-wrap: pretty;
 }
 
-.field {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.label {
-  color: var(--color-text-body);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  line-height: var(--line-height-md);
-}
-
-.optional {
-  margin-left: var(--space-1);
-  color: var(--color-text-secondary);
-  font-weight: 400;
-}
-
-.control {
+.textarea {
   width: 100%;
-  min-height: 40px;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
+  height: 100px;
+  display: block;
+  padding: var(--space-3);
+  border: 1px solid var(--feedback-field-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font: inherit;
   /* Below 16px iOS Safari zooms in on focus; fine while the widget is desktop-only. */
   font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-md);
-  transition:
-    border-color var(--duration-hover) ease,
-    box-shadow var(--duration-hover) ease;
-}
-
-.control::placeholder {
-  color: var(--color-text-placeholder);
-}
-
-.control:focus-visible {
-  border-color: var(--color-text-secondary);
-  outline: none;
-  box-shadow: 0 0 0 3px rgb(5 30 29 / 8%);
-}
-
-/* A fixed "@" sits inside the field; the input itself holds only the bare username. */
-.prefixedControl {
-  position: relative;
-}
-
-.prefix {
-  position: absolute;
-  top: 50%;
-  left: var(--space-3);
-  transform: translateY(-50%);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-md);
-  pointer-events: none;
-}
-
-.prefixedControl .control {
-  padding-left: calc(var(--space-3) + 1ch + 2px);
-}
-
-.textarea {
-  min-height: 104px;
-  max-height: 240px;
   resize: none;
+  transition: border-color var(--duration-hover) ease;
 }
 
-.hint {
-  margin: 0;
+.textarea::placeholder {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-sm);
+  opacity: 1;
+}
+
+/* Focus only darkens the border a step; no ring around the field. */
+.textarea:focus-visible {
+  border-color: var(--feedback-field-border-focus);
+  outline: none;
 }
 
 .error {
+  width: 100%;
   margin: 0;
   color: var(--color-danger);
   font-size: var(--font-size-xs);
@@ -277,26 +449,37 @@
   pointer-events: none;
 }
 
+/* Figma's Send button has 16px side padding, wider than the shared pill's 12px. */
 .submit {
-  justify-self: end;
+  /* Holds the outgoing label, which leaves the flow while it slides out. */
+  position: relative;
+  overflow: hidden;
+  padding-inline: var(--space-4);
 }
 
-.option:focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 2px;
+/* Two classes, so the width transition wins over the shared button's own transition list. */
+.card .submit {
+  transition:
+    width 300ms var(--ease-out-quint),
+    transform var(--duration-press) var(--ease-out-snappy),
+    background-color var(--duration-hover) ease;
 }
 
-.option:active {
-  transform: scale(0.98);
+.submitLabel {
+  display: block;
+  white-space: nowrap;
+}
+
+/* An invisible copy of the next label; its width sets the button's width. */
+.submitSizer {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .option:hover {
-    border-color: var(--color-border-hover);
-    background: var(--color-surface-hover);
-  }
-
-  .control:hover:not(:focus-visible) {
+  .textarea:hover:not(:focus-visible) {
     border-color: var(--color-border-hover);
   }
 }
@@ -310,20 +493,28 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* The morph itself is switched off by <MotionConfig reducedMotion="user">. */
-  .panel[data-animate-height] {
+  .textarea,
+  .card .submit {
     transition: none;
   }
 
-  .option,
-  .control {
-    transition: none;
+  /* No roll: the card fades out over the thanks instead. */
+  .roll {
+    display: none;
   }
 
-  .body {
+  .thanksNote {
     animation: none;
   }
 
-  .option:active {
-    transform: none;
+  .sheet[data-rolled] .card {
+    animation: fadeCard 200ms ease both;
+  }
+
+  @keyframes fadeCard {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 }

@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     "",
     message,
     "",
-    `Telegram: ${telegram || "—"}`,
+    telegram ? `Telegram: ${telegram}` : null,
     page ? `Page: ${page}` : null,
     userAgent ? `UA: ${userAgent}` : null,
   ]

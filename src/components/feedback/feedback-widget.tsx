@@ -1,8 +1,17 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+} from "react";
 import { AnimatePresence, m, MotionConfig, type Transition } from "framer-motion";
-import { Bug, ChevronLeft, ChevronRight, Lightbulb, X } from "lucide-react";
+import { Caveat } from "next/font/google";
+import { Bug } from "lucide-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { Button } from "@/components/ui/button";
 import { HoverShimmer } from "@/components/ui/hover-shimmer";
@@ -13,7 +22,6 @@ import { useEscapeKey } from "@/lib/modal";
 import styles from "./feedback-widget.module.css";
 
 type SendState = "idle" | "sending" | "sent" | "error";
-type FeedbackKind = "bug" | "idea";
 
 const MAX_MESSAGE_LENGTH = 2000;
 /**
@@ -26,89 +34,54 @@ const morphTransition: Transition = {
   duration: 0.35,
   bounce: 0,
 };
+/** Send → Sending…: the old label slides up and out while the new one rises in. */
+const labelTransition: Transition = {
+  type: "spring",
+  duration: 0.3,
+  bounce: 0,
+};
 const TRIGGER_RADIUS = 22;
-const PANEL_RADIUS = 16;
+const PANEL_RADIUS = 12;
 
 const MotionButton = m.create(Button);
 
-/**
- * Returns the bare username: the field shows its own "@" prefix, so a typed "@" is dropped,
- * a pasted t.me link is cut down to the name, and only Latin letters, digits and "_" remain.
- */
-function sanitizeTelegram(value: string) {
-  return value
-    .trim()
-    .replace(/^(https?:\/\/)?(t|telegram)\.me\//i, "")
-    .replace(/[^a-z0-9_]/gi, "");
-}
+/** Two twine tails hanging from under the roll, in a 52 × 74 box whose top 22px is the roll. */
+const TWINE_TAILS = ["M24 21 C21 38 15 52 10 70", "M28 21 C31 38 37 52 42 71"];
 
-const kindOptions = [
-  {
-    description: "A glitch or a layout that fell apart",
-    icon: Bug,
-    kind: "bug",
-    label: "Something's broken",
-  },
-  {
-    description: "Something to add or improve",
-    icon: Lightbulb,
-    kind: "idea",
-    label: "I have an idea",
-  },
-] as const;
-
-const kindCopy = {
-  bug: {
-    description: "Describe what broke. I'll see the page and browser on my side.",
-    label: "What went wrong?",
-    placeholder: "The video in the Steamify case froze on my iPhone",
-    sentTitle: "Got it, I'll take a look",
-    title: "Report a bug",
-  },
-  idea: {
-    description: "Anything from a missing detail to a case that didn't land.",
-    label: "What would you change?",
-    placeholder: "Show the final numbers at the top of each case",
-    sentTitle: "Thanks for the idea",
-    title: "Suggest an improvement",
-  },
-} satisfies Record<FeedbackKind, Record<string, string>>;
+/** Handwriting for the thanks note left on the frame under the roll. */
+const handwriting = Caveat({
+  subsets: ["latin"],
+  weight: "500",
+});
 
 /** Floating bug button in the bottom-left corner that opens a feedback form sent to Telegram. */
 export function FeedbackWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [sendState, setSendState] = useState<SendState>("idle");
-  const [kind, setKind] = useState<FeedbackKind | null>(null);
   const [message, setMessage] = useState("");
-  const [telegram, setTelegram] = useState("");
   const { playTap } = useInteractionSound();
   const { hoverProps: submitHoverProps, isHovered: isSubmitHovered } = useMouseHover();
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
-  const firstOptionRef = useRef<HTMLButtonElement>(null);
-  // Set when the user switches steps, so focus follows them into the new step.
-  const shouldMoveFocusRef = useRef(false);
   const titleId = useId();
-  const messageId = useId();
-  const telegramId = useId();
-  const telegramHintId = useId();
+  const descriptionId = useId();
   const contentRef = useRef<HTMLDivElement>(null);
-  const measuredStepRef = useRef<string | null>(null);
-  const [panelHeight, setPanelHeight] = useState<{
-    animate: boolean;
-    value: number;
-  } | null>(null);
-  const step = !kind ? "choose" : sendState === "sent" ? "sent" : kind;
+  const cardRef = useRef<HTMLFormElement>(null);
+  const submitRef = useRef<HTMLButtonElement>(null);
+  const submitSizerRef = useRef<HTMLSpanElement>(null);
+  const [panelHeight, setPanelHeight] = useState<number | null>(null);
+  // The roll-up animation travels the card's own height, measured when the message goes out.
+  const [sheetHeight, setSheetHeight] = useState(0);
+  const isSent = sendState === "sent";
   const canSubmit = message.trim() !== "" && sendState !== "sending";
+  // Stays on "Sending…" once sent, so the label doesn't swap back while the card rolls away.
+  const submitLabel = sendState === "sending" || sendState === "sent" ? "Sending…" : "Send";
 
-  // A sent form starts over from the first step; an unsent draft stays where it was.
+  // A sent form starts over empty; an unsent draft stays for the next time.
   const handleClosed = () => {
     if (sendState === "sent") {
       setMessage("");
-    }
-    if (sendState === "sent" || !message.trim()) {
-      setKind(null);
     }
     if (sendState !== "sending") {
       setSendState("idle");
@@ -122,23 +95,9 @@ export function FeedbackWidget() {
     setIsOpen((current) => !current);
   };
 
-  const chooseKind = (nextKind: FeedbackKind) => {
-    playTap();
-    setKind(nextKind);
-    setSendState("idle");
-    shouldMoveFocusRef.current = true;
-  };
-
-  const goBack = () => {
-    playTap();
-    setKind(null);
-    setSendState("idle");
-    shouldMoveFocusRef.current = true;
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!kind || !message.trim() || sendState === "sending") {
+    if (!message.trim() || sendState === "sending") {
       return;
     }
 
@@ -149,10 +108,8 @@ export function FeedbackWidget() {
     try {
       const response = await fetch("/api/feedback", {
         body: JSON.stringify({
-          kind,
           message,
           page: window.location.href,
-          telegram: telegram ? `@${telegram}` : "",
           website,
         }),
         headers: { "Content-Type": "application/json" },
@@ -163,8 +120,9 @@ export function FeedbackWidget() {
         throw new Error(`Feedback request failed with ${response.status}`);
       }
 
+      setSheetHeight(cardRef.current?.offsetHeight ?? 0);
       setSendState("sent");
-      trackGoal(`feedback_sent_${kind}`);
+      trackGoal("feedback_sent");
     } catch {
       setSendState("error");
     }
@@ -172,48 +130,37 @@ export function FeedbackWidget() {
 
   useEffect(() => {
     if (isOpen && matchesMedia(FINE_HOVER_QUERY)) {
-      (messageRef.current ?? firstOptionRef.current)?.focus({
-        preventScroll: true,
-      });
+      messageRef.current?.focus({ preventScroll: true });
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    if (!shouldMoveFocusRef.current) {
-      return;
-    }
-
-    shouldMoveFocusRef.current = false;
-    (kind ? messageRef.current : firstOptionRef.current)?.focus({
-      preventScroll: true,
-    });
-  }, [kind]);
-
-  // The panel gets an explicit height that follows its content, so a step change can transition
-  // between two heights. Other resizes (textarea drag, error line) follow instantly.
-  const stepRef = useRef(step);
-  useLayoutEffect(() => {
-    stepRef.current = step;
-  }, [step]);
-
+  // The panel gets an explicit height that follows its content (the error line, for one), so the
+  // open/close morph lands on the content's real size.
   useEffect(() => {
     const content = contentRef.current;
     if (!isOpen || !content) {
-      measuredStepRef.current = null;
       return;
     }
 
     const observer = new ResizeObserver(([entry]) => {
-      const value = entry.borderBoxSize[0]?.blockSize ?? content.offsetHeight;
-      const animate =
-        measuredStepRef.current !== null && measuredStepRef.current !== stepRef.current;
-      measuredStepRef.current = stepRef.current;
-      setPanelHeight({ animate, value });
+      setPanelHeight(entry.borderBoxSize[0]?.blockSize ?? content.offsetHeight);
     });
 
     observer.observe(content);
     return () => observer.disconnect();
   }, [isOpen]);
+
+  // Sizes the button to the label it is about to show, before paint, so the CSS width transition
+  // starts from the old width in the same frame the labels start to swap.
+  useLayoutEffect(() => {
+    const button = submitRef.current;
+    const sizer = submitSizerRef.current;
+    if (!isOpen || !button || !sizer) {
+      return;
+    }
+
+    button.style.width = `calc(${sizer.getBoundingClientRect().width}px + 2 * var(--space-4))`;
+  }, [isOpen, submitLabel]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -263,17 +210,17 @@ export function FeedbackWidget() {
         <AnimatePresence onExitComplete={handleClosed}>
           {isOpen ? (
             <m.section
+              aria-describedby={descriptionId}
               aria-labelledby={titleId}
               className={styles.panel}
-              data-animate-height={panelHeight?.animate || undefined}
-              // Only the open/close morph is a layout animation; step changes resize with CSS.
+              // Only the open/close morph is a layout animation; the roll-up runs in CSS.
               layoutDependency={0}
               layoutCrossfade={false}
               layoutId={SURFACE_LAYOUT_ID}
               role="dialog"
               style={{
                 borderRadius: PANEL_RADIUS,
-                height: panelHeight?.value,
+                height: panelHeight ?? undefined,
               }}
               transition={morphTransition}
             >
@@ -290,169 +237,121 @@ export function FeedbackWidget() {
                 layoutDependency={0}
                 ref={contentRef}
               >
-                <header className={styles.header}>
-                  {kind && sendState !== "sent" ? (
-                    <Button
-                      aria-label="Back to choosing a topic"
-                      iconOnly
-                      onClick={goBack}
-                      size="sm"
-                    >
-                      <ChevronLeft aria-hidden="true" size={16} strokeWidth={1.8} />
-                    </Button>
-                  ) : null}
-                  <h2 className={styles.title} id={titleId}>
-                    {kind
-                      ? sendState === "sent"
-                        ? kindCopy[kind].sentTitle
-                        : kindCopy[kind].title
-                      : "Bug or feature?"}
-                  </h2>
-                  <Button
-                    aria-label="Close feedback form"
-                    iconOnly
-                    onClick={() => {
-                      playTap();
-                      closePanel();
-                    }}
-                    size="sm"
-                  >
-                    <X aria-hidden="true" size={16} strokeWidth={1.7} />
-                  </Button>
-                </header>
+                {isSent ? (
+                  <p className={styles.thanks} role="status">
+                    <span className={`${styles.thanksNote} ${handwriting.className}`}>
+                      Thanks for feedback!
+                    </span>
+                  </p>
+                ) : null}
 
-                {!kind ? (
-                  <div className={styles.body} key="choose">
-                    <p className={styles.description}>
-                      Tell me what&apos;s broken or what could be better. It goes straight to my
-                      Telegram.
-                    </p>
-                    <div className={styles.options}>
-                      {kindOptions.map(
-                        ({ description, icon: Icon, kind: optionKind, label }, index) => (
-                          <button
-                            className={styles.option}
-                            key={optionKind}
-                            onClick={() => chooseKind(optionKind)}
-                            ref={index === 0 ? firstOptionRef : undefined}
-                            type="button"
-                          >
-                            <span className={styles.optionIcon} data-kind={optionKind}>
-                              <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
-                            </span>
-                            <span className={styles.optionText}>
-                              <span className={styles.optionLabel}>{label}</span>
-                              <span className={styles.optionDescription}>{description}</span>
-                            </span>
-                            <ChevronRight
-                              aria-hidden="true"
-                              className={styles.optionChevron}
-                              size={16}
-                              strokeWidth={1.8}
-                            />
-                          </button>
-                        ),
-                      )}
-                    </div>
-                  </div>
-                ) : sendState === "sent" ? (
-                  <div className={styles.body} key="sent">
-                    <p className={styles.description}>
-                      {telegram.trim()
-                        ? "It's already in my Telegram. I'll reply to you there."
-                        : "It's already in my Telegram. Add your username next time if you want a reply."}
-                    </p>
-                    <Button
-                      className={styles.submit}
-                      onClick={() => {
-                        playTap();
-                        closePanel();
-                      }}
-                      variant="primary"
+                {/* After sending, the white card rolls up like paper and uncovers the thanks. */}
+                <div
+                  className={styles.sheet}
+                  data-rolled={isSent || undefined}
+                  style={{ "--sheet-height": `${sheetHeight}px` } as CSSProperties}
+                >
+                  <div className={styles.wind}>
+                    <form
+                      className={styles.card}
+                      inert={isSent}
+                      noValidate
+                      onSubmit={handleSubmit}
+                      ref={cardRef}
                     >
-                      Close
-                    </Button>
-                  </div>
-                ) : (
-                  <form className={styles.body} key={kind} noValidate onSubmit={handleSubmit}>
-                    <p className={styles.description}>{kindCopy[kind].description}</p>
+                      <div className={styles.heading}>
+                        <h2 className={styles.title} id={titleId}>
+                          Bug or feature?
+                        </h2>
+                        <p className={styles.description} id={descriptionId}>
+                          Tell me what&apos;s broken or what could be better. It goes straight to my
+                          Telegram.
+                        </p>
+                      </div>
 
-                    <div className={styles.field}>
-                      <label className={styles.label} htmlFor={messageId}>
-                        {kindCopy[kind].label}
-                      </label>
                       <textarea
-                        className={`${styles.control} ${styles.textarea}`}
-                        id={messageId}
+                        aria-describedby={descriptionId}
+                        aria-labelledby={titleId}
+                        className={styles.textarea}
                         maxLength={MAX_MESSAGE_LENGTH}
                         name="message"
                         onChange={(event) => setMessage(event.target.value)}
-                        placeholder={kindCopy[kind].placeholder}
+                        placeholder="Leave your thoughts"
                         ref={messageRef}
                         required
-                        rows={4}
                         value={message}
                       />
-                    </div>
 
-                    <div className={styles.field}>
-                      <label className={styles.label} htmlFor={telegramId}>
-                        Your Telegram <span className={styles.optional}>optional</span>
-                      </label>
-                      <div className={styles.prefixedControl}>
-                        <span aria-hidden="true" className={styles.prefix}>
-                          @
+                      {/* Honeypot for bots; hidden from people and assistive tech. */}
+                      <input
+                        aria-hidden="true"
+                        autoComplete="off"
+                        className={styles.honeypot}
+                        name="website"
+                        tabIndex={-1}
+                        type="text"
+                      />
+
+                      {sendState === "error" ? (
+                        <p className={styles.error} role="alert">
+                          It didn&apos;t go through. Try again or message me at @art_ew.
+                        </p>
+                      ) : null}
+
+                      {/*
+                        The button's width follows its label: an invisible copy of the label is
+                        measured and the width transitions in CSS, so nothing is scaled mid-resize.
+                      */}
+                      <Button
+                        className={styles.submit}
+                        disabled={!canSubmit}
+                        ref={submitRef}
+                        type="submit"
+                        variant="primary"
+                        {...submitHoverProps}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={styles.submitSizer}
+                          ref={submitSizerRef}
+                        >
+                          {submitLabel}
                         </span>
-                        <input
-                          aria-describedby={telegramHintId}
-                          autoCapitalize="none"
-                          autoComplete="off"
-                          autoCorrect="off"
-                          className={styles.control}
-                          id={telegramId}
-                          maxLength={32}
-                          name="telegram"
-                          onChange={(event) => setTelegram(sanitizeTelegram(event.target.value))}
-                          placeholder="username"
-                          spellCheck={false}
-                          type="text"
-                          value={telegram}
-                        />
-                      </div>
-                      <p className={styles.hint} id={telegramHintId}>
-                        Only if you want a reply.
-                      </p>
-                    </div>
-
-                    {/* Honeypot for bots; hidden from people and assistive tech. */}
-                    <input
-                      aria-hidden="true"
-                      autoComplete="off"
-                      className={styles.honeypot}
-                      name="website"
-                      tabIndex={-1}
-                      type="text"
-                    />
-
-                    {sendState === "error" ? (
-                      <p className={styles.error} role="alert">
-                        It didn&apos;t go through. Try again or message me at @art_ew.
-                      </p>
-                    ) : null}
-
-                    <Button
-                      className={styles.submit}
-                      disabled={!canSubmit}
-                      type="submit"
-                      variant="primary"
-                      {...submitHoverProps}
-                    >
-                      <HoverShimmer isActive={isSubmitHovered && canSubmit}>
-                        {sendState === "sending" ? "Sending…" : "Send"}
-                      </HoverShimmer>
-                    </Button>
-                  </form>
-                )}
+                        <AnimatePresence initial={false} mode="popLayout">
+                          <m.span
+                            animate={{ opacity: 1, y: 0 }}
+                            className={styles.submitLabel}
+                            exit={{ opacity: 0, y: -12 }}
+                            initial={{ opacity: 0, y: 12 }}
+                            key={submitLabel}
+                            transition={labelTransition}
+                          >
+                            <HoverShimmer isActive={isSubmitHovered && canSubmit}>
+                              {submitLabel}
+                            </HoverShimmer>
+                          </m.span>
+                        </AnimatePresence>
+                      </Button>
+                    </form>
+                  </div>
+                  {isSent ? (
+                    <span aria-hidden="true" className={styles.roll}>
+                      <svg className={styles.twine} viewBox="0 0 52 74">
+                        {TWINE_TAILS.map((path) => (
+                          <g className={styles.twineStrand} key={path}>
+                            <path d={path} pathLength={1} />
+                            {/* Darker flecks along the cord read as its twist. */}
+                            <path className={styles.twineTwist} d={path} />
+                          </g>
+                        ))}
+                      </svg>
+                      {/* Pressed onto the tails once the twine is tied, sealing the message. */}
+                      <span className={styles.seal}>
+                        <Bug size={15} strokeWidth={2.2} />
+                      </span>
+                    </span>
+                  ) : null}
+                </div>
               </m.div>
             </m.section>
           ) : null}
