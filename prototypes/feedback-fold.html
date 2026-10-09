@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Feedback fold prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --page: #f2f2f2;
+    --text-primary: #051e1d;
+    --text-secondary: #616b6a;
+    --frame: #f7f7f7;
+    --frame-border: #f0f0f0;
+    --field-border: #ececec;
+    --paper-back: #fbfbfa;
+
+    /* Playback speed multiplier, set from the controls. */
+    --slow: 1;
+
+    /* Timeline, in ms at 1x. */
+    --fold1-at: 0;
+    --fold1-for: 520;
+    --fold2-at: 620;
+    --fold2-for: 520;
+    --seal-at: 1220;
+    --seal-for: 420;
+    --write-at: 1180;
+    --write-for: 800;
+
+    --fold-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    gap: 24px;
+    padding: 40px 16px;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: "Geist", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { display: grid; gap: 24px; justify-items: center; }
+
+  /* ---------- Panel (matches the Figma frame) ---------- */
+
+  .panel {
+    position: relative;
+    width: min(400px, calc(100vw - 32px));
+    padding: 4px;
+    border: 1px solid var(--frame-border);
+    border-radius: 12px;
+    background: var(--frame);
+    box-shadow: 0 10px 15px rgb(0 0 0 / 5%), 0 4px 6px rgb(0 0 0 / 5%);
+  }
+
+  /* Card size is fixed in the prototype so the quadrants line up. */
+  .stageWrap {
+    --w: 390px;
+    --h: 250px;
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    perspective: 650px;
+    perspective-origin: 50% 40%;
+  }
+
+  /* ---------- Static card, shown before the fold ---------- */
+
+  .card {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 4%), 0 1px 2px rgb(0 0 0 / 6%);
+  }
+
+  .content {
+    position: absolute;
+    inset: 0;
+    width: var(--w);
+    height: var(--h);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  .heading { width: 100%; display: grid; gap: 4px; }
+
+  .title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.16px;
+    line-height: 26px;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    letter-spacing: -0.14px;
+    line-height: 20px;
+  }
+
+  .field {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border: 1px solid var(--field-border);
+    border-radius: 12px;
+    font-size: 14px;
+    letter-spacing: -0.14px;
+    line-height: 20px;
+  }
+
+  .send {
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--text-primary);
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: -0.14px;
+    line-height: 20px;
+  }
+
+  /* ---------- Folding paper ---------- */
+
+  /*
+   * The card is cut into four quadrants, each showing its slice of the same content.
+   * Fold 1: the bottom row flips up over the top row (rotateX around the middle line).
+   * Fold 2: the right column, now two layers thick, flips over the left (rotateY).
+   * The packet then slides to the middle, tilts, and gets the seal.
+   */
+  /* Turns around the folded packet's centre, the top-left quarter, so the tilt reads as the packet's own. */
+  .packet,
+  .shadows {
+    transform-origin: calc(var(--w) / 4) calc(var(--h) / 4);
+  }
+
+  .packet {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    visibility: hidden;
+  }
+
+  .col {
+    position: absolute;
+    top: 0;
+    width: calc(var(--w) / 2);
+    height: var(--h);
+    transform-style: preserve-3d;
+  }
+
+  .col.left { left: 0; }
+
+  .col.right {
+    left: calc(var(--w) / 2);
+    transform-origin: left center;
+  }
+
+  .q {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: calc(var(--h) / 2);
+    transform-style: preserve-3d;
+  }
+
+  .q.top { top: 0; }
+
+  .q.bottom {
+    top: calc(var(--h) / 2);
+    transform-origin: center top;
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: #fff;
+  }
+
+  .face.back {
+    transform: rotateY(180deg);
+    background: var(--paper-back);
+  }
+
+  /*
+   * The quarters that fold reach a pixel past their fold line into the neighbour, so no hairline
+   * seam shows between quarters. Once flipped, that extra pixel lands on the far side of the
+   * fold, so the folded layer still covers the one under it completely.
+   */
+  .right .face { left: -1px; }
+  .bottom .face { top: -1px; }
+
+  /*
+   * The printed side keeps the card's rounded outer corners. The back only shows once the sheet
+   * is folded, and a folded packet has square corners.
+   */
+  .left .top .front { border-top-left-radius: 8px; }
+  .left .bottom .front { border-bottom-left-radius: 8px; }
+  .right .top .front { border-top-right-radius: 8px; }
+  .right .bottom .front { border-bottom-right-radius: 8px; }
+
+  /* Each quadrant shows its own slice of the full-size content. */
+  .left .content { left: 0; }
+  .right .content { left: calc(var(--w) / -2 + 1px); }
+  .top .content { top: 0; }
+  .bottom .content { top: calc(var(--h) / -2 + 1px); }
+
+  /* A faint crease on the paper's back along each fold. */
+  .bottom .back { background: linear-gradient(to bottom, rgb(0 0 0 / 5%), transparent 22%), var(--paper-back); }
+  .right .top .back { background: linear-gradient(to right, rgb(0 0 0 / 5%), transparent 22%), var(--paper-back); }
+
+  /*
+   * Shadow under the paper, one piece per quarter. When a quarter lifts off the table, its piece
+   * fades where it lies instead of anything sliding under the fold. Inner edges sit under the
+   * neighbouring paper, so only the outer outline shows.
+   */
+  .shadows {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+  }
+
+  .shadows span {
+    position: absolute;
+    width: calc(var(--w) / 2);
+    height: calc(var(--h) / 2);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 4%), 0 1px 2px rgb(0 0 0 / 6%);
+  }
+
+  .shadows .tl { left: 0; top: 0; border-top-left-radius: 8px; }
+  .shadows .tr { left: 50%; top: 0; border-top-right-radius: 8px; }
+  .shadows .bl { left: 0; top: 50%; border-bottom-left-radius: 8px; }
+  .shadows .br { left: 50%; top: 50%; border-bottom-right-radius: 8px; }
+
+  /* ---------- Seal ---------- */
+
+  .seal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 48% 52% 50% 50% / 53% 47% 52% 48%;
+    background: radial-gradient(circle at 36% 30%, #dc4f43 0%, #b3271d 48%, #861910 100%);
+    box-shadow:
+      0 2px 3px rgb(0 0 0 / 22%),
+      0 6px 10px -4px rgb(80 10 5 / 35%),
+      inset 0 -2px 3px rgb(0 0 0 / 22%),
+      inset 0 2px 2px rgb(255 255 255 / 22%);
+    color: rgb(84 10 6 / 72%);
+    opacity: 0;
+    transform: translate(-50%, -50%) translateZ(4px);
+  }
+
+  .seal::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 1.5px rgb(0 0 0 / 30%), 0 1px 0 rgb(255 255 255 / 18%);
+  }
+
+  .seal svg { filter: drop-shadow(0 1px 0 rgb(255 255 255 / 22%)); }
+
+  /* ---------- Thanks ---------- */
+
+  .thanks {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 172px;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .thanks span {
+    display: inline-block;
+    padding-inline: 4px;
+    font-family: "Caveat", cursive;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 36px;
+    transform: rotate(-3deg);
+    clip-path: inset(-4px 100% -4px -4px);
+  }
+
+  /* ---------- Playing ---------- */
+
+  .playing .card { visibility: hidden; }
+  .playing .packet,
+  .playing .shadows { visibility: visible; }
+
+  .playing .q.bottom {
+    animation: fold1 calc(var(--fold1-for) * var(--slow) * 1ms) var(--fold-ease) calc(var(--fold1-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .col.right {
+    animation: fold2 calc(var(--fold2-for) * var(--slow) * 1ms) var(--fold-ease) calc(var(--fold2-at) * var(--slow) * 1ms) both;
+  }
+
+  /*
+   * Shading is a brightness filter on the face itself. A separate shade layer gets its own
+   * compositing layer in Chrome and keeps painting after its face has turned away.
+   */
+  .playing .q.bottom .front {
+    animation: shadeIn calc(var(--fold1-for) * var(--slow) * 0.5ms) ease-in calc(var(--fold1-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .q.bottom .back {
+    animation: shadeOut calc(var(--fold1-for) * var(--slow) * 0.5ms) ease-out calc((var(--fold1-at) + var(--fold1-for) * 0.5) * var(--slow) * 1ms) both;
+  }
+
+  /*
+   * Once the bottom row lies on the top row, the top row's printed side is covered for good.
+   * Hiding it stops its text from bleeding through the hairline where two quarters meet.
+   */
+  .playing .q.top .front {
+    animation: hideFace 1ms calc((var(--fold1-at) + var(--fold1-for)) * var(--slow) * 1ms) forwards;
+  }
+
+  /* While the right column rises, its visible side is the back of the folded bottom-right quarter. */
+  .playing .col.right .q.bottom .back {
+    animation:
+      shadeOut calc(var(--fold1-for) * var(--slow) * 0.5ms) ease-out calc((var(--fold1-at) + var(--fold1-for) * 0.5) * var(--slow) * 1ms) both,
+      shadeIn calc(var(--fold2-for) * var(--slow) * 0.5ms) ease-in calc(var(--fold2-at) * var(--slow) * 1ms) forwards;
+  }
+
+  .playing .col.right .top .back {
+    animation: shadeOut calc(var(--fold2-for) * var(--slow) * 0.5ms) ease-out calc((var(--fold2-at) + var(--fold2-for) * 0.5) * var(--slow) * 1ms) both;
+  }
+
+  /* The lifted quarters' shadows fade over the first third of their fold. */
+  .playing .shadows .bl,
+  .playing .shadows .br {
+    animation: liftOff calc(var(--fold1-for) * var(--slow) * 0.35ms) ease-out calc(var(--fold1-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .shadows .tr {
+    animation: liftOff calc(var(--fold2-for) * var(--slow) * 0.35ms) ease-out calc(var(--fold2-at) * var(--slow) * 1ms) both;
+  }
+
+  /* The packet's own shadow loses the card's rounded corner along with the paper. */
+  .playing .shadows .tl {
+    animation: squareCorner 1ms calc((var(--fold2-at) + var(--fold2-for)) * var(--slow) * 1ms) forwards;
+  }
+
+  /* What is left is the folded packet's shadow, and it travels with the packet. */
+  .playing .shadows {
+    animation: settle calc((var(--fold2-at) + var(--fold2-for) - var(--fold1-at)) * var(--slow) * 1ms) linear calc(var(--fold1-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .packet {
+    animation: settle calc((var(--fold2-at) + var(--fold2-for) - var(--fold1-at)) * var(--slow) * 1ms) linear calc(var(--fold1-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .seal {
+    animation: stampSeal calc(var(--seal-for) * var(--slow) * 1ms) cubic-bezier(0.34, 1.2, 0.64, 1) calc(var(--seal-at) * var(--slow) * 1ms) both;
+  }
+
+  .playing .thanks span {
+    animation: writeNote calc(var(--write-for) * var(--slow) * 1ms) cubic-bezier(0.45, 0, 0.55, 1) calc(var(--write-at) * var(--slow) * 1ms) both;
+  }
+
+  /* Pause freezes every running animation on the current frame. */
+  .paused,
+  .paused * {
+    animation-play-state: paused !important;
+  }
+
+  /* Small z offsets keep stacked layers from flickering through each other. */
+  @keyframes fold1 {
+    from { transform: translateZ(0.5px) rotateX(0deg); }
+    to { transform: translateZ(0.5px) rotateX(180deg); }
+  }
+
+  @keyframes fold2 {
+    from { transform: translateZ(1.5px) rotateY(0deg); }
+    to { transform: translateZ(1.5px) rotateY(-180deg); }
+  }
+
+  @keyframes hideFace { to { visibility: hidden; } }
+
+  @keyframes shadeIn { from { filter: brightness(1); } to { filter: brightness(0.82); } }
+  @keyframes shadeOut { from { filter: brightness(0.88); } to { filter: brightness(1); } }
+
+  @keyframes liftOff { to { opacity: 0; } }
+  @keyframes squareCorner { to { border-radius: 0; } }
+
+  /* The folded packet (the top-left quarter) slides to the middle, a little higher, and tilts. */
+  /*
+   * The paper drifts to its resting place while it folds, not after. Each fold moves the paper's
+   * centre toward the fold, and the drift runs with the same curve in the opposite direction, so
+   * the sheet reads as folding in on itself: down a little during fold 1, right by a quarter
+   * width during fold 2 (exactly where the centre went). The tilt builds over both folds.
+   * Stops follow the timeline: fold 1 ends at 520 / 1140 = 45.6%, fold 2 starts at 620 / 1140.
+   */
+  @keyframes settle {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    45.6% {
+      transform: translate(0, 22px) rotate(-1.5deg);
+      animation-timing-function: linear;
+    }
+
+    54.4% {
+      transform: translate(0, 22px) rotate(-1.5deg);
+      animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    100% {
+      transform: translate(calc(var(--w) / 4), 22px) rotate(-4deg);
+    }
+  }
+
+  @keyframes stampSeal {
+    0% { opacity: 0; transform: translate(-50%, -50%) translateZ(4px) scale(1.7) rotate(-24deg); }
+    55% { opacity: 1; transform: translate(-50%, -50%) translateZ(4px) scale(0.92) rotate(-6deg); }
+    100% { opacity: 1; transform: translate(-50%, -50%) translateZ(4px) scale(1) rotate(-8deg); }
+  }
+
+  @keyframes writeNote {
+    from { clip-path: inset(-4px 100% -4px -4px); }
+    to { clip-path: inset(-4px -4px -4px -4px); }
+  }
+
+  /* The seal sits on the folded packet: a quarter-size box at the top left. */
+  .sealSpot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(var(--w) / 2);
+    height: calc(var(--h) / 2);
+    transform-style: preserve-3d;
+  }
+
+  /* ---------- Controls ---------- */
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .controls button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .controls button {
+    height: 32px;
+    padding: 0 14px;
+    border: 0.5px solid #e6e6e6;
+    border-radius: 999px;
+    background: #fff;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .controls button[aria-pressed="true"],
+  .controls .primary {
+    border-color: transparent;
+    background: var(--text-primary);
+    color: #fff;
+  }
+
+  .hint {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) body { background: var(--page); }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="stageWrap" id="stage">
+        <div class="thanks"><span>Thanks for feedback!</span></div>
+        <div class="shadows"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+
+        <div class="card" id="card"></div>
+
+        <div class="packet" id="packet">
+          <div class="col left">
+            <div class="q top"><div class="face front"></div><div class="face back"></div></div>
+            <div class="q bottom"><div class="face front"></div><div class="face back"></div></div>
+          </div>
+          <div class="col right">
+            <div class="q top"><div class="face front"></div><div class="face back"></div></div>
+            <div class="q bottom"><div class="face front"></div><div class="face back"></div></div>
+          </div>
+          <div class="sealSpot">
+            <div class="seal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="primary" id="play" type="button">Send</button>
+      <button id="pause" aria-pressed="false" disabled type="button">Pause</button>
+      <button id="reset" type="button">Reset</button>
+      <span class="hint">Speed</span>
+      <button data-slow="1" aria-pressed="true" type="button">1×</button>
+      <button data-slow="2" aria-pressed="false" type="button">0.5×</button>
+      <button data-slow="4" aria-pressed="false" type="button">0.25×</button>
+    </div>
+    <p class="hint">Prototype of the feedback panel after Send: fold in four, seal, thank. Space pauses.</p>
+  </div>
+
+  <template id="content">
+    <div class="content">
+      <div class="heading">
+        <p class="title">Bug or feature?</p>
+        <p class="description">Tell me what's broken or what could be better. It goes straight to my Telegram.</p>
+      </div>
+      <div class="field">The video in the Steamify case froze on my iPhone</div>
+      <div class="send">Send</div>
+    </div>
+  </template>
+
+  <script>
+    const template = document.getElementById("content");
+    const stage = document.getElementById("stage");
+
+    // The static card and every front face get the same content; each face crops its quarter.
+    document.getElementById("card").append(template.content.cloneNode(true));
+    for (const face of document.querySelectorAll(".face.front")) {
+      face.append(template.content.cloneNode(true));
+    }
+
+    const pauseButton = document.getElementById("pause");
+
+    const setPaused = (paused) => {
+      stage.classList.toggle("paused", paused);
+      pauseButton.textContent = paused ? "Resume" : "Pause";
+      pauseButton.setAttribute("aria-pressed", String(paused));
+    };
+
+    const reset = () => {
+      stage.classList.remove("playing");
+      setPaused(false);
+      pauseButton.disabled = true;
+    };
+
+    const play = () => {
+      reset();
+      // Force a restyle so the animations restart from the first frame.
+      void stage.offsetWidth;
+      stage.classList.add("playing");
+      pauseButton.disabled = false;
+    };
+
+    const togglePause = () => {
+      if (stage.classList.contains("playing")) {
+        setPaused(!stage.classList.contains("paused"));
+      }
+    };
+
+    pauseButton.addEventListener("click", togglePause);
+
+    // Space pauses and resumes, so you can stop on a frame without reaching for the button.
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space" && !event.repeat) {
+        event.preventDefault();
+        togglePause();
+      }
+    });
+
+    document.getElementById("play").addEventListener("click", play);
+    document.getElementById("reset").addEventListener("click", reset);
+
+    for (const button of document.querySelectorAll("[data-slow]")) {
+      button.addEventListener("click", () => {
+        document.documentElement.style.setProperty("--slow", button.dataset.slow);
+        for (const other of document.querySelectorAll("[data-slow]")) {
+          other.setAttribute("aria-pressed", String(other === button));
+        }
+        play();
+      });
+    }
+  </script>
+</body>
+</html>

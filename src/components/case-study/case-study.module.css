@@ -195,9 +195,11 @@
 }
 
 /* Back is a bare chevron and label: no outline, fill or padding, so the chevron's
-   stroke lines up with the first letter of every table-of-contents item below. */
+   stroke lines up with the first letter of every table-of-contents item below.
+   The hover selector outweighs Button's `.outline:hover:not(:disabled)` regardless
+   of stylesheet order. */
 .rail .back,
-.rail .back:hover {
+.rail .back:hover:not(:disabled) {
   border: 0;
   background: transparent;
 }
