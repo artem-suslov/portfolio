@@ -5,8 +5,11 @@ import {
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
 import { CaseImage } from "@/components/case-study/case-media";
+import { CaseMorph } from "@/components/case-study/case-morph";
 import shared from "@/components/case-study/case-study.module.css";
 import styles from "./cashout-case.module.css";
+// Same file as the home page cover, imported so the URL carries a content hash.
+import heroPhones from "../../../../public/images/cashout_thumb_case.png";
 
 const assets = "/images/steamify-case-v2";
 
@@ -37,7 +40,9 @@ function Metrics() {
 export function CashoutCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Steamify · B2C, eCom" title={<>How I turned payout waiting into <br />Telegram conversion</>}>
-        <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_before_after.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 636px" preload alt="Before and after Steamify payout screens, showing the Telegram offer introduced earlier in the flow" />
+        <CaseMorph slug="steamify-skins-cashout">
+          <CaseImage expandable={false} caseId="steamify-cashout" className={shared.media} src={heroPhones.src} width={heroPhones.width} height={heroPhones.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" preload alt="Steamify cashout flow across mobile screens" />
+        </CaseMorph>
         <CaseMeta items={meta} />
       </CaseOverview>
 

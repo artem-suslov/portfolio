@@ -51,6 +51,50 @@
   outline-offset: 4px;
 }
 
+/* Cards without a case page yet reveal a label over the cover on hover. */
+.comingSoonCover {
+  position: relative;
+  width: 100%;
+}
+
+.comingSoonLabel {
+  position: absolute;
+  bottom: var(--space-3);
+  left: var(--space-3);
+  z-index: 7;
+  /* 32px tall, matching the video's pause button in the opposite corner. */
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-full);
+  /* Same surface as the overlay Button (the video's pause/play control). */
+  background: rgb(17 17 17 / 56%);
+  color: var(--color-text-inverse);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition:
+    opacity var(--duration-hover) ease,
+    transform var(--duration-hover) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .comingSoonCover:hover .comingSoonLabel {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comingSoonLabel {
+    transform: none;
+    transition: opacity var(--duration-hover) ease;
+  }
+}
+
 /* Cards that open a case page: the whole card is covered by the link overlay. */
 .linkedCase .caseVisual {
   z-index: 6;

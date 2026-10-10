@@ -5,11 +5,12 @@ import {
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
 import { CaseImage } from "@/components/case-study/case-media";
+import { CaseMorph } from "@/components/case-study/case-morph";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import styles from "./trading-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
-import heroScreen from "../../../../public/images/steamify_trading_bot_4.jpg";
+import heroScreen from "../../../../public/images/tradingbot_thumb_case.png";
 
 const assets = "/images/steamify-trading-case";
 const caseId = "steamify-trading-bot";
@@ -53,10 +54,9 @@ function Metrics() {
 export function TradingCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Steamify · B2C, Web App" title={<>Steam trading <br />management dashboard</>}>
-        {/* Mirrors the home page cover: the bare screen centered on a gray frame. */}
-        <div className={styles.hero}>
-          <CaseImage caseId={caseId} className={shared.media} frameClassName={styles.heroScreen} src={heroScreen.src} width={heroScreen.width} height={heroScreen.height} sizes="(max-width: 760px) 90vw, 516px" thumbnailRadius={6} preload alt="Steam trading management dashboard overview" />
-        </div>
+        <CaseMorph slug="steamify-trading-bot">
+          <CaseImage expandable={false} caseId={caseId} className={shared.media} src={heroScreen.src} width={heroScreen.width} height={heroScreen.height} preload alt="Steam trading management dashboard overview" />
+        </CaseMorph>
         <CaseMeta items={meta} />
       </CaseOverview>
 

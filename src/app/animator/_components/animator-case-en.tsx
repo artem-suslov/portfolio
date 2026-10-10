@@ -4,6 +4,7 @@ import {
   CaseOverview,
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
+import { CaseMorph } from "@/components/case-study/case-morph";
 import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
@@ -43,7 +44,9 @@ export function AnimatorCaseContent() {
   return (
     <CaseStudyLayout sections={railSections}>
       <CaseOverview eyebrow="Animator · Creator tool" title="Animator: a tool for creating looping MP4 showcases">
-        <AnimatorHeroVideo />
+        <CaseMorph slug="animator">
+          <AnimatorHeroVideo />
+        </CaseMorph>
         <CaseMeta items={meta} />
       </CaseOverview>
 

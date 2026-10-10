@@ -15,6 +15,12 @@
   background: transparent;
 }
 
+/* Non-expandable media keeps the frame's clipping without the button affordances. */
+.still {
+  width: 100%;
+  overflow: hidden;
+}
+
 .frame:focus-visible {
   outline: 2px solid var(--color-text-primary);
   outline-offset: 2px;

@@ -42,6 +42,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      // Route changes jump instead of gliding, so the cover morph lands on a settled page;
+      // in-page anchors keep the smooth scrolling from globals.css.
+      data-scroll-behavior="smooth"
       className={`h-full antialiased ${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="flex min-h-full flex-col">

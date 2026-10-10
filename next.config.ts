@@ -59,6 +59,10 @@ const publicAssetCacheHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    // Morphs a home page cover into its case-study hero (see `CaseMorph`).
+    viewTransition: true,
+  },
   images: {
     minimumCacheTTL: 604800,
   },

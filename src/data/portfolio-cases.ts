@@ -1,9 +1,9 @@
 import { links } from "@/lib/site";
 import type { PortfolioCaseData } from "@/components/portfolio-case/types";
-import safeDesignSystemThumbnail from "../../public/images/safe_design_system_thumbnail.png";
+import safeDesignSystemThumbnail from "../../public/images/safe_thumb_case.png";
 // Imported so the URL carries a content hash: replacing the file busts the image cache.
-import steamifyCashoutPhones from "../../public/images/steamify_cashout_phones.jpg";
-import steamifyTradingBotScreen from "../../public/images/steamify_trading_bot_4.jpg";
+import steamifyCashoutPhones from "../../public/images/cashout_thumb_case.png";
+import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.png";
 
 export const portfolioCases: PortfolioCaseData[] = [
   {
@@ -159,7 +159,9 @@ export const portfolioCases: PortfolioCaseData[] = [
       alt: "Steam trading management dashboard overview",
       height: steamifyTradingBotScreen.height,
       src: steamifyTradingBotScreen,
-      type: "screen",
+      type: "image",
+      // The exported cover carries its own gray surface, so it fills the frame like Safe's.
+      variant: "safe",
       width: steamifyTradingBotScreen.width,
     },
     id: "orbit",
@@ -199,8 +201,8 @@ export const portfolioCases: PortfolioCaseData[] = [
   //   title: "Web3 NFT marketplace for gamers in Asia",
   // },
   {
+    comingSoon: true,
     cover: {
-      expandable: true,
       poster: "/images/video-posters/ccp-white.webp",
       src: "/videos/CCP_White_BG_compress.mp4?v=20261001-2",
       type: "video",

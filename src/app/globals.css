@@ -116,6 +116,14 @@ html {
   --duration-press: 140ms;
   --duration-hover: 160ms;
 
+  /* Cover → case-study navigation: the cover morph, the page crossfade, and the
+     staggered fade-in of the content around it. */
+  --duration-case-morph: 520ms;
+  --duration-page-fade: 200ms;
+  --duration-content-enter: 600ms;
+  /* Content waits for the cover to land; only during a cover navigation (below). */
+  --content-enter-delay: 0ms;
+
   /* Layers: page-level overlays only; local stacking stays as small numbers. */
   --z-floating: 900;
   --z-modal: 1000;
@@ -189,4 +197,46 @@ body {
 ::selection {
   background: var(--color-selection);
   color: var(--color-text-inverse);
+}
+
+/* ── Cover → case-study navigation (React <ViewTransition>, see CaseMorph) ── */
+::view-transition-group(.case-morph) {
+  animation-duration: var(--duration-case-morph);
+  animation-timing-function: var(--ease-out-quint);
+}
+
+::view-transition-old(.case-morph),
+::view-transition-new(.case-morph) {
+  /* Covers and heroes differ in aspect ratio: fill the frame instead of stretching. */
+  height: 100%;
+  object-fit: cover;
+  animation-duration: calc(var(--duration-case-morph) * 0.6);
+  animation-timing-function: var(--ease-out-quint);
+}
+
+/* The pages only crossfade: no blur or transform on a full-page snapshot, which is
+   too heavy to stay smooth. While the cover flies, the new page's content fades in
+   on its own (`caseEnter`, `homeReturn`). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-page-fade);
+}
+
+/* Set by `markCaseNavigation()` in src/lib/case-return.ts. */
+html[data-case-nav] {
+  /* Content fades in alongside the cover's flight. Raise toward
+     `--duration-case-morph` to hold it back until the cover lands. */
+  --content-enter-delay: 0ms;
+}
+
+/* Reduced motion keeps the crossfades but drops the flight: the cover swaps in place. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+  }
+
+  /* Nothing flies, so there is nothing to wait for. */
+  html[data-case-nav] {
+    --content-enter-delay: 0ms;
+  }
 }

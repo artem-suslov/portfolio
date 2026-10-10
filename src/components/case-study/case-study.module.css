@@ -195,9 +195,11 @@
 }
 
 /* Back is a bare chevron and label: no outline, fill or padding, so the chevron's
-   stroke lines up with the first letter of every table-of-contents item below. */
+   stroke lines up with the first letter of every table-of-contents item below.
+   The hover selector outweighs Button's `.outline:hover:not(:disabled)` regardless
+   of stylesheet order. */
 .rail .back,
-.rail .back:hover {
+.rail .back:hover:not(:disabled) {
   border: 0;
   background: transparent;
 }
@@ -334,6 +336,23 @@
   .railItems {
     display: none;
   }
+}
+
+/* Page enter: everything around the hero fades in at once, after the hero arrives
+   with the cover morph. The article card and the hero's own ancestors stay opaque,
+   or the morphed hero would turn translucent once the view transition ends. */
+@keyframes caseEnter {
+  from {
+    opacity: 0;
+  }
+}
+
+.intro,
+.rail,
+.meta,
+.article > :not(.overview) {
+  animation: caseEnter var(--duration-content-enter) var(--ease-out-quint)
+    var(--content-enter-delay) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

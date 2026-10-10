@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { PAPER_INTRO_FINISHED_EVENT } from "@/lib/events";
+import { readCaseReturn } from "@/lib/case-return";
 import { matchesMedia, MOBILE_QUERY } from "@/lib/media";
 import styles from "./paper-intro.module.css";
 
@@ -15,7 +16,8 @@ export function PaperIntro() {
 
     if (matchesMedia(MOBILE_QUERY)) return;
 
-    if (document.documentElement.dataset.paperIntroPlayed === "true") {
+    // Coming back from a case study is not a first visit: skip straight to the page.
+    if (document.documentElement.dataset.paperIntroPlayed === "true" || readCaseReturn()) {
       cover.hidden = true;
       return;
     }
