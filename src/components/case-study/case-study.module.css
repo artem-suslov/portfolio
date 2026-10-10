@@ -338,6 +338,23 @@
   }
 }
 
+/* Page enter: everything around the hero fades in at once, after the hero arrives
+   with the cover morph. The article card and the hero's own ancestors stay opaque,
+   or the morphed hero would turn translucent once the view transition ends. */
+@keyframes caseEnter {
+  from {
+    opacity: 0;
+  }
+}
+
+.intro,
+.rail,
+.meta,
+.article > :not(.overview) {
+  animation: caseEnter var(--duration-content-enter) var(--ease-out-quint)
+    var(--content-enter-delay) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .railItem,
   .railDot[data-ready] {

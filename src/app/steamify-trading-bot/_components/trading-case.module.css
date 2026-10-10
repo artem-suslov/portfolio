@@ -24,21 +24,6 @@
   line-height: var(--line-height-xl);
 }
 
-/* Same proportions as the home page "screen" cover. */
-.hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 636 / 348.19;
-  background: var(--color-surface-muted);
-}
-
-.heroScreen {
-  flex: none;
-  width: 81%;
-  border-radius: var(--radius-sm);
-}
-
 .screens {
   display: flex;
   flex-direction: column;
@@ -68,10 +53,5 @@
 
   .details {
     gap: var(--space-3);
-  }
-
-  .heroScreen {
-    width: 90%;
-    border-radius: var(--radius-xs);
   }
 }

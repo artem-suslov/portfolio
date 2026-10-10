@@ -15,14 +15,15 @@
 }
 
 .metrics dd {
-  font-size: var(--font-size-4xl);
-  line-height: 36px;
+  font-size: var(--font-size-3xl);
+  font-weight: 500;
+  line-height: var(--line-height-2xl);
 }
 
 .metrics dt {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-xl);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
 }
 
 .goals {
@@ -39,11 +40,39 @@
   margin-top: var(--space-2);
 }
 
-/* The spacing-token snippet is a narrow portrait shot; keep it at its natural 1x size. */
 .tokens {
-  width: 264px;
-  max-width: 100%;
-  border-radius: var(--radius-lg);
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  font-variant-numeric: tabular-nums;
+}
+
+.tokens th,
+.tokens td {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: inherit;
+  text-align: left;
+}
+
+.tokens td {
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+.tokens thead th {
+  color: var(--color-text-secondary);
+}
+
+.tokens thead th:last-child {
+  text-align: right;
+}
+
+.tokens code {
+  color: var(--color-text-body);
+  font-family: var(--font-mono);
 }
 
 .screens {
@@ -55,16 +84,6 @@
 @media (max-width: 760px) {
   .metrics {
     gap: var(--space-5) var(--space-8);
-  }
-
-  .metrics dt {
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-md);
-  }
-
-  .metrics dd {
-    font-size: var(--font-size-3xl);
-    line-height: 32px;
   }
 
   section.results {

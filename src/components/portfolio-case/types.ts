@@ -84,6 +84,8 @@ export type CoverExperiment = {
 };
 
 export type PortfolioCaseData = {
+  /** No case page yet: hovering the cover shows a "coming soon" label. */
+  comingSoon?: boolean;
   cover: CaseCover;
   coverExperiment?: CoverExperiment;
   /** Short caption under the cover, used when the card has no `details`. */

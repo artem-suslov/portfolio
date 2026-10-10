@@ -24,6 +24,7 @@ export function CaseImage({
   alt,
   caseId = defaultCaseId,
   className,
+  expandable = true,
   frameClassName,
   height,
   preload,
@@ -36,6 +37,8 @@ export function CaseImage({
   caseId?: string;
   /** Class for the image itself. */
   className?: string;
+  /** False renders a plain image, e.g. for case heroes the reader just saw full size. */
+  expandable?: boolean;
   /** Class for the clickable frame, e.g. its corner radius and background. */
   frameClassName?: string;
   height: number;
@@ -46,6 +49,16 @@ export function CaseImage({
   thumbnailRadius?: number;
   width: number;
 }) {
+  const imageClassName = className ? `${styles.media} ${className}` : styles.media;
+
+  if (!expandable) {
+    return (
+      <div className={frameClassName ? `${styles.still} ${frameClassName}` : styles.still}>
+        <Image alt={alt} className={imageClassName} height={height} preload={preload} sizes={sizes} src={src} width={width} />
+      </div>
+    );
+  }
+
   return (
     <CaseCoverModal
       caseId={caseId}
@@ -55,7 +68,7 @@ export function CaseImage({
       renderMedia={(isExpanded) => (
         <Image
           alt={alt}
-          className={className ? `${styles.media} ${className}` : styles.media}
+          className={imageClassName}
           height={height}
           loading={isExpanded ? "eager" : undefined}
           preload={isExpanded ? undefined : preload}

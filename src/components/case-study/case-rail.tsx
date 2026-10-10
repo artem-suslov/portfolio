@@ -4,6 +4,7 @@ import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { ButtonLink } from "@/components/ui/button";
+import { useMarkCaseReturn } from "@/lib/case-return";
 import styles from "./case-study.module.css";
 
 export type CaseRailSection = {
@@ -18,6 +19,7 @@ export function CaseRail({
 }) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
   const { playTap } = useInteractionSound();
+  useMarkCaseReturn();
   const navRef = useRef<HTMLElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
   // While a click-triggered scroll runs, the scroll spy stays paused so the dot

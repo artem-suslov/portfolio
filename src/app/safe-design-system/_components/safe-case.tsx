@@ -36,6 +36,16 @@ function Screen({ alt, name }: { alt: string; name: string }) {
   return <CaseImage caseId="safe-design-system" className={shared.media} src={`${assets}/${name}.jpg`} width={2560} height={1396} alt={alt} />;
 }
 
+// Spacing tokens shared with the frontend: an 8px step from --space-1 to --space-12.
+function SpacingTokens() {
+  return <table className={styles.tokens}>
+    <thead><tr><th scope="col">Token</th><th scope="col">Value</th></tr></thead>
+    <tbody>
+      {Array.from({ length: 12 }, (_, i) => <tr key={i}><th scope="row"><code>--space-{i + 1}</code></th><td>{(i + 1) * 8}px</td></tr>)}
+    </tbody>
+  </table>;
+}
+
 function Metrics() {
   return <dl className={styles.metrics}>
     <div><dt>Likes in the Figma Community</dt><dd>85+</dd></div>
@@ -49,7 +59,7 @@ export function SafeCase() {
   return <CaseStudyLayout sections={sections}>
       <CaseOverview eyebrow="Safe{Wallet} · Web3, Design System" title={<>Open-source design system <br />for Safe{"{"}Wallet{"}"}</>}>
         <CaseMorph slug="safe-design-system">
-          <CaseImage caseId="safe-design-system" className={shared.media} src="/images/safe_design_system_thumbnail.png" width={3816} height={2082} preload alt="Tag component from the Safe design system in light and dark themes" />
+          <CaseImage expandable={false} caseId="safe-design-system" className={shared.media} src="/images/safe_thumb_case.png" width={3816} height={2082} preload alt="Tag component from the Safe design system in light and dark themes" />
         </CaseMorph>
         <CaseMeta items={meta} />
       </CaseOverview>
@@ -96,7 +106,7 @@ export function SafeCase() {
           <p>The Safe{"{"}Wallet{"}"} frontend is built on <TextLink href="https://mui.com/">Material UI</TextLink> components, so it was sometimes crucial to rely on their standard components to verify behavior.</p>
           <p>I also configured layout grids and added missing color tokens based on the frontend library to fully align the design system with the implemented UI.</p>
         </div>
-        <CaseImage caseId="safe-design-system" className={shared.media} frameClassName={styles.tokens} src={`${assets}/spacing-tokens.png`} width={528} height={771} sizes="264px" thumbnailRadius={12} alt="Spacing tokens shared with the frontend: --space-1 is 8px, up to --space-12 at 96px" />
+        <SpacingTokens />
         <div className={styles.screens}>
           <Screen name="colors" alt="Light mode color variables: background, border, text, primary, secondary, success and error groups" />
           <Screen name="grids" alt="Layout grids with fixed margins at 1920px, with and without the sidebar" />

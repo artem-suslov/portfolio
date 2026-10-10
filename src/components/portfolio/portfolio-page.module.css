@@ -156,6 +156,24 @@
   }
 }
 
+/* Returning from a case study (`data-case-return`, see src/lib/case-return.ts): the page
+   fades in all at once after the case's cover morphs back. Nothing that contains
+   that cover fades, or it would turn translucent once the view transition ends. */
+@keyframes homeReturn {
+  from {
+    opacity: 0;
+  }
+}
+
+:global(html[data-case-return]) .portfolio > :not(.anchor, :has([data-return-target])),
+:global(html[data-case-return]) .heroTabs,
+:global(html[data-case-return]) .work > :not([data-return-target]),
+:global(html[data-case-return]) .work > [data-return-target] > :not(:first-child),
+:global(html[data-case-return]) .viewport > :not(.portfolio) {
+  animation: homeReturn var(--duration-content-enter) var(--ease-out-quint)
+    var(--content-enter-delay) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .viewport {
     scroll-behavior: auto;
