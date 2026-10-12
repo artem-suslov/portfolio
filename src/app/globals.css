@@ -229,6 +229,16 @@ html[data-case-nav] {
   --content-enter-delay: 0ms;
 }
 
+/* On mobile a case opens instantly: no cover flight, no page crossfade. Returning
+   home (`data-case-return`) keeps its transition. */
+@media (max-width: 760px) {
+  html:not([data-case-return])::view-transition-group(*),
+  html:not([data-case-return])::view-transition-old(*),
+  html:not([data-case-return])::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 /* Reduced motion keeps the crossfades but drops the flight: the cover swaps in place. */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*) {

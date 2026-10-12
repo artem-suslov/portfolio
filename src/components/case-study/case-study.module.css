@@ -355,6 +355,16 @@
     var(--content-enter-delay) both;
 }
 
+/* On mobile a case opens instantly (see the view-transition rules in globals.css). */
+@media (max-width: 760px) {
+  .intro,
+  .rail,
+  .meta,
+  .article > :not(.overview) {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .railItem,
   .railDot[data-ready] {
