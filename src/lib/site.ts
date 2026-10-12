@@ -1,7 +1,7 @@
-export const SITE_URL = "https://artem-portfolio.layero.ru";
-export const SITE_TITLE = "Artem Suslov — Software Designer";
+export const SITE_URL = "https://artemsuslov.com";
+export const SITE_TITLE = "Artem Suslov — Product Designer";
 export const SITE_DESCRIPTION =
-  "Software designer focused on B2C web and mobile products.";
+  "Product designer who can ship front-end, focused on B2C web and mobile products.";
 
 export const YANDEX_METRIKA_ID = 110413593;
 

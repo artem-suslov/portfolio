@@ -36,20 +36,10 @@ function Screen({ alt, name }: { alt: string; name: string }) {
   return <CaseImage caseId="safe-design-system" className={shared.media} src={`${assets}/${name}.jpg`} width={2560} height={1396} alt={alt} />;
 }
 
-// Spacing tokens shared with the frontend: an 8px step from --space-1 to --space-12.
-function SpacingTokens() {
-  return <table className={styles.tokens}>
-    <thead><tr><th scope="col">Token</th><th scope="col">Value</th></tr></thead>
-    <tbody>
-      {Array.from({ length: 12 }, (_, i) => <tr key={i}><th scope="row"><code>--space-{i + 1}</code></th><td>{(i + 1) * 8}px</td></tr>)}
-    </tbody>
-  </table>;
-}
-
 function Metrics() {
   return <dl className={styles.metrics}>
     <div><dt>Likes in the Figma Community</dt><dd>85+</dd></div>
-    <div><dt>Users</dt><dd>1,400+</dd></div>
+    <div><dt>Copies</dt><dd>1,400+</dd></div>
     <div><dt><TextLink href="https://x.com/safe/status/1755592590794334674">Post views on X</TextLink></dt><dd>33,000+</dd></div>
     <div><dt><TextLink href="https://ethereum.org/en/developers/docs/design-and-ux/">Mentioned in an article</TextLink></dt><dd>Ethereum.org</dd></div>
   </dl>;
@@ -95,18 +85,16 @@ export function SafeCase() {
         <ol className={styles.goals}>
           <li>Publish the design system before the end of 2023.</li>
           <li>Reach 50+ copies in the Figma Community before the end of 2023.</li>
-          <li>Maintain an average rating of 4.5+ from Figma Community users.</li>
         </ol>
       </section>
 
       <section id="foundations" className={shared.divided}>
         <h2>Foundations</h2>
         <div className={shared.prose}>
-          <p>I began by auditing an existing Figma file containing draft components and styles. I migrated all colors into Figma Variables and synchronized spacing tokens with the frontend codebase to ensure design-development consistency.</p>
+          <p>I began by auditing an existing Figma file containing draft components and styles. I migrated all colors into Figma Variables and synchronized spacing tokens with the frontend codebase — a single 8px scale — to ensure design-development consistency.</p>
           <p>The Safe{"{"}Wallet{"}"} frontend is built on <TextLink href="https://mui.com/">Material UI</TextLink> components, so it was sometimes crucial to rely on their standard components to verify behavior.</p>
           <p>I also configured layout grids and added missing color tokens based on the frontend library to fully align the design system with the implemented UI.</p>
         </div>
-        <SpacingTokens />
         <div className={styles.screens}>
           <Screen name="colors" alt="Light mode color variables: background, border, text, primary, secondary, success and error groups" />
           <Screen name="grids" alt="Layout grids with fixed margins at 1920px, with and without the sidebar" />
