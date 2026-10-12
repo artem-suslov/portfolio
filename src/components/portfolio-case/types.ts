@@ -29,8 +29,6 @@ export type CaseImageCover = {
 };
 
 export type CaseVideoCover = {
-  /** Clicking the cover opens the video in the expanded view. */
-  expandable?: boolean;
   mobilePoster?: string;
   mobileSrc?: string;
   poster?: string;

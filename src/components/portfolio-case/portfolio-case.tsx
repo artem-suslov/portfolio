@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { CaseMorph } from "@/components/case-study/case-morph";
 import { useInteractionSound } from "@/components/sound/sound-provider";
-import { markCaseNavigation, useCaseReturnTarget } from "@/lib/case-return";
+import { markCaseNavigation, rememberHomeScroll, useCaseReturnTarget } from "@/lib/case-return";
 import { CaseCover } from "./case-cover";
 import { CaseInfo } from "./case-info";
 import styles from "./portfolio-case.module.css";
@@ -60,6 +60,7 @@ export function PortfolioCase({
           href={href}
           onClick={() => {
             markCaseNavigation();
+            rememberHomeScroll();
             trackOpen();
             playTap();
           }}

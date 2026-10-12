@@ -35,7 +35,7 @@
 .triggerIcon {
   display: grid;
   place-items: center;
-  transition: opacity 150ms ease 150ms;
+  transition: opacity 120ms ease 240ms;
 }
 
 .trigger[aria-expanded="true"] .triggerIcon {

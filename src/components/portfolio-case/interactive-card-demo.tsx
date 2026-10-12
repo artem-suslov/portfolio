@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Maximize2 } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -11,7 +10,6 @@ import {
 } from "react";
 import { Dithering, MeshGradient } from "@paper-design/shaders-react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
-import { Dialog, DialogClose } from "@/components/ui/dialog";
 import { isMouseHover, matchesMedia, REDUCED_MOTION_QUERY } from "@/lib/media";
 import styles from "./interactive-card-demo.module.css";
 
@@ -45,7 +43,6 @@ const rawCardThemes: Array<{
 const cardThemes: CardTheme[] = rawCardThemes.map(normalizeTheme);
 
 export default function InteractiveCardDemo() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedThemeId, setSelectedThemeId] =
     useState<ThemeId>("ember");
   const { playTap } = useInteractionSound();
@@ -103,45 +100,12 @@ export default function InteractiveCardDemo() {
 
       <div className={styles.controls}>
         <span className={styles.hint}>Hover on card</span>
-        <button
-          aria-label="Open card in modal"
-          className={styles.expandButton}
-          onClick={() => {
-            playTap();
-            setIsModalOpen(true);
-          }}
-          type="button"
-        >
-          <Maximize2 aria-hidden="true" size={16} strokeWidth={1.5} />
-        </button>
       </div>
-
-      <Dialog
-        aria-label="Interactive card preview"
-        backdropClassName={styles.modalBackdrop}
-        className={styles.modalPanel}
-        onClose={() => setIsModalOpen(false)}
-        open={isModalOpen}
-      >
-        <DialogClose
-          aria-label="Close card preview"
-          className={styles.closeButton}
-          iconSize={18}
-          size="md"
-        />
-        <CardStage modal theme={animatedTheme} />
-      </Dialog>
     </div>
   );
 }
 
-function CardStage({
-  modal = false,
-  theme,
-}: {
-  modal?: boolean;
-  theme: CardTheme;
-}) {
+function CardStage({ theme }: { theme: CardTheme }) {
   const canUseShaders = useCanUseShaders();
   const cardRef = useRef<HTMLDivElement>(null);
   const spotlightRef = useRef<HTMLDivElement>(null);
@@ -202,7 +166,7 @@ function CardStage({
   };
 
   return (
-    <div className={`${styles.stage} ${modal ? styles.modalStage : ""}`}>
+    <div className={styles.stage}>
       {canUseShaders ? (
         <MeshGradient
           colors={theme.glowColors}

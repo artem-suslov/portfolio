@@ -26,7 +26,7 @@ export function AnimatorHeroVideo() {
       playsInline
       poster={`${imagePath}/03.png`}
     >
-      <source src="/videos/animator_demo.mp4" type="video/mp4" />
+      <source src="/videos/animator_thumb_demo.mp4" type="video/mp4" />
     </video>
   );
 }

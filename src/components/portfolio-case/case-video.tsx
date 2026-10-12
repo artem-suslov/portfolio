@@ -108,7 +108,7 @@ export function CaseVideo({
   poster,
   src,
   variant,
-}: CaseVideoCover & { caseId: string; label: string }) {
+}: CaseVideoCover & { caseId: string; expandable: boolean; label: string }) {
   const { playTap } = useInteractionSound();
   const videoRef = useRef<HTMLVideoElement>(null);
   const expandedVideoRef = useRef<HTMLVideoElement>(null);

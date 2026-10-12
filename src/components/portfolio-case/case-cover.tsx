@@ -200,7 +200,8 @@ export function CaseCover({
         <CaseVideo
           {...cover}
           caseId={caseId}
-          expandable={cover.expandable && !isLinked}
+          // Cards without their own page open the video in the expanded view.
+          expandable={!isLinked}
           label={label}
         />
       );

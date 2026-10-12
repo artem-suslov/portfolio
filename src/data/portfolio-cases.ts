@@ -110,8 +110,8 @@ export const portfolioCases: PortfolioCaseData[] = [
     cover: {
       mobilePoster: "/images/video-posters/animator-mobile.webp",
       mobileSrc: "/videos/animator_demo_mobile.mp4?v=20260903-fs",
-      poster: "/images/video-posters/animator.webp",
-      src: "/videos/animator_demo.mp4?v=20260903-fs",
+      poster: "/images/video-posters/animator.webp?v=20261012",
+      src: "/videos/animator_thumb_demo.mp4?v=20261012-2",
       type: "video",
       variant: "animator",
     },
