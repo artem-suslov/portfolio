@@ -10,7 +10,7 @@ export function V2Description() {
         I have 5+ years of experience. I explore product design, AI, and
         emerging technologies to create better digital experiences. Previously,
         I worked at <TextLink href={links.steamify}>Steamify</TextLink>
-        {", where I built an ecosystem for gamers. I've also designed products for crypto companies like "}
+        {", where I designed products for a gaming ecosystem. I've also designed products for crypto companies like "}
         <TextLink href={links.safe}>Safe</TextLink>
         {", with hands-on experience in Web3, wallets, and digital assets."}
       </p>

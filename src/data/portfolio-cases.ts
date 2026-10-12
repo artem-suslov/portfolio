@@ -85,7 +85,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       companyHref: links.steamify,
       description:
         "Redesigned the payout waiting step to introduce Telegram earlier, using usability testing and A/B-tested offers to raise web-to-Telegram conversion from 20% to 50%.",
-      period: "2024–2025",
+      period: "2025",
       role: "Product Designer",
       title: "How I turned payout waiting into Telegram conversion",
     },
@@ -117,10 +117,11 @@ export const portfolioCases: PortfolioCaseData[] = [
     },
     id: "animator",
     details: {
-      company: "Animator",
+      company: "Personal project · Live",
       companyHref: "https://getanimator.xyz/",
+      companyLabel: "Project",
       description:
-        "Designed and built Animator from scratch — a browser-based tool for creating looping MP4 showcases.",
+        "Designed and built Animator from scratch — a browser-based tool for creating looping MP4 showcases. Reached 300 users in the first three days.",
       descriptionLink: {
         href: "https://youtu.be/d9Nve2VaHQ4?si=Jy_Wdt_buRd10kKW",
         label: "Watch how I built it",
@@ -146,13 +147,13 @@ export const portfolioCases: PortfolioCaseData[] = [
       company: "Safe {Wallet}",
       companyHref: links.safe,
       description:
-        "Designed and evolved an open-source design system for Safe, creating reusable foundations and components used by 1,500+ people. The release received 85+ likes on Figma Community and reached 33,000 people on X.",
+        "Designed and evolved an open-source design system for Safe, creating reusable foundations and components used by 1,400+ people. The release received 85+ likes on Figma Community and got 33,000+ views on X.",
       period: "2023",
       role: "Product Designer",
-      title: "Open-source design system used by 1,500+ people",
+      title: "Open-source design system used by 1,400+ people",
     },
     href: "/safe-design-system",
-    title: "Open-source design system used by 1,500+ people",
+    title: "Open-source design system used by 1,400+ people",
   },
   {
     cover: {
@@ -170,7 +171,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       companyHref: links.steamify,
       description:
         "Designed a centralized dashboard for managing Steam trading operations, bringing inventory, listings, and transactions into one workspace.",
-      period: "2023",
+      period: "2023–2024",
       role: "Product Designer",
       title: "Steam trading management dashboard",
     },
@@ -201,7 +202,6 @@ export const portfolioCases: PortfolioCaseData[] = [
   //   title: "Web3 NFT marketplace for gamers in Asia",
   // },
   {
-    comingSoon: true,
     cover: {
       poster: "/images/video-posters/ccp-white.webp",
       src: "/videos/CCP_White_BG_compress.mp4?v=20261001-2",
@@ -235,6 +235,7 @@ export const portfolioTabs = [
     label: "Work",
     caseIds: [
       "steamify-case",
+      "animator",
       "orbit",
       "s7-case",
       "ccp-design-system",
@@ -252,5 +253,4 @@ export const portfolioTabs = [
       "glow-hover-effect",
     ],
   },
-  { id: "my-products", label: "My products", caseIds: ["animator"] },
 ] as const;

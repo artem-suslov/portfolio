@@ -40,41 +40,6 @@
   margin-top: var(--space-2);
 }
 
-.tokens {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-md);
-  font-variant-numeric: tabular-nums;
-}
-
-.tokens th,
-.tokens td {
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--color-border);
-  font-weight: inherit;
-  text-align: left;
-}
-
-.tokens td {
-  color: var(--color-text-secondary);
-  font-family: var(--font-mono);
-  text-align: right;
-}
-
-.tokens thead th {
-  color: var(--color-text-secondary);
-}
-
-.tokens thead th:last-child {
-  text-align: right;
-}
-
-.tokens code {
-  color: var(--color-text-body);
-  font-family: var(--font-mono);
-}
-
 .screens {
   display: flex;
   flex-direction: column;

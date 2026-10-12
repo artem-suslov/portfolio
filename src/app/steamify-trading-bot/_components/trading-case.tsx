@@ -105,7 +105,7 @@ export function TradingCase() {
         <h2>How did we measure success?</h2>
         <div className={shared.prose}>
           <p>We evaluated product success with two core metrics: user growth and user feedback.</p>
-          <p>As market benchmarks, we only had visibility into our competitors’ user numbers. As of March 3, 2024, we had already surpassed TradeOn, reaching 70 users in beta.</p>
+          <p>As market benchmarks, we only had visibility into our competitors’ user numbers. As of March 3, 2024, we had already surpassed both competitors, reaching 70 users in beta.</p>
         </div>
         <Metrics />
         <p>We measured qualitative performance through direct chat feedback. User responses were highly positive, with strong engagement and satisfaction signals.</p>

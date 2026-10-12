@@ -242,10 +242,8 @@ export function AnimatorCaseContent() {
           stable.
         </p>
         <p>
-          The control panel followed a similar path. I tried an off-the-shelf
-          library and then custom components. Both approaches made the
-          interface feel too heavy, so I stopped polishing endlessly,
-          rebuilt the panel, and chose a simpler set of controls.
+          The same went for the control panel: rather than polishing my own
+          components endlessly, I settled on ToolCraft.
         </p>
       </section>
 
@@ -277,7 +275,9 @@ export function AnimatorCaseContent() {
         </ul>
         <p>
           The service is deployed on its own domain and is already part of my
-          video-making workflow.
+          video-making workflow. I brought in the first 300 users in three
+          days through my own YouTube, Telegram, Threads, and LinkedIn
+          channels.
         </p>
         <div className={shared.block}>
           <CaseLabel>What I learned</CaseLabel>
@@ -289,10 +289,6 @@ export function AnimatorCaseContent() {
             <li>
               I implemented Magic Link sign-in and configured my own SMTP
               server through Resend.
-            </li>
-            <li>
-              I brought in the first 300 users in three days through my own
-              YouTube, Telegram, Threads, and LinkedIn channels.
             </li>
           </ul>
         </div>

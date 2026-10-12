@@ -5,7 +5,7 @@ import type { CaseDetails } from "./types";
 function CaseDetailsSection({ details }: { details: CaseDetails }) {
   const metadata = [
     {
-      label: "Company",
+      label: details.companyLabel ?? "Company",
       value: details.companyHref ? (
         <TextLink className={styles.detailsLink} href={details.companyHref}>
           {details.company}

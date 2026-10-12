@@ -67,6 +67,8 @@ export type CaseCover =
 export type CaseDetails = {
   company: string;
   companyHref?: string;
+  /** Overrides the "Company" label, e.g. for personal projects. */
+  companyLabel?: string;
   description: string;
   descriptionLink?: {
     href: string;
