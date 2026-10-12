@@ -93,7 +93,8 @@ export function CaseRail({
   }, [sections]);
 
   return <aside className={styles.rail} aria-label="Case navigation">
-    <ButtonLink className={styles.back} href="/" onClick={playTap} variant="outline">
+    {/* The home page restores its own scroll position on return (`useRestoreHomeScroll`). */}
+    <ButtonLink className={styles.back} href="/" onClick={playTap} scroll={false} variant="outline">
       <ChevronLeft absoluteStrokeWidth aria-hidden="true" size={16} strokeWidth={1.1} />Back
     </ButtonLink>
     <nav ref={navRef} aria-label="Table of contents" className={styles.railItems}>

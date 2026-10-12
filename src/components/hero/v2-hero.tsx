@@ -14,7 +14,7 @@ export function V2Hero({ showDivider = true }: { showDivider?: boolean }) {
       </div>
       <div className={styles.v2Content}>
         <div className={styles.v2Identity}>
-          <h1 className={styles.v2Name}>Artem Suslov, a Product Designer who can ship front-end</h1>
+          <h1 className={styles.v2Name}>Artem Suslov, a Product Designer who can ship frontend</h1>
           <p className={styles.v2Tagline}>
             Designing B2C products for Web and Mobile
           </p>

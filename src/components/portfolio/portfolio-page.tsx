@@ -6,6 +6,7 @@ import { SoundProvider } from "@/components/sound/sound-provider";
 import { portfolioCases, portfolioTabs } from "@/data/portfolio-cases";
 import { AboutMeContent } from "./about-me-content";
 import { ConceptsGallery } from "./concepts-gallery";
+import { HomeScrollRestore } from "./home-scroll-restore";
 import styles from "./portfolio-page.module.css";
 import { PortfolioTabs } from "./portfolio-tabs";
 
@@ -44,6 +45,7 @@ export async function PortfolioPage({
 
   return (
     <main className={styles.viewport}>
+      <HomeScrollRestore />
       <SoundProvider>
         <MotionProvider>
           <article

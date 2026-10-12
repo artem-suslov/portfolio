@@ -94,18 +94,12 @@
   pointer-events: none;
 }
 
-.hint,
-.expandButton {
-  min-height: 36px;
-  border: 1px solid rgb(255 255 255 / 12%);
+.hint {
+  min-height: 32px;
   color: #fff;
   background: rgb(255 255 255 / 10%);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-}
-
-.hint {
-  min-height: 32px;
   display: inline-flex;
   align-items: center;
   padding: 6px 12px;
@@ -116,77 +110,6 @@
   line-height: 20px;
   letter-spacing: -0.01em;
   pointer-events: none;
-}
-
-.expandButton {
-  width: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 12px;
-  cursor: pointer;
-  pointer-events: auto;
-  transition:
-    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
-    background-color 160ms ease,
-    border-color 160ms ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.expandButton {
-  width: 32px;
-  min-height: 32px;
-  border: 0;
-  border-radius: 999px;
-}
-
-
-.expandButton:active {
-  transform: scale(0.94);
-}
-
-.expandButton:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-
-.modalBackdrop {
-  --dialog-backdrop: rgb(0 0 0 / 72%);
-  --dialog-backdrop-blur: 16px;
-}
-
-.modalPanel {
-  --dialog-width: min(680px, calc(100vw - 48px));
-  --dialog-radius: 20px;
-  --dialog-surface: #0e1010;
-  --dialog-shadow: 0 32px 96px rgb(0 0 0 / 45%);
-
-  min-height: min(480px, calc(100vh - 48px));
-  display: grid;
-  place-items: center;
-  border: 1px solid rgb(255 255 255 / 12%);
-}
-
-/* Two classes so the glass look wins over the shared Button outline style. */
-.modalPanel .closeButton {
-  position: absolute;
-  z-index: 50;
-  top: 16px;
-  right: 16px;
-  border: 1px solid rgb(255 255 255 / 12%);
-  background: rgb(255 255 255 / 10%);
-  color: #fff;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-}
-
-.modalPanel .closeButton:focus-visible {
-  outline-color: #fff;
-}
-
-.modalStage {
-  width: min(392px, calc(100vw - 96px));
 }
 
 .swatch {
@@ -244,16 +167,6 @@
     border-color: rgb(255 255 255 / 90%);
   }
 
-  .expandButton:hover {
-    border-color: rgb(255 255 255 / 24%);
-    background: rgb(255 255 255 / 16%);
-  }
-
-  /* The extra :not(:disabled) outranks Button's own hover rule. */
-  .modalPanel .closeButton:hover:not(:disabled) {
-    border-color: rgb(255 255 255 / 24%);
-    background: rgb(255 255 255 / 16%);
-  }
 }
 
 @media (max-width: 760px) {
@@ -279,8 +192,7 @@
 @media (prefers-reduced-motion: reduce) {
   .card,
   .swatch,
-  .spotlight,
-  .expandButton {
+  .spotlight {
     transition: none !important;
   }
 }

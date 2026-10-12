@@ -25,8 +25,9 @@ type SendState = "idle" | "sending" | "sent" | "error";
 
 const MAX_MESSAGE_LENGTH = 2000;
 /**
- * The button and the panel share one surface that morphs between the two shapes. Crossfade is off
- * on both, so the surface hands over at once instead of showing a stretched copy of the button.
+ * The button and the panel share one surface that morphs between the two shapes. Opening hands the
+ * surface over at once, so no stretched copy of the button shows; closing crossfades, so the panel
+ * fades into the shrinking button instead of snapping to a blank, stretched one.
  */
 const SURFACE_LAYOUT_ID = "feedback-surface";
 const morphTransition: Transition = {
@@ -193,7 +194,8 @@ export function FeedbackWidget() {
           aria-label="Report a bug or leave feedback"
           className={styles.trigger}
           iconOnly
-          layoutCrossfade={false}
+          // Read when the button takes the surface back, i.e. on close.
+          layoutCrossfade={!isOpen}
           layoutId={SURFACE_LAYOUT_ID}
           onClick={togglePanel}
           ref={triggerRef}
