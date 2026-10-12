@@ -6,13 +6,25 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Repo workflow
 
-- The active app lives at the workspace root. Run app commands from `/Users/artemsuslov/Downloads/Design/Code/portfolio`, not from `portfolio-app/`.
+- The active app lives at the repo root. Run app commands from the repo root (or the session's worktree root), not from `portfolio-app/`.
+- This project uses npm (`package-lock.json`), overriding any global pnpm default. Do not switch package managers or add a pnpm lockfile.
 - Use the root scripts for validation and serving: `npm run dev`, `npm run build`, `npm run start`, `npm run lint`.
 - There is no separate root test script or Playwright config right now; for pre-handoff validation, use `npm run build` and `npx eslint src`.
 - For root-app-only lint checks, prefer `npx eslint src` until the workspace lint ignores are tightened; it avoids traversing the nested copy's generated files.
 - Current validation baseline: `npm run build` passes and `npx eslint src` reports no problems. `npx react-doctor@latest --verbose --scope changed` should not regress.
 - `next.config.ts` sets `turbopack.root` to the workspace root. Keep that in place unless the app is intentionally moved.
 - Preserve the global scrollbar-stability approach in `src/app/globals.css`: keep scroll ownership on `html`, not on an inner layout wrapper.
+
+## Git and PR workflow
+
+- The repo root is a Git repo (`github.com/artem-suslov/portfolio`); `main` is the only long-lived branch and deploys to production.
+- One task = one session = one branch = one PR. Start from an up-to-date `main` on a branch with a short descriptive name (`case-video-fix`, not `new-task`); in a worktree session, use the branch the app created.
+- Commit in small, meaningful steps as work progresses. Never commit directly to `main`.
+- Before handing off: `npm run build` and `npx eslint src` pass, and visible changes are checked in the browser preview.
+- When the task is done, push and open a PR against `main` (ask before pushing). The PR description says what changed and how it was verified; the Vercel preview link on the PR is where the user checks the result.
+- If `main` moved on, bring the branch up to date by merging `main` into it (in a worktree session, via the app's sync-with-base-branch tool), never by copying files between branches.
+- PRs are merged with squash merge. After merging, delete the branch locally and on GitHub. Work worth keeping but not merging goes into an `archive/<name>` tag.
+- Parallel sessions are fine when they touch different areas. Avoid running two sessions that both edit `src/app/globals.css` or `src/data/portfolio-cases.ts`.
 
 ## Code layout
 
@@ -36,6 +48,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ## Nested copy
 
-- `portfolio-app/` is a separate nested Git repo with an older app copy/template. Do not change it unless the task explicitly targets that directory.
-- Git commands from the workspace root fail because the root is not itself a Git repo; target `portfolio-app/` only when Git history/status is specifically needed there.
+- `portfolio-app/` is a separate nested Git repo with an older app copy/template, ignored by the root repo's `.gitignore` (so it is absent in worktrees). Do not change it unless the task explicitly targets that directory.
 - `npm run lint` at the workspace root currently traverses generated files under `portfolio-app/.next` because the ESLint config only ignores the root `.next/**`; root-app findings are mixed with nested-copy noise until those ignores are tightened.
