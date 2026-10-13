@@ -78,12 +78,12 @@
 .article ul > li::before {
   content: "";
   position: absolute;
-  top: calc(0.5lh - 2.5px);
+  top: calc(0.5lh - 2px);
   left: 0;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--color-text-secondary);
 }
 
 .article ul > li + li {
