@@ -10,10 +10,9 @@ import shared from "@/components/case-study/case-study.module.css";
 import styles from "./cashout-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
 import heroPhones from "../../../../public/images/cashout_thumb_case.png";
+import abTestScreens from "../../../../public/images/steamify-case-v2/AB_test.png";
 import afterScreens from "../../../../public/images/steamify-case-v2/steamify_after.png";
 import beforeScreens from "../../../../public/images/steamify-case-v2/steamify_before.png";
-
-const assets = "/images/steamify-case-v2";
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -138,7 +137,7 @@ export function CashoutCase() {
           <p>The test ran for 1.5 weeks with a 50/50 traffic split. Together, the two offers received approximately 1,500–2,000 impressions.</p>
           <p>The reward-led offer performed best, with an 85% CTR, and became our primary message.</p>
         </div>
-        <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/AB_test.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="A/B test: offer A, Get free skin, achieved approximately 85% CTR. Offer B, Open Telegram to track a payout, had a lower CTR." />
+        <CaseImage caseId="steamify-cashout" className={shared.media} src={abTestScreens.src} width={abTestScreens.width} height={abTestScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="A/B test on the payout waiting screen. Offer A: grab a free skin while you wait, with a Claim in Telegram button. Offer B: know when the money lands, with a Track in Telegram button." />
       </section>
 
       <section id="results" className={`${shared.divided} ${styles.results}`}>
