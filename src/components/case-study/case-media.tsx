@@ -10,6 +10,8 @@ import styles from "./case-media.module.css";
 
 const defaultCaseId = "case-media";
 const defaultSizes = "(max-width: 760px) calc(100vw - 32px), 636px";
+// Matches `--radius-md`, the corner radius of every case-study image and video.
+const mediaRadius = 8;
 
 function frameClass(frameClassName?: string) {
   return frameClassName ? `${styles.frame} ${frameClassName}` : styles.frame;
@@ -30,7 +32,7 @@ export function CaseImage({
   preload,
   sizes = defaultSizes,
   src,
-  thumbnailRadius = 0,
+  thumbnailRadius = mediaRadius,
   width,
 }: {
   alt: string;
@@ -90,7 +92,7 @@ export function CaseVideo({
   frameClassName,
   poster,
   src,
-  thumbnailRadius = 0,
+  thumbnailRadius = mediaRadius,
 }: {
   alt: string;
   caseId?: string;

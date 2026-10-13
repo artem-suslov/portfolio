@@ -128,7 +128,7 @@ export function SteamifyCaseContent() {
 }
 
 const caseId = "steamify-original-case";
-const mediaRadius = 12;
+const mediaRadius = 8;
 
 function CaseImage({ alt, src }: { alt: string; src: string }) {
   return (
