@@ -10,6 +10,8 @@ import shared from "@/components/case-study/case-study.module.css";
 import styles from "./cashout-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
 import heroPhones from "../../../../public/images/cashout_thumb_case.png";
+import afterScreens from "../../../../public/images/steamify-case-v2/steamify_after.png";
+import beforeScreens from "../../../../public/images/steamify-case-v2/steamify_before.png";
 
 const assets = "/images/steamify-case-v2";
 
@@ -117,11 +119,11 @@ export function CashoutCase() {
         <h2 id="before-after-heading">Before/After</h2>
         <figure className={shared.block}>
           <figcaption className={styles.caption}>Before: Telegram appeared only after the payout was complete, when some users had already left the page.</figcaption>
-          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_before.png`} width={1470} height={802} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={beforeScreens.src} width={beforeScreens.width} height={beforeScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
         </figure>
         <figure className={`${shared.block} ${styles.after}`}>
           <figcaption className={styles.caption}>After: Telegram appeared earlier, while users waited for their payout, becoming a channel for updates and follow-ups.</figcaption>
-          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_after.png`} width={1478} height={807} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={afterScreens.src} width={afterScreens.width} height={afterScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
         </figure>
       </section>
 
