@@ -36,7 +36,8 @@ type CaseCoverSize = {
 type CaseCoverModalPhase = "closed" | "open" | "closing";
 
 const caseViewMaxWidth = 900;
-const caseViewRadius = 12;
+// Matches `--radius-md`, the corner radius of case covers and case-study media.
+const caseViewRadius = 8;
 const caseViewShadowAlpha = 0.18;
 
 function getCaseViewWidth(cover: CaseCoverSize) {
