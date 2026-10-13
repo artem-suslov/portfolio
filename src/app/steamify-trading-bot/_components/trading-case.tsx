@@ -11,6 +11,10 @@ import { TextLink } from "@/components/ui/text-link";
 import styles from "./trading-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
 import heroScreen from "../../../../public/images/tradingbot_thumb_case.png";
+import loginScreen from "../../../../public/images/steamify-trading-case/login.png";
+import overviewScreen from "../../../../public/images/steamify-trading-case/overview.png";
+import profilesScreen from "../../../../public/images/steamify-trading-case/profiles.png";
+import settingsScreen from "../../../../public/images/steamify-trading-case/settings.png";
 
 const assets = "/images/steamify-trading-case";
 const caseId = "steamify-trading-bot";
@@ -33,9 +37,12 @@ const meta = [
   { label: "Tags", value: "B2C, Web App, Design System" },
 ];
 
-// Screens are 2560×1396 exports of the Figma file.
-function Screen({ alt, name, preload }: { alt: string; name: string; preload?: boolean }) {
-  return <CaseImage caseId={caseId} className={shared.media} src={`${assets}/${name}.jpg`} width={2560} height={1396} preload={preload} alt={alt} />;
+type StaticScreen = { src: string; width: number; height: number };
+
+// Screens are either static imports or 2560×1396 JPG exports of the Figma file.
+function Screen({ alt, name, image, preload }: { alt: string; preload?: boolean } & ({ name: string; image?: never } | { image: StaticScreen; name?: never })) {
+  const { src, width, height } = image ?? { src: `${assets}/${name}.jpg`, width: 2560, height: 1396 };
+  return <CaseImage caseId={caseId} className={shared.media} src={src} width={width} height={height} preload={preload} alt={alt} />;
 }
 
 // Square close-ups, shown side by side.
@@ -92,12 +99,12 @@ export function TradingCase() {
           <p>This helped us evaluate options objectively and make aligned decisions. Ultimately, we always found common ground, clarified priorities, and moved forward with a shared vision.</p>
         </div>
         <div className={styles.screens}>
-          <Screen name="login" alt="Steamify sign-in screen next to the Profiles page" />
+          <Screen image={loginScreen} alt="Steamify sign-in screen next to a preview of the dashboard" />
           <div className={styles.details}>
             <Detail name="sidebar" alt="Sidebar navigation: Overview, Transactions, Profiles, Items, Steam accounts, Proxies and Items valuation" />
             <Detail name="status-cards" alt="Profile status cards: profiles in use, In progress, Inactive, Error and Done" />
           </div>
-          <Screen name="user-profile" alt="User profile settings with security options and Steam, Telegram, Discord and Metamask integrations" />
+          <Screen image={settingsScreen} alt="General settings with Steam ID, trade offer link, auto-accept and global sales toggles, and preferred marketplaces" />
         </div>
       </section>
 
@@ -120,7 +127,7 @@ export function TradingCase() {
           <p>All data updates in real time via WebSocket integration, ensuring immediate status changes and a responsive user experience.</p>
         </div>
         <div className={styles.screens}>
-          <Screen name="overview-widgets" alt="Overview widgets: items sold, volume chart, balances, all items and all items cost" />
+          <Screen image={overviewScreen} alt="Overview widgets: revenue, volume and items sold chart with a per-platform tooltip, balances, inventory and inventory value" />
           <Screen name="overview-sales" alt="Sales history with marketplace, profile and status for each transaction, next to the Overview widgets" />
         </div>
       </section>
@@ -131,7 +138,7 @@ export function TradingCase() {
           <p>Profiles represent the bots responsible for selling users’ items. Each profile can have one of four statuses: Error, In Progress, Inactive or Done.</p>
           <p>Each profile displays key operational data, including current balance, total revenue from sales, estimated inventory value, total number of items, as well as API key and proxy status — ensuring transparency and control over the selling process.</p>
         </div>
-        <Screen name="profiles" alt="Profiles page with bots grouped by status, showing balance, amount, items, API status and proxy" />
+        <Screen image={profilesScreen} alt="Profiles page with bots grouped by status, showing balance, sales, items, markets and status" />
       </section>
 
       <section id="prices" className={shared.divided}>
