@@ -149,12 +149,10 @@
   letter-spacing: var(--letter-spacing-tight);
 }
 
+/* Same type as the case body copy. */
 .meta dd {
   margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-lg);
-  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-text-body);
 }
 
 /* Content blocks. */
