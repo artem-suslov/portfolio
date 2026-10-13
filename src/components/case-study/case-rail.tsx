@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { ButtonLink } from "@/components/ui/button";
@@ -95,7 +94,7 @@ export function CaseRail({
   return <aside className={styles.rail} aria-label="Case navigation">
     {/* The home page restores its own scroll position on return (`useRestoreHomeScroll`). */}
     <ButtonLink className={styles.back} href="/" onClick={playTap} scroll={false} variant="outline">
-      <ChevronLeft absoluteStrokeWidth aria-hidden="true" size={16} strokeWidth={1.1} />Back
+      Home
     </ButtonLink>
     <nav ref={navRef} aria-label="Table of contents" className={styles.railItems}>
       <span ref={dotRef} className={styles.railDot} aria-hidden="true" />

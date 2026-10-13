@@ -10,8 +10,9 @@ import shared from "@/components/case-study/case-study.module.css";
 import styles from "./cashout-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
 import heroPhones from "../../../../public/images/cashout_thumb_case.png";
-
-const assets = "/images/steamify-case-v2";
+import abTestScreens from "../../../../public/images/steamify-case-v2/AB_test.png";
+import afterScreens from "../../../../public/images/steamify-case-v2/steamify_after.png";
+import beforeScreens from "../../../../public/images/steamify-case-v2/steamify_before.png";
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -26,7 +27,7 @@ const sections = [
 
 const meta = [
   { label: "Team", value: "CEO, Backend Dev, Frontend Dev, Product Designer (me)" },
-  { label: "My role", value: "Product Design, Research, Design System, Handoff, Design Review, Analytics" },
+  { label: "My role", value: "Product Design, Research, Handoff, Design Review, Analytics" },
   { label: "Timeline", value: "March, 2025" },
 ];
 
@@ -117,11 +118,11 @@ export function CashoutCase() {
         <h2 id="before-after-heading">Before/After</h2>
         <figure className={shared.block}>
           <figcaption className={styles.caption}>Before: Telegram appeared only after the payout was complete, when some users had already left the page.</figcaption>
-          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_before.png`} width={1470} height={802} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={beforeScreens.src} width={beforeScreens.width} height={beforeScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="Before: two payout screens. The main Telegram CTA appears only after payout completion." />
         </figure>
         <figure className={`${shared.block} ${styles.after}`}>
           <figcaption className={styles.caption}>After: Telegram appeared earlier, while users waited for their payout, becoming a channel for updates and follow-ups.</figcaption>
-          <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/steamify_after.png`} width={1478} height={807} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
+          <CaseImage caseId="steamify-cashout" className={shared.media} src={afterScreens.src} width={afterScreens.width} height={afterScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="After: the free-skin CTA stays visible during payout waiting and after completion." />
         </figure>
       </section>
 
@@ -136,7 +137,7 @@ export function CashoutCase() {
           <p>The test ran for 1.5 weeks with a 50/50 traffic split. Together, the two offers received approximately 1,500–2,000 impressions.</p>
           <p>The reward-led offer performed best, with an 85% CTR, and became our primary message.</p>
         </div>
-        <CaseImage caseId="steamify-cashout" className={shared.media} src={`${assets}/AB_test.png`} width={1472} height={720} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="A/B test: offer A, Get free skin, achieved approximately 85% CTR. Offer B, Open Telegram to track a payout, had a lower CTR." />
+        <CaseImage caseId="steamify-cashout" className={shared.media} src={abTestScreens.src} width={abTestScreens.width} height={abTestScreens.height} sizes="(max-width: 760px) calc(100vw - 32px), 636px" alt="A/B test on the payout waiting screen. Offer A: grab a free skin while you wait, with a Claim in Telegram button. Offer B: know when the money lands, with a Track in Telegram button." />
       </section>
 
       <section id="results" className={`${shared.divided} ${styles.results}`}>

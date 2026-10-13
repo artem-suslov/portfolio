@@ -35,7 +35,7 @@ export function SteamifyCaseContent() {
             <CaseVideo alt="Steamify cashout product preview" className={styles.heroVideo} poster="/images/steamify-case/hero-poster.webp" src="/images/steamify-case/hero.mp4" />
             <dl className={styles.details}>
               <div><dt>Team</dt><dd>CEO, 2x Backend Devs, 1x Frontend Dev, Product Designer, QA</dd></div>
-              <div><dt>My role</dt><dd>Product Design, Research, Design System, Handoff, Design Review, Analytics</dd></div>
+              <div><dt>My role</dt><dd>Product Design, Research, Handoff, Design Review, Analytics</dd></div>
               <div><dt>Timeline</dt><dd>2024–2025</dd></div>
             </dl>
           </section>
@@ -128,7 +128,7 @@ export function SteamifyCaseContent() {
 }
 
 const caseId = "steamify-original-case";
-const mediaRadius = 12;
+const mediaRadius = 8;
 
 function CaseImage({ alt, src }: { alt: string; src: string }) {
   return (

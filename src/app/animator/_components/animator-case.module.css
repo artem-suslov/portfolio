@@ -20,6 +20,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 508 / 298;
+  border-radius: var(--radius-md);
   object-fit: cover;
   object-position: left center;
 }

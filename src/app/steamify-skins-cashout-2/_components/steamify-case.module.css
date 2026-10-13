@@ -25,7 +25,7 @@
 .details dd { margin: 0; color: var(--color-text-primary); font-size: var(--font-size-base); line-height: var(--line-height-lg); }
 .details dd span { display: block; }
 /* Each image and video is wrapped in a button that opens the shared expanding view used by home page covers. */
-.mediaFrame { border-radius: var(--radius-lg); background: var(--color-surface-subtle); }
+.mediaFrame { border-radius: var(--radius-md); background: var(--color-surface-subtle); }
 .heroVideo, .mediaVideo { width: 100%; height: auto; display: block; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-top: 22px; }
 .metrics > div { min-height: 84px; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-1); padding: var(--space-4); border-radius: var(--radius-md); background: var(--color-surface-subtle); }
