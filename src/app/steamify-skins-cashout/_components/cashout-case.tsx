@@ -27,7 +27,7 @@ const sections = [
 
 const meta = [
   { label: "Team", value: "CEO, Backend Dev, Frontend Dev, Product Designer (me)" },
-  { label: "My role", value: "Product Design, Research, Design System, Handoff, Design Review, Analytics" },
+  { label: "My role", value: "Product Design, Research, Handoff, Design Review, Analytics" },
   { label: "Timeline", value: "March, 2025" },
 ];
 
