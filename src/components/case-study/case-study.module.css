@@ -65,8 +65,25 @@
 }
 
 .article ul {
-  padding-left: var(--space-6);
-  list-style: disc;
+  padding-left: 0;
+  list-style: none;
+}
+
+/* Drawn bullet so it sits flush with the label above; wrapped lines align with the text. */
+.article ul > li {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.article ul > li::before {
+  content: "";
+  position: absolute;
+  top: calc(0.5lh - 2.5px);
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
 }
 
 .article ul > li + li {
