@@ -217,8 +217,9 @@
   background: transparent;
 }
 
-/* Muted like the inactive items; the label and chevron (currentColor) darken on hover. */
+/* Muted like the inactive items; the label darkens on hover. Flush left with the items. */
 .rail .back {
+  padding: 0;
   color: var(--color-text-secondary);
   transition:
     color var(--duration-hover) ease,
@@ -229,16 +230,6 @@
   .rail .back:hover {
     color: var(--color-text-primary);
   }
-}
-
-.rail .back:has(> svg:first-child) {
-  padding: 0;
-}
-
-/* The chevron's stroke starts about 5.4px into its 16px icon box, while the items'
-   first-letter stems start about 1.3px into theirs, so pull the icon 4px left. */
-.rail .back svg {
-  margin-inline-start: -4px;
 }
 
 .railItems {
