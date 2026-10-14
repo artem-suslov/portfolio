@@ -11,7 +11,7 @@ export function Colophon({ className }: { className?: string }) {
       </h2>
       <p className={styles.text}>
         Next.js, TypeScript, my own design tokens and components. Geist, Lucide, Framer Motion and
-        Paper shaders. Hosted on Vercel, coded with help from Claude and Codex.
+        Paper shaders. Hosted on Layero, coded with help from Claude and Codex.
       </p>
     </footer>
   );
