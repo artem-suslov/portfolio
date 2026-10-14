@@ -6,86 +6,95 @@
   width: var(--bento-width);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  align-items: center;
+  gap: var(--bento-header-gap);
   margin: var(--bento-spacing) 0 var(--space-18) calc((100% - var(--bento-width)) / 2);
+}
+
+.header {
+  width: min(var(--bento-header-width), 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .heading {
   margin: 0;
   color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--line-height-xl);
+  letter-spacing: -0.02em;
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: 400;
   line-height: var(--line-height-md);
   letter-spacing: var(--letter-spacing-tight);
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(var(--bento-columns), minmax(0, 1fr));
-  grid-auto-rows: var(--bento-row);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-row-gap);
+  container-type: inline-size;
+}
+
+/* Rows keep the design's height-to-width ratio as the grid narrows; tiles share the
+   row in proportion to their widths at full size. */
+.row {
+  height: calc(var(--bento-row-ratio) * 100cqw);
+  display: flex;
   gap: var(--bento-gap);
 }
 
-.grid[data-dense] {
-  grid-auto-flow: row dense;
-}
-
 .tile {
+  flex: var(--tile-width) 1 0;
   min-width: 0;
-  grid-column: span var(--tile-cols);
-  grid-row: span var(--tile-rows);
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 }
 
-/* Concept trigger: fills the tile and shows the shot cropped or whole. */
-.conceptTrigger {
+/* Concept frame: fills the tile and shows the shot cropped or whole. */
+.conceptFrame {
   position: relative;
-  display: block;
   width: 100%;
   flex: 1 1 0;
   min-height: 0;
-  padding: 0;
   overflow: hidden;
-  border: 0;
   border-radius: var(--radius-md);
-  background: var(--color-surface-muted);
-  color: inherit;
-  font: inherit;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.conceptTrigger:where(button) {
-  cursor: pointer;
-}
-
-.conceptTrigger:where(button):focus-visible {
-  outline: 2px solid var(--color-text-primary);
-  outline-offset: 4px;
+  background: var(--color-surface);
 }
 
 .concept {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-.concept[data-fit="contain"] {
-  object-fit: contain;
-}
-
+/* Phones stack the tiles; each keeps the proportions it has on desktop. */
 @media (max-width: 760px) {
-  /* The card is the full-screen surface here and already ends with 72px of padding. */
   .craft {
     width: auto;
     margin: max(0px, calc(var(--bento-spacing) - var(--space-18))) var(--space-4) var(--space-18);
   }
 
-  .grid {
-    grid-template-columns: repeat(var(--bento-mobile-columns), minmax(0, 1fr));
-    grid-auto-rows: var(--bento-mobile-row);
+  .header {
+    width: 100%;
+  }
+
+  .row {
+    height: auto;
+    flex-direction: column;
+    gap: var(--bento-row-gap);
   }
 
   .tile {
-    grid-column: span var(--tile-mobile-cols);
+    flex: none;
+    aspect-ratio: var(--tile-width) / var(--bento-row-height);
   }
 }

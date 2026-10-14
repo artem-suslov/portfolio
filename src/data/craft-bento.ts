@@ -1,62 +1,69 @@
-/** Grid of smaller work below the case studies: craft cases and concept shots. */
+/** Smaller work below the case studies: craft cases and concept shots, in rows of tiles. */
 
 export type CraftCaptions = "full" | "none" | "title";
 export type CraftTileFit = "contain" | "cover";
+export type CraftTilePosition = "bottom" | "center" | "left top" | "right top" | "top";
 
-export type CraftTileLayout = {
-  cols: number;
+export type CraftTile = {
   /** Concept images only: crop to the tile, or show the whole shot. */
   fit: CraftTileFit;
-  hidden: boolean;
-  /** A case id from portfolio-cases.ts or a concept id from concepts.ts. */
-  id: string;
+  /** A case id from portfolio-cases.ts, a concept id from concepts.ts, or null for a blank tile. */
+  id: string | null;
   /** Name in the dev panel. */
   label: string;
-  rows: number;
+  /** Concept images only: which part of a cropped shot stays in view. */
+  position: CraftTilePosition;
+  /** Width at the full grid width; tiles in a row keep these proportions as the grid narrows. */
+  width: number;
 };
 
 export type CraftBentoSettings = {
   captions: CraftCaptions;
-  columns: number;
-  /** Tiles backfill holes left by larger tiles before them. */
-  dense: boolean;
+  description: string;
+  /** Between tiles in a row. */
   gap: number;
   heading: string;
-  /** The grid sits on the page below the card and can grow wider than it. */
+  /** Between the heading block and the grid. */
+  headerGap: number;
+  /** The heading block lines up with the content column of the page card. */
+  headerWidth: number;
   maxWidth: number;
-  mobileColumns: number;
-  mobileRowHeight: number;
   radius: number;
+  /** Row height at the full grid width; rows scale with the grid below it. */
   rowHeight: number;
+  /** Between rows. */
+  rowGap: number;
+  rows: CraftTile[][];
   /** Space between the page card and the heading. */
   spacing: number;
-  tiles: CraftTileLayout[];
 };
 
-// Four narrow columns and short rows, so tiles can mix sizes:
-//   Telegram 2×3 | Bank card 2×2, then Tone of voice and Whisp 1×1 under it
-//   Phantom 1×2 | AI agents workspace 3×2
-//   Agents dashboard 2×2 | Coding agent run 2×2
+const tile = (
+  label: string,
+  id: string | null,
+  width: number,
+  media: Partial<Pick<CraftTile, "fit" | "position">> = {},
+): CraftTile => ({ fit: "cover", id, label, position: "center", width, ...media });
+
+// Paper: "Concepts and craft" frame, 1280px wide.
 export const craftBento: CraftBentoSettings = {
-  captions: "title",
-  columns: 4,
-  dense: true,
+  captions: "none",
+  description: "I practice myself in prototyping and concepts. Few of them here",
   gap: 16,
-  heading: "Craft & concepts",
-  maxWidth: 1024,
-  mobileColumns: 2,
-  mobileRowHeight: 140,
+  heading: "Concepts and craft",
+  headerGap: 32,
+  headerWidth: 636,
+  maxWidth: 1280,
   radius: 8,
-  rowHeight: 160,
-  spacing: 96,
-  tiles: [
-    { cols: 2, fit: "cover", hidden: false, id: "telegram-quick-stickers", label: "Telegram stickers", rows: 3 },
-    { cols: 2, fit: "cover", hidden: false, id: "mesh-card-demo", label: "Bank card", rows: 2 },
-    { cols: 1, fit: "cover", hidden: false, id: "concept-tov", label: "Tone of voice", rows: 1 },
-    { cols: 1, fit: "cover", hidden: false, id: "concept-whisp", label: "Whisp", rows: 1 },
-    { cols: 1, fit: "cover", hidden: false, id: "glow-hover-effect", label: "Phantom glow", rows: 2 },
-    { cols: 3, fit: "cover", hidden: false, id: "steamify-case-2", label: "AI agents workspace", rows: 2 },
-    { cols: 2, fit: "cover", hidden: false, id: "concept-agents", label: "Agents dashboard", rows: 2 },
-    { cols: 2, fit: "cover", hidden: false, id: "concept-loop", label: "Coding agent run", rows: 2 },
+  rowHeight: 400,
+  rowGap: 15,
+  rows: [
+    [tile("1 · left", "mesh-card-demo", 709), tile("1 · right", "steamify-case-2", 555)],
+    [tile("2 · left", "telegram-quick-stickers", 546), tile("2 · right", "concept-tov", 718)],
+    [
+      tile("3 · left", "concept-whisp", 783, { position: "left top" }),
+      tile("3 · right", "glow-hover-effect", 481),
+    ],
   ],
+  spacing: 96,
 };

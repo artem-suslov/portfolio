@@ -91,15 +91,20 @@ function StaticCover({
 export function CaseCover({
   caseId,
   cover,
-  isLinked,
+  expandable = true,
+  isLinked: isLinkedCase,
   title,
 }: {
   caseId: string;
   cover: CaseCoverData;
+  /** Cards without their own page open the cover in an expanded view unless this is off. */
+  expandable?: boolean;
   isLinked: boolean;
   title: string;
 }) {
   const label = title || "case image";
+  // A cover that doesn't expand renders like a linked one: a plain frame.
+  const isLinked = isLinkedCase || !expandable;
 
   switch (cover.type) {
     case "background": {

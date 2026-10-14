@@ -3,11 +3,12 @@
 import { DialRoot, useDialKitController } from "dialkit";
 import { useEffect, useRef } from "react";
 import "dialkit/styles.css";
-import { conceptsById } from "@/data/concepts";
+import { concepts } from "@/data/concepts";
 import {
   type CraftBentoSettings,
   type CraftCaptions,
   type CraftTileFit,
+  type CraftTilePosition,
   craftBento,
 } from "@/data/craft-bento";
 import { CraftBento } from "./craft-bento";
@@ -16,57 +17,64 @@ import { CraftBento } from "./craft-bento";
 // current settings on the clipboard in the shape of `craftBento`, ready to paste
 // into src/data/craft-bento.ts.
 
-const tileCount = craftBento.tiles.length;
+type Slider = [number, number, number, number];
+
+const emptyTile = "blank";
+const contentOptions = [
+  { label: "Telegram stickers", value: "telegram-quick-stickers" },
+  { label: "Bank card", value: "mesh-card-demo" },
+  { label: "AI agents workspace", value: "steamify-case-2" },
+  { label: "Phantom glow", value: "glow-hover-effect" },
+  ...concepts.map(({ id }) => ({ label: id.replace("concept-", "Concept: "), value: id })),
+  { label: "Blank", value: emptyTile },
+];
+const positionOptions: CraftTilePosition[] = ["center", "top", "bottom", "left top", "right top"];
+// "1 · left" → "left": the row already names its folder.
+const sideOf = (label: string) => label.split(" · ")[1] ?? label;
 
 const config = {
-  columns: [craftBento.columns, 1, 6, 1] as [number, number, number, number],
-  rowHeight: [craftBento.rowHeight, 80, 480, 1] as [number, number, number, number],
-  gap: [craftBento.gap, 0, 48, 1] as [number, number, number, number],
-  radius: [craftBento.radius, 0, 32, 1] as [number, number, number, number],
-  spacing: [craftBento.spacing, 0, 240, 1] as [number, number, number, number],
-  maxWidth: [craftBento.maxWidth, 700, 1440, 1] as [number, number, number, number],
-  dense: craftBento.dense,
+  maxWidth: [craftBento.maxWidth, 700, 1600, 1] as Slider,
+  rowHeight: [craftBento.rowHeight, 120, 800, 1] as Slider,
+  gap: [craftBento.gap, 0, 48, 1] as Slider,
+  rowGap: [craftBento.rowGap, 0, 48, 1] as Slider,
+  radius: [craftBento.radius, 0, 32, 1] as Slider,
+  spacing: [craftBento.spacing, 0, 240, 1] as Slider,
   captions: {
     default: craftBento.captions,
-    options: ["full", "title", "none"],
+    options: ["none", "title", "full"],
     type: "select" as const,
   },
-  heading: { default: craftBento.heading, placeholder: "No heading", type: "text" as const },
-  mobile: {
+  header: {
     _collapsed: true,
-    columns: [craftBento.mobileColumns, 1, 3, 1] as [number, number, number, number],
-    rowHeight: [craftBento.mobileRowHeight, 80, 480, 1] as [number, number, number, number],
+    heading: { default: craftBento.heading, type: "text" as const },
+    description: { default: craftBento.description, placeholder: "No description", type: "text" as const },
+    width: [craftBento.headerWidth, 320, 1280, 1] as Slider,
+    gap: [craftBento.headerGap, 0, 96, 1] as Slider,
   },
-  tiles: {
-    _collapsed: true,
-    ...Object.fromEntries(
-      craftBento.tiles.map((tile, index) => [
-        tile.label,
-        {
-          _collapsed: true,
-          visible: !tile.hidden,
-          order: [index + 1, 1, tileCount, 1] as [number, number, number, number],
-          cols: [tile.cols, 1, 6, 1] as [number, number, number, number],
-          rows: [tile.rows, 1, 6, 1] as [number, number, number, number],
-          // Only concept shots can switch between a crop and the whole image.
-          ...(conceptsById.has(tile.id)
-            ? { fit: { default: tile.fit, options: ["cover", "contain"], type: "select" as const } }
-            : {}),
-        },
-      ]),
-    ),
-  },
+  ...Object.fromEntries(
+    craftBento.rows.map((row, rowIndex) => [
+      `row ${rowIndex + 1}`,
+      {
+        _collapsed: rowIndex > 0,
+        ...Object.fromEntries(
+          row.map((tile) => [
+            sideOf(tile.label),
+            {
+              content: { default: tile.id ?? emptyTile, options: contentOptions, type: "select" as const },
+              width: [tile.width, 100, 1280, 1] as Slider,
+              fit: { default: tile.fit, options: ["cover", "contain"], type: "select" as const },
+              position: { default: tile.position, options: positionOptions, type: "select" as const },
+            },
+          ]),
+        ),
+      },
+    ]),
+  ),
   copy: { label: "Copy layout", type: "action" as const },
   reset: { label: "Reset", type: "action" as const },
 };
 
-type TileValues = {
-  cols: number;
-  fit?: string;
-  order: number;
-  rows: number;
-  visible: boolean;
-};
+type TileValues = { content: string; fit: string; position: string; width: number };
 
 function CraftBentoWithDials() {
   // Actions read the latest render through refs, whatever closure the panel kept.
@@ -84,35 +92,36 @@ function CraftBentoWithDials() {
         console.info("[craft grid] layout\n", text);
       }
     },
-    persist: { key: "portfolio-craft-grid-v3" },
+    persist: { key: "portfolio-craft-grid-rows" },
   });
   const { values } = dial;
-  const tileValues = values.tiles as unknown as Record<string, TileValues>;
+  const rowValues = values as unknown as Record<string, Record<string, TileValues>>;
 
   const settings: CraftBentoSettings = {
     captions: values.captions as CraftCaptions,
-    columns: values.columns,
-    dense: values.dense,
+    description: values.header.description,
     gap: values.gap,
-    heading: values.heading,
+    heading: values.header.heading,
+    headerGap: values.header.gap,
+    headerWidth: values.header.width,
     maxWidth: values.maxWidth,
-    mobileColumns: values.mobile.columns,
-    mobileRowHeight: values.mobile.rowHeight,
     radius: values.radius,
     rowHeight: values.rowHeight,
+    rowGap: values.rowGap,
+    rows: craftBento.rows.map((row, rowIndex) =>
+      row.map((tile) => {
+        const tileValues = rowValues[`row ${rowIndex + 1}`][sideOf(tile.label)];
+
+        return {
+          fit: tileValues.fit as CraftTileFit,
+          id: tileValues.content === emptyTile ? null : tileValues.content,
+          label: tile.label,
+          position: tileValues.position as CraftTilePosition,
+          width: tileValues.width,
+        };
+      }),
+    ),
     spacing: values.spacing,
-    tiles: craftBento.tiles
-      .map((tile, index) => ({ index, tile, values: tileValues[tile.label] }))
-      // Equal orders keep the data file's sequence.
-      .sort((a, b) => a.values.order - b.values.order || a.index - b.index)
-      .map(({ tile, values: tileSettings }) => ({
-        cols: tileSettings.cols,
-        fit: (tileSettings.fit ?? tile.fit) as CraftTileFit,
-        hidden: !tileSettings.visible,
-        id: tile.id,
-        label: tile.label,
-        rows: tileSettings.rows,
-      })),
   };
 
   useEffect(() => {

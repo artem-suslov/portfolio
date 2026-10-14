@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { CaseCoverModal } from "@/components/portfolio-case/case-cover-modal";
 import { CaseInfo } from "@/components/portfolio-case/case-info";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import caseStyles from "@/components/portfolio-case/portfolio-case.module.css";
 import { type Concept, conceptsById } from "@/data/concepts";
-import { type CraftBentoSettings, type CraftTileLayout, craftBento } from "@/data/craft-bento";
+import { type CraftBentoSettings, type CraftTile, craftBento } from "@/data/craft-bento";
 import { portfolioCases } from "@/data/portfolio-cases";
 import styles from "./craft-bento.module.css";
 
@@ -17,46 +16,52 @@ function ConceptTile({
   captions,
   concept,
   fit,
-  radius,
+  position,
 }: {
   captions: CraftBentoSettings["captions"];
   concept: Concept;
-  fit: CraftTileLayout["fit"];
-  radius: number;
+  fit: CraftTile["fit"];
+  position: CraftTile["position"];
 }) {
   const { alt, id, src } = concept;
 
   return (
     <article className={`${caseStyles.case} ${caseStyles.tileCase}`} data-case-id={id}>
-      <CaseCoverModal
-        caseId={id}
-        className={styles.conceptTrigger}
-        expandedSrc={src.src}
-        label={alt}
-        renderMedia={(isExpanded) => (
-          <Image
-            alt={alt}
-            className={styles.concept}
-            data-fit={fit}
-            height={src.height}
-            sizes={isExpanded ? "(max-width: 760px) 92vw, 900px" : "(max-width: 760px) 100vw, 640px"}
-            src={src}
-            // The expanded view shows the original file, not a recompressed variant.
-            unoptimized={isExpanded}
-            width={src.width}
-          />
-        )}
-        scaleOnHover={false}
-        thumbnailRadius={radius}
-      />
+      <div className={styles.conceptFrame}>
+        <Image
+          alt={alt}
+          className={styles.concept}
+          height={src.height}
+          sizes="(max-width: 760px) 100vw, 800px"
+          src={src}
+          style={{ objectFit: fit, objectPosition: position }}
+          width={src.width}
+        />
+      </div>
       {captions === "none" ? null : <CaseInfo title={alt} />}
     </article>
   );
 }
 
-export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSettings }) {
-  const tiles = settings.tiles.filter(({ hidden }) => !hidden);
+function TileContent({ settings, tile }: { settings: CraftBentoSettings; tile: CraftTile }) {
+  const portfolioCase = tile.id ? casesById.get(tile.id) : undefined;
+  const concept = tile.id ? conceptsById.get(tile.id) : undefined;
 
+  if (portfolioCase) {
+    return <PortfolioCase {...portfolioCase} caption={settings.captions} tile />;
+  }
+
+  return concept ? (
+    <ConceptTile
+      captions={settings.captions}
+      concept={concept}
+      fit={tile.fit}
+      position={tile.position}
+    />
+  ) : null;
+}
+
+export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSettings }) {
   return (
     <section
       aria-labelledby="craft-heading"
@@ -64,56 +69,40 @@ export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSet
       id="craft"
       style={
         {
-          "--bento-columns": settings.columns,
           "--bento-gap": `${settings.gap}px`,
+          "--bento-header-gap": `${settings.headerGap}px`,
+          "--bento-header-width": `${settings.headerWidth}px`,
           "--bento-max-width": `${settings.maxWidth}px`,
-          "--bento-mobile-columns": settings.mobileColumns,
-          "--bento-mobile-row": `${settings.mobileRowHeight}px`,
-          "--bento-row": `${settings.rowHeight}px`,
+          "--bento-row-gap": `${settings.rowGap}px`,
+          // Unitless, so rows can scale with the grid's width.
+          "--bento-row-height": settings.rowHeight,
+          "--bento-row-ratio": settings.rowHeight / settings.maxWidth,
           "--bento-spacing": `${settings.spacing}px`,
           // Every cover in the grid rounds its corners with this token.
           "--radius-md": `${settings.radius}px`,
         } as CSSProperties
       }
     >
-      {settings.heading ? (
+      <header className={styles.header}>
         <h2 className={styles.heading} id="craft-heading">
           {settings.heading}
         </h2>
-      ) : null}
-      <div className={styles.grid} data-dense={settings.dense || undefined}>
-        {tiles.map(({ cols, fit, id, rows }) => {
-          const portfolioCase = casesById.get(id);
-          const concept = conceptsById.get(id);
-          const columns = Math.min(cols, settings.columns);
-
-          return portfolioCase || concept ? (
-            <div
-              className={styles.tile}
-              key={id}
-              style={
-                {
-                  "--tile-cols": columns,
-                  // Phones pair up the small tiles; anything larger takes the full width,
-                  // so a tall or wide tile never leaves a hole beside it.
-                  "--tile-mobile-cols": columns === 1 && rows === 1 ? 1 : settings.mobileColumns,
-                  "--tile-rows": rows,
-                } as CSSProperties
-              }
-            >
-              {portfolioCase ? (
-                <PortfolioCase {...portfolioCase} caption={settings.captions} tile />
-              ) : concept ? (
-                <ConceptTile
-                  captions={settings.captions}
-                  concept={concept}
-                  fit={fit}
-                  radius={settings.radius}
-                />
-              ) : null}
-            </div>
-          ) : null;
-        })}
+        {settings.description ? <p className={styles.description}>{settings.description}</p> : null}
+      </header>
+      <div className={styles.grid}>
+        {settings.rows.map((row, rowIndex) => (
+          <div className={styles.row} key={rowIndex}>
+            {row.map((tile) => (
+              <div
+                className={styles.tile}
+                key={tile.label}
+                style={{ "--tile-width": tile.width } as CSSProperties}
+              >
+                <TileContent settings={settings} tile={tile} />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
     </section>
   );

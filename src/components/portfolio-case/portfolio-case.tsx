@@ -54,13 +54,14 @@ export function PortfolioCase({
         </CaseMorph>
       ) : comingSoon ? (
         <div className={styles.comingSoonCover}>
-          <CaseCover caseId={id} cover={cover} isLinked={false} title={title} />
+          <CaseCover caseId={id} cover={cover} expandable={!tile} isLinked={false} title={title} />
           <span aria-hidden="true" className={styles.comingSoonLabel}>
             Case coming soon
           </span>
         </div>
       ) : (
-        <CaseCover caseId={id} cover={cover} isLinked={false} title={title} />
+        // Grid tiles stay put; only full cards open their cover in the expanded view.
+        <CaseCover caseId={id} cover={cover} expandable={!tile} isLinked={false} title={title} />
       )}
       {caption === "full" ? (
         <CaseInfo description={description} details={details} title={title} />
