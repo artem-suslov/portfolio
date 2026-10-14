@@ -61,8 +61,8 @@ export const craftBento: CraftBentoSettings = {
   rowHeight: 400,
   rowGap: 15,
   rows: [
-    [tile("1 · left", "telegram-quick-stickers", 658), tile("1 · right", "mesh-card-demo", 555)],
-    [tile("2 · left", "concept-tov", 556), tile("2 · right", "steamify-case-2", 718)],
+    [tile("1 · left", "telegram-quick-stickers", 658), tile("1 · right", "steamify-case-2", 555)],
+    [tile("2 · left", "concept-tov", 556), tile("2 · right", "mesh-card-demo", 718)],
     [tile("3 · left", "glow-hover-effect", 266), tile("3 · right", "concept-whisp", 481)],
   ],
   spacing: 96,
