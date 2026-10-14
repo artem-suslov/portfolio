@@ -45,7 +45,9 @@ const tile = (
   media: Partial<Pick<CraftTile, "fit" | "position">> = {},
 ): CraftTile => ({ fit: "cover", id, label, position: "center", width, ...media });
 
-// Paper: "Concepts and craft" frame, 1280px wide.
+// Paper: "Concepts and craft" frame, 1280px wide. "Save to code" in the dev DialKit panel
+// (/api/debug/craft-bento) rewrites everything between the markers; keep them.
+// CRAFT_BENTO_START
 export const craftBento: CraftBentoSettings = {
   captions: "none",
   description:
@@ -65,3 +67,4 @@ export const craftBento: CraftBentoSettings = {
   ],
   spacing: 96,
 };
+// CRAFT_BENTO_END

@@ -1,7 +1,7 @@
 "use client";
 
 import { DialRoot, useDialKitController } from "dialkit";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "dialkit/styles.css";
 import { concepts } from "@/data/concepts";
 import {
@@ -14,8 +14,8 @@ import {
 import { CraftBento } from "./craft-bento";
 
 // Dev-only: live DialKit controls for the craft grid. Values are not persisted, so
-// a reload always shows src/data/craft-bento.ts; "Copy layout" puts the current
-// settings on the clipboard in the shape of `craftBento`, ready to paste there.
+// a reload always shows src/data/craft-bento.ts. "Save to code" writes the current
+// settings into that file; "Copy layout" puts them on the clipboard as JSON.
 
 type Slider = [number, number, number, number];
 
@@ -70,6 +70,7 @@ const config = {
       },
     ]),
   ),
+  save: { label: "Save to code", type: "action" as const },
   copy: { label: "Copy layout", type: "action" as const },
   reset: { label: "Reset", type: "action" as const },
 };
@@ -80,10 +81,15 @@ function CraftBentoWithDials() {
   // Actions read the latest render through refs, whatever closure the panel kept.
   const settingsRef = useRef<CraftBentoSettings>(craftBento);
   const resetRef = useRef<() => void>(() => undefined);
+  const [status, setStatus] = useState<string | null>(null);
   const dial = useDialKitController("Craft grid", config, {
     onAction: (action) => {
       if (action === "reset") {
         resetRef.current();
+      }
+
+      if (action === "save") {
+        void saveToCode(settingsRef.current).then(setStatus);
       }
 
       if (action === "copy") {
@@ -128,8 +134,54 @@ function CraftBentoWithDials() {
     resetRef.current = dial.resetValues;
   });
 
-  return <CraftBento settings={settings} />;
+  useEffect(() => {
+    if (!status) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setStatus(null), 2400);
+    return () => window.clearTimeout(timeout);
+  }, [status]);
+
+  return (
+    <>
+      <CraftBento settings={settings} />
+      {status ? (
+        <div role="status" style={statusStyle}>
+          {status}
+        </div>
+      ) : null}
+    </>
+  );
 }
+
+async function saveToCode(settings: CraftBentoSettings) {
+  try {
+    const response = await fetch("/api/debug/craft-bento", {
+      body: JSON.stringify(settings),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+
+    return response.ok ? "Saved to src/data/craft-bento.ts" : "Couldn’t save the layout";
+  } catch {
+    return "Couldn’t save the layout";
+  }
+}
+
+const statusStyle = {
+  position: "fixed",
+  bottom: 24,
+  left: "50%",
+  zIndex: 2147483000,
+  padding: "6px 12px",
+  borderRadius: 999,
+  background: "#111",
+  color: "#fff",
+  fontSize: 13,
+  lineHeight: "20px",
+  transform: "translateX(-50%)",
+} as const;
 
 export function CraftBentoDebug() {
   return (
