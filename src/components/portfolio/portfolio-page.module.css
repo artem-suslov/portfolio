@@ -183,3 +183,14 @@
 .tabPanel {
   width: 100%;
 }
+
+/* Closes the page; with the viewport's own bottom padding the gap below is 100px. */
+.colophon {
+  padding-bottom: calc(100px - var(--space-6));
+}
+
+@media (max-width: 760px) {
+  .colophon {
+    padding: 0 var(--space-4) var(--space-18);
+  }
+}
