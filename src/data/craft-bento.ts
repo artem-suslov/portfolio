@@ -62,7 +62,7 @@ export const craftBento: CraftBentoSettings = {
     [tile("1 · left", "mesh-card-demo", 709), tile("1 · right", "steamify-case-2", 555)],
     [tile("2 · left", "telegram-quick-stickers", 546), tile("2 · right", "concept-tov", 718)],
     [
-      tile("3 · left", "concept-whisp", 783, { position: "left top" }),
+      tile("3 · left", "concept-whisp", 783),
       tile("3 · right", "glow-hover-effect", 481),
     ],
   ],
