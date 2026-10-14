@@ -13,9 +13,9 @@ import {
 } from "@/data/craft-bento";
 import { CraftBento } from "./craft-bento";
 
-// Dev-only: live DialKit controls for the craft grid. "Copy layout" puts the
-// current settings on the clipboard in the shape of `craftBento`, ready to paste
-// into src/data/craft-bento.ts.
+// Dev-only: live DialKit controls for the craft grid. Values are not persisted, so
+// a reload always shows src/data/craft-bento.ts; "Copy layout" puts the current
+// settings on the clipboard in the shape of `craftBento`, ready to paste there.
 
 type Slider = [number, number, number, number];
 
@@ -92,7 +92,6 @@ function CraftBentoWithDials() {
         console.info("[craft grid] layout\n", text);
       }
     },
-    persist: { key: "portfolio-craft-grid-rows" },
   });
   const { values } = dial;
   const rowValues = values as unknown as Record<string, Record<string, TileValues>>;
