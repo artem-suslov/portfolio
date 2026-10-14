@@ -22,25 +22,28 @@ export type CraftBentoSettings = {
   dense: boolean;
   gap: number;
   heading: string;
+  /** The grid sits on the page below the card and can grow wider than it. */
+  maxWidth: number;
   mobileColumns: number;
   mobileRowHeight: number;
   radius: number;
   rowHeight: number;
-  /** Space between the last case study and the heading. */
+  /** Space between the page card and the heading. */
   spacing: number;
   tiles: CraftTileLayout[];
 };
 
 export const craftBento: CraftBentoSettings = {
   captions: "title",
-  columns: 2,
+  columns: 3,
   dense: true,
-  gap: 12,
+  gap: 16,
   heading: "Craft & concepts",
+  maxWidth: 1024,
   mobileColumns: 1,
   mobileRowHeight: 200,
   radius: 8,
-  rowHeight: 172,
+  rowHeight: 220,
   spacing: 96,
   tiles: [
     { cols: 2, fit: "cover", hidden: false, id: "telegram-quick-stickers", label: "Telegram stickers", rows: 2 },
@@ -48,8 +51,8 @@ export const craftBento: CraftBentoSettings = {
     { cols: 1, fit: "cover", hidden: false, id: "glow-hover-effect", label: "Phantom glow", rows: 1 },
     { cols: 1, fit: "cover", hidden: false, id: "concept-tov", label: "Tone of voice", rows: 1 },
     { cols: 1, fit: "cover", hidden: false, id: "concept-agents", label: "Agents dashboard", rows: 1 },
-    { cols: 2, fit: "cover", hidden: false, id: "steamify-case-2", label: "AI agents workspace", rows: 2 },
     { cols: 1, fit: "cover", hidden: false, id: "concept-whisp", label: "Whisp", rows: 1 },
+    { cols: 2, fit: "cover", hidden: false, id: "steamify-case-2", label: "AI agents workspace", rows: 1 },
     { cols: 1, fit: "cover", hidden: false, id: "concept-loop", label: "Coding agent run", rows: 1 },
   ],
 };

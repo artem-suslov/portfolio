@@ -66,6 +66,7 @@ export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSet
         {
           "--bento-columns": settings.columns,
           "--bento-gap": `${settings.gap}px`,
+          "--bento-max-width": `${settings.maxWidth}px`,
           "--bento-mobile-columns": settings.mobileColumns,
           "--bento-mobile-row": `${settings.mobileRowHeight}px`,
           "--bento-row": `${settings.rowHeight}px`,

@@ -53,12 +53,13 @@ export async function PortfolioPage({
           >
             {hero}
             <WorkList caseIds={workCaseIds} />
-            <CraftSection />
             {portfolioCases.map(({ id }) => (
               <span className={styles.anchor} id={id} key={id} aria-hidden="true" />
             ))}
             <span className={styles.anchor} id="tools" aria-hidden="true" />
           </article>
+
+          <CraftSection />
 
           {showAbout ? (
             <section className={styles.aboutSection} aria-labelledby="about-me">

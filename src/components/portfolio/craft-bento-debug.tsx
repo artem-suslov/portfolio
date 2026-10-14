@@ -24,6 +24,7 @@ const config = {
   gap: [craftBento.gap, 0, 48, 1] as [number, number, number, number],
   radius: [craftBento.radius, 0, 32, 1] as [number, number, number, number],
   spacing: [craftBento.spacing, 0, 240, 1] as [number, number, number, number],
+  maxWidth: [craftBento.maxWidth, 700, 1440, 1] as [number, number, number, number],
   dense: craftBento.dense,
   captions: {
     default: craftBento.captions,
@@ -83,7 +84,7 @@ function CraftBentoWithDials() {
         console.info("[craft grid] layout\n", text);
       }
     },
-    persist: { key: "portfolio-craft-grid" },
+    persist: { key: "portfolio-craft-grid-v2" },
   });
   const { values } = dial;
   const tileValues = values.tiles as unknown as Record<string, TileValues>;
@@ -94,6 +95,7 @@ function CraftBentoWithDials() {
     dense: values.dense,
     gap: values.gap,
     heading: values.heading,
+    maxWidth: values.maxWidth,
     mobileColumns: values.mobile.columns,
     mobileRowHeight: values.mobile.rowHeight,
     radius: values.radius,
