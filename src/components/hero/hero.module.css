@@ -158,14 +158,6 @@
   align-items: center;
 }
 
-.v2Divider {
-  width: calc(100% - 64px);
-  height: 1px;
-  display: block;
-  margin: var(--space-4) var(--space-8) 0;
-  background: var(--color-divider);
-}
-
 @media (max-width: 760px) {
   .intro {
     width: calc(100% + 32px);
@@ -183,11 +175,6 @@
 
   .v2Content {
     padding: 0 var(--space-4);
-  }
-
-  .v2Divider {
-    width: calc(100% - 32px);
-    margin-inline: var(--space-4);
   }
 
   .heroToolbar {

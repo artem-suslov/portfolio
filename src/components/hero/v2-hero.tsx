@@ -5,7 +5,7 @@ import { ResumeButton } from "./resume-button";
 import { SoundToggleButton } from "./sound-toggle-button";
 import { V2Description } from "./v2-description";
 
-export function V2Hero({ showDivider = true }: { showDivider?: boolean }) {
+export function V2Hero() {
   return (
     <header className={styles.v2Hero}>
       <div className={styles.v2Toolbar}>
@@ -25,7 +25,6 @@ export function V2Hero({ showDivider = true }: { showDivider?: boolean }) {
           <ContactButton />
         </div>
       </div>
-      {showDivider ? <span className={styles.v2Divider} aria-hidden="true" /> : null}
     </header>
   );
 }
