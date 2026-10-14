@@ -11,6 +11,10 @@ import { TextLink } from "@/components/ui/text-link";
 import styles from "./trading-case.module.css";
 // Same file as the home page cover, imported so the URL carries a content hash.
 import heroScreen from "../../../../public/images/tradingbot_thumb_case.png";
+import loginScreen from "../../../../public/images/steamify-trading-case/login.png";
+import overviewScreen from "../../../../public/images/steamify-trading-case/overview.png";
+import profilesScreen from "../../../../public/images/steamify-trading-case/profiles.png";
+import settingsScreen from "../../../../public/images/steamify-trading-case/settings.png";
 
 const assets = "/images/steamify-trading-case";
 const caseId = "steamify-trading-bot";
@@ -33,14 +37,12 @@ const meta = [
   { label: "Timeline", value: "2023 – 2024" },
 ];
 
-// Screens are 2560×1396 exports of the Figma file.
-function Screen({ alt, name, preload }: { alt: string; name: string; preload?: boolean }) {
-  return <CaseImage caseId={caseId} className={shared.media} src={`${assets}/${name}.jpg`} width={2560} height={1396} preload={preload} alt={alt} />;
-}
+type StaticScreen = { src: string; width: number; height: number };
 
-// Square close-ups, shown side by side.
-function Detail({ alt, name }: { alt: string; name: string }) {
-  return <CaseImage caseId={caseId} className={shared.media} src={`${assets}/${name}.jpg`} width={1280} height={1280} sizes="(max-width: 760px) calc(50vw - 24px), 310px" alt={alt} />;
+// Screens are either static imports or 2560×1396 JPG exports of the Figma file.
+function Screen({ alt, name, image, preload }: { alt: string; preload?: boolean } & ({ name: string; image?: never } | { image: StaticScreen; name?: never })) {
+  const { src, width, height } = image ?? { src: `${assets}/${name}.jpg`, width: 2560, height: 1396 };
+  return <CaseImage caseId={caseId} className={shared.media} src={src} width={width} height={height} preload={preload} alt={alt} />;
 }
 
 function Metrics() {
@@ -92,12 +94,8 @@ export function TradingCase() {
           <p>This helped us evaluate options objectively and make aligned decisions. Ultimately, we always found common ground, clarified priorities, and moved forward with a shared vision.</p>
         </div>
         <div className={styles.screens}>
-          <Screen name="login" alt="Steamify sign-in screen next to the Profiles page" />
-          <div className={styles.details}>
-            <Detail name="sidebar" alt="Sidebar navigation: Overview, Transactions, Profiles, Items, Steam accounts, Proxies and Items valuation" />
-            <Detail name="status-cards" alt="Profile status cards: profiles in use, In progress, Inactive, Error and Done" />
-          </div>
-          <Screen name="user-profile" alt="User profile settings with security options and Steam, Telegram, Discord and Metamask integrations" />
+          <Screen image={loginScreen} alt="Steamify sign-in screen next to a preview of the dashboard" />
+          <Screen image={settingsScreen} alt="General settings with Steam ID, trade offer link, auto-accept and global sales toggles, and preferred marketplaces" />
         </div>
       </section>
 
@@ -114,15 +112,10 @@ export function TradingCase() {
       <section id="overview-page" className={shared.divided}>
         <h2>Overview</h2>
         <div className={shared.prose}>
-          <p>The Overview page consists of two main sections: Widgets and Sales.</p>
-          <p>The Widgets section functions as a centralized dashboard, displaying key performance indicators across all Steam accounts connected to Steamify. Users can filter data by selecting a specific time range via the integrated calendar, enabling more flexible performance analysis.</p>
-          <p>The Sales section provides a complete sales history. Each transaction is assigned one of four statuses: Waiting, Retry, In Process, or Accepted, allowing users to clearly track the progress of their sales.</p>
-          <p>All data updates in real time via WebSocket integration, ensuring immediate status changes and a responsive user experience.</p>
+          <p>The Overview page is a centralized dashboard with key performance indicators across all Steam accounts connected to Steamify: revenue, volume and items sold, plus balances, inventory and inventory value broken down by marketplace.</p>
+          <p>Users can pick a time range in the integrated calendar, and the chart shows sales per marketplace for any day on hover. All data updates in real time via WebSocket integration.</p>
         </div>
-        <div className={styles.screens}>
-          <Screen name="overview-widgets" alt="Overview widgets: items sold, volume chart, balances, all items and all items cost" />
-          <Screen name="overview-sales" alt="Sales history with marketplace, profile and status for each transaction, next to the Overview widgets" />
-        </div>
+        <Screen image={overviewScreen} alt="Overview widgets: revenue, volume and items sold chart with a per-platform tooltip, balances, inventory and inventory value" />
       </section>
 
       <section id="profiles" className={shared.divided}>
@@ -131,7 +124,7 @@ export function TradingCase() {
           <p>Profiles represent the bots responsible for selling users’ items. Each profile can have one of four statuses: Error, In Progress, Inactive or Done.</p>
           <p>Each profile displays key operational data, including current balance, total revenue from sales, estimated inventory value, total number of items, as well as API key and proxy status — ensuring transparency and control over the selling process.</p>
         </div>
-        <Screen name="profiles" alt="Profiles page with bots grouped by status, showing balance, amount, items, API status and proxy" />
+        <Screen image={profilesScreen} alt="Profiles page with bots grouped by status, showing balance, sales, items, markets and status" />
       </section>
 
       <section id="prices" className={shared.divided}>
