@@ -161,9 +161,7 @@
 }
 
 .loopCaseVisual {
-  background-image: url("/images/AI_Bg_02.webp");
-  background-position: center;
-  background-size: cover;
+  background: var(--color-surface-muted);
 }
 
 .ccpCaseVisual {
