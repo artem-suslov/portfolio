@@ -94,7 +94,9 @@ export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSet
               style={
                 {
                   "--tile-cols": columns,
-                  "--tile-mobile-cols": Math.min(columns, settings.mobileColumns),
+                  // Phones pair up the small tiles; anything larger takes the full width,
+                  // so a tall or wide tile never leaves a hole beside it.
+                  "--tile-mobile-cols": columns === 1 && rows === 1 ? 1 : settings.mobileColumns,
                   "--tile-rows": rows,
                 } as CSSProperties
               }

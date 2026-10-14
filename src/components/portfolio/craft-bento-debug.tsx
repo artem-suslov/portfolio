@@ -19,7 +19,7 @@ import { CraftBento } from "./craft-bento";
 const tileCount = craftBento.tiles.length;
 
 const config = {
-  columns: [craftBento.columns, 1, 4, 1] as [number, number, number, number],
+  columns: [craftBento.columns, 1, 6, 1] as [number, number, number, number],
   rowHeight: [craftBento.rowHeight, 80, 480, 1] as [number, number, number, number],
   gap: [craftBento.gap, 0, 48, 1] as [number, number, number, number],
   radius: [craftBento.radius, 0, 32, 1] as [number, number, number, number],
@@ -46,8 +46,8 @@ const config = {
           _collapsed: true,
           visible: !tile.hidden,
           order: [index + 1, 1, tileCount, 1] as [number, number, number, number],
-          cols: [tile.cols, 1, 4, 1] as [number, number, number, number],
-          rows: [tile.rows, 1, 4, 1] as [number, number, number, number],
+          cols: [tile.cols, 1, 6, 1] as [number, number, number, number],
+          rows: [tile.rows, 1, 6, 1] as [number, number, number, number],
           // Only concept shots can switch between a crop and the whole image.
           ...(conceptsById.has(tile.id)
             ? { fit: { default: tile.fit, options: ["cover", "contain"], type: "select" as const } }
@@ -84,7 +84,7 @@ function CraftBentoWithDials() {
         console.info("[craft grid] layout\n", text);
       }
     },
-    persist: { key: "portfolio-craft-grid-v2" },
+    persist: { key: "portfolio-craft-grid-v3" },
   });
   const { values } = dial;
   const tileValues = values.tiles as unknown as Record<string, TileValues>;
