@@ -3,12 +3,11 @@ import { FeedbackWidget } from "@/components/feedback/feedback-widget";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
-import { portfolioCases, portfolioTabs } from "@/data/portfolio-cases";
+import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
 import { AboutMeContent } from "./about-me-content";
-import { ConceptsGallery } from "./concepts-gallery";
+import { CraftBento } from "./craft-bento";
 import { HomeScrollRestore } from "./home-scroll-restore";
 import styles from "./portfolio-page.module.css";
-import { PortfolioTabs } from "./portfolio-tabs";
 
 const casesById = new Map(portfolioCases.map((portfolioCase) => [portfolioCase.id, portfolioCase]));
 
@@ -23,25 +22,24 @@ function WorkList({ caseIds }: { caseIds: readonly string[] }) {
   );
 }
 
-const tabPanels = Object.fromEntries(
-  portfolioTabs.map(({ caseIds, id }) => [id, <WorkList caseIds={caseIds} key={id} />]),
-) as Record<(typeof portfolioTabs)[number]["id"], ReactNode>;
-
 export async function PortfolioPage({
   hero,
   showAbout = true,
-  showTabs = true,
   variant = "default",
 }: {
   hero: ReactNode;
   showAbout?: boolean;
-  showTabs?: boolean;
   variant?: "default" | "v2";
 }) {
   const DebugPanel =
     process.env.NODE_ENV === "development"
       ? (await import("@/components/portfolio-case/portfolio-debug-panel")).PortfolioDebugPanel
       : null;
+  // In development the grid comes with live DialKit controls.
+  const CraftSection =
+    process.env.NODE_ENV === "development"
+      ? (await import("./craft-bento-debug")).CraftBentoDebug
+      : CraftBento;
 
   return (
     <main className={styles.viewport}>
@@ -54,20 +52,13 @@ export async function PortfolioPage({
             }
           >
             {hero}
-            <PortfolioTabs
-              panelClassName={styles.tabPanel}
-              panels={tabPanels}
-              showTabs={showTabs}
-              tabs={portfolioTabs}
-              tabsClassName={styles.heroTabs}
-            />
+            <WorkList caseIds={workCaseIds} />
+            <CraftSection />
             {portfolioCases.map(({ id }) => (
               <span className={styles.anchor} id={id} key={id} aria-hidden="true" />
             ))}
             <span className={styles.anchor} id="tools" aria-hidden="true" />
           </article>
-
-          <ConceptsGallery className={styles.concepts} />
 
           {showAbout ? (
             <section className={styles.aboutSection} aria-labelledby="about-me">

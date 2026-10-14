@@ -7,12 +7,15 @@ import whispConcept from "../../public/images/Concept/Whisp_Concept.png";
 
 export interface Concept {
   alt: string;
+  id: string;
   src: StaticImageData;
 }
 
 export const concepts: Concept[] = [
-  { alt: "Tone of voice picker for an AI chat assistant", src: tovConcept },
-  { alt: "Dashboard for monitoring AI agent logs, latency, and cost", src: agentsConcept },
-  { alt: "Whisp: an AI chat assistant next to a Solana wallet", src: whispConcept },
-  { alt: "Coding agent run ready for review, with its prompt and sources", src: loopConcept },
+  { id: "concept-tov", alt: "Tone of voice picker for an AI chat assistant", src: tovConcept },
+  { id: "concept-agents", alt: "Dashboard for monitoring AI agent logs, latency, and cost", src: agentsConcept },
+  { id: "concept-whisp", alt: "Whisp: an AI chat assistant next to a Solana wallet", src: whispConcept },
+  { id: "concept-loop", alt: "Coding agent run ready for review, with its prompt and sources", src: loopConcept },
 ];
+
+export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));

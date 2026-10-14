@@ -9,9 +9,13 @@ import { CaseCover } from "./case-cover";
 import { CaseInfo } from "./case-info";
 import styles from "./portfolio-case.module.css";
 import type { PortfolioCaseData } from "./types";
+
+/** How much text sits under the cover: everything, the title only, or nothing. */
+export type CaseCaption = "full" | "none" | "title";
 import { useCoverExperiment } from "./use-cover-experiment";
 
 export function PortfolioCase({
+  caption = "full",
   comingSoon,
   cover: defaultCover,
   coverExperiment,
@@ -19,8 +23,13 @@ export function PortfolioCase({
   details,
   href,
   id,
+  tile = false,
   title,
-}: PortfolioCaseData) {
+}: PortfolioCaseData & {
+  caption?: CaseCaption;
+  /** Fill a grid cell: the cover stretches to whatever height the cell leaves it. */
+  tile?: boolean;
+}) {
   const { playTap } = useInteractionSound();
   const cardRef = useRef<HTMLElement>(null);
   const { cover, trackOpen } = useCoverExperiment(
@@ -33,7 +42,9 @@ export function PortfolioCase({
 
   return (
     <article
-      className={isLinked ? `${styles.case} ${styles.linkedCase}` : styles.case}
+      className={[styles.case, isLinked && styles.linkedCase, tile && styles.tileCase]
+        .filter(Boolean)
+        .join(" ")}
       data-case-id={id}
       ref={cardRef}
     >
@@ -51,7 +62,11 @@ export function PortfolioCase({
       ) : (
         <CaseCover caseId={id} cover={cover} isLinked={false} title={title} />
       )}
-      <CaseInfo description={description} details={details} title={title} />
+      {caption === "full" ? (
+        <CaseInfo description={description} details={details} title={title} />
+      ) : caption === "title" ? (
+        <CaseInfo title={title} />
+      ) : null}
 
       {href && title ? (
         <Link
