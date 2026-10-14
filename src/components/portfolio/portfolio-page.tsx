@@ -5,6 +5,7 @@ import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
 import { AboutMeContent } from "./about-me-content";
+import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
 import { HomeScrollRestore } from "./home-scroll-restore";
 import styles from "./portfolio-page.module.css";
@@ -69,6 +70,7 @@ export async function PortfolioPage({
               <AboutMeContent />
             </section>
           ) : null}
+          <Colophon className={styles.colophon} />
           <FeedbackWidget />
           {DebugPanel ? (
             <DebugPanel cases={portfolioCases.map(({ id, title }) => ({ id, label: title }))} />
