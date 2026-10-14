@@ -48,7 +48,8 @@ const tile = (
 // Paper: "Concepts and craft" frame, 1280px wide.
 export const craftBento: CraftBentoSettings = {
   captions: "none",
-  description: "I practice myself in prototyping and concepts. Few of them here",
+  description:
+    "I love what I do, so I keep making things outside of work. Here are a few concepts I've built with AI along the way.",
   gap: 16,
   heading: "Concepts and craft",
   headerGap: 32,
