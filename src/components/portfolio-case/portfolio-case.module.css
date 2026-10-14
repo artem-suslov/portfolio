@@ -28,6 +28,13 @@
   aspect-ratio: auto;
 }
 
+/* Tiles in the craft grid sit on plain white, whatever their cover's own surface;
+   the interactive card and the Phantom glow keep their dark stages. */
+.tileCase .caseVisual:not(.interactiveCaseVisual, .phantomCaseVisual),
+.tileCase .caseVideo {
+  background-color: var(--color-surface);
+}
+
 /* Short tiles: the logo fits the height as well as the width. */
 .tileCase .phantomCaseVisual {
   container-type: size;
