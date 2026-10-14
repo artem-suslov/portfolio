@@ -28,6 +28,15 @@
   aspect-ratio: auto;
 }
 
+/* Short tiles: the logo fits the height as well as the width. */
+.tileCase .phantomCaseVisual {
+  container-type: size;
+}
+
+.tileCase .phantomCaseTarget {
+  max-width: min(calc(100% - 48px), calc((100cqh - 48px) * 1823 / 1518));
+}
+
 .tileCase .caseCaption {
   flex: none;
   min-width: 0;
