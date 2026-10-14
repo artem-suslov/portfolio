@@ -112,10 +112,8 @@ export function TradingCase() {
       <section id="overview-page" className={shared.divided}>
         <h2>Overview</h2>
         <div className={shared.prose}>
-          <p>The Overview page consists of two main sections: Widgets and Sales.</p>
-          <p>The Widgets section functions as a centralized dashboard, displaying key performance indicators across all Steam accounts connected to Steamify. Users can filter data by selecting a specific time range via the integrated calendar, enabling more flexible performance analysis.</p>
-          <p>The Sales section provides a complete sales history. Each transaction is assigned one of four statuses: Waiting, Retry, In Process, or Accepted, allowing users to clearly track the progress of their sales.</p>
-          <p>All data updates in real time via WebSocket integration, ensuring immediate status changes and a responsive user experience.</p>
+          <p>The Overview page is a centralized dashboard with key performance indicators across all Steam accounts connected to Steamify: revenue, volume and items sold, plus balances, inventory and inventory value broken down by marketplace.</p>
+          <p>Users can pick a time range in the integrated calendar, and the chart shows sales per marketplace for any day on hover. All data updates in real time via WebSocket integration.</p>
         </div>
         <Screen image={overviewScreen} alt="Overview widgets: revenue, volume and items sold chart with a per-platform tooltip, balances, inventory and inventory value" />
       </section>
