@@ -26,9 +26,9 @@ const sections = [
 ];
 
 const meta = [
-  { label: "Scope", value: "Design System" },
+  { label: "Team", value: "Lead Designer, Product Designer (me)" },
+  { label: "My role", value: "Design System" },
   { label: "Timeline", value: "Aug – Oct, 2023" },
-  { label: "Live", value: <TextLink href={figmaCommunity}>Figma Community</TextLink> },
 ];
 
 // Screens are 2560×1396 exports of the Figma Community file.
@@ -56,7 +56,7 @@ export function SafeCase() {
 
       <section id="about-project" className={shared.divided}>
         <h2>About project</h2>
-        <p>I was invited to help establish a unified design foundation, aligning design and frontend standards while shaping a system that could serve both internal needs and the broader Web3 community.</p>
+        <p>I was invited to help establish a unified design foundation, aligning design and frontend standards while shaping a system that could serve both internal needs and the broader Web3 community. The system is published in the <TextLink href={figmaCommunity}>Figma Community</TextLink>.</p>
       </section>
 
       <section id="idea-and-challenge" className={`${shared.divided} ${shared.spacious}`}>
