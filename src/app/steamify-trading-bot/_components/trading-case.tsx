@@ -45,11 +45,6 @@ function Screen({ alt, name, image, preload }: { alt: string; preload?: boolean 
   return <CaseImage caseId={caseId} className={shared.media} src={src} width={width} height={height} preload={preload} alt={alt} />;
 }
 
-// Square close-ups, shown side by side.
-function Detail({ alt, name }: { alt: string; name: string }) {
-  return <CaseImage caseId={caseId} className={shared.media} src={`${assets}/${name}.jpg`} width={1280} height={1280} sizes="(max-width: 760px) calc(50vw - 24px), 310px" alt={alt} />;
-}
-
 function Metrics() {
   return <dl className={styles.metrics}>
     <div><dt>Steamify users in beta</dt><dd>70</dd></div>
@@ -100,10 +95,6 @@ export function TradingCase() {
         </div>
         <div className={styles.screens}>
           <Screen image={loginScreen} alt="Steamify sign-in screen next to a preview of the dashboard" />
-          <div className={styles.details}>
-            <Detail name="sidebar" alt="Sidebar navigation: Overview, Transactions, Profiles, Items, Steam accounts, Proxies and Items valuation" />
-            <Detail name="status-cards" alt="Profile status cards: profiles in use, In progress, Inactive, Error and Done" />
-          </div>
           <Screen image={settingsScreen} alt="General settings with Steam ID, trade offer link, auto-accept and global sales toggles, and preferred marketplaces" />
         </div>
       </section>
@@ -126,10 +117,7 @@ export function TradingCase() {
           <p>The Sales section provides a complete sales history. Each transaction is assigned one of four statuses: Waiting, Retry, In Process, or Accepted, allowing users to clearly track the progress of their sales.</p>
           <p>All data updates in real time via WebSocket integration, ensuring immediate status changes and a responsive user experience.</p>
         </div>
-        <div className={styles.screens}>
-          <Screen image={overviewScreen} alt="Overview widgets: revenue, volume and items sold chart with a per-platform tooltip, balances, inventory and inventory value" />
-          <Screen name="overview-sales" alt="Sales history with marketplace, profile and status for each transaction, next to the Overview widgets" />
-        </div>
+        <Screen image={overviewScreen} alt="Overview widgets: revenue, volume and items sold chart with a per-platform tooltip, balances, inventory and inventory value" />
       </section>
 
       <section id="profiles" className={shared.divided}>
