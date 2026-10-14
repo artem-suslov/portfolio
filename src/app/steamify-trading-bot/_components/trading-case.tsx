@@ -32,9 +32,9 @@ const sections = [
 ];
 
 const meta = [
-  { label: "Scope", value: "UI/UX Design, Product Strategy" },
+  { label: "Team", value: "CEO, Backend Dev, Frontend Dev, Product Designer (me)" },
+  { label: "My role", value: "Product Design, Product Strategy" },
   { label: "Timeline", value: "2023 – 2024" },
-  { label: "Tags", value: "B2C, Web App, Design System" },
 ];
 
 type StaticScreen = { src: string; width: number; height: number };
