@@ -309,10 +309,13 @@
   mix-blend-mode: screen;
 }
 
+/* Centered along the bottom, like the bank card's hint. */
 .phantomCaseHint {
   position: absolute;
   bottom: 12px;
-  left: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   z-index: 4;
   min-height: 32px;
   display: inline-flex;

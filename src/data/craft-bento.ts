@@ -45,7 +45,9 @@ const tile = (
   media: Partial<Pick<CraftTile, "fit" | "position">> = {},
 ): CraftTile => ({ fit: "cover", id, label, position: "center", width, ...media });
 
-// Paper: "Concepts and craft" frame, 1280px wide.
+// Paper: "Concepts and craft" frame, 1280px wide. "Save to code" in the dev DialKit panel
+// (/api/debug/craft-bento) rewrites everything between the markers; keep them.
+// CRAFT_BENTO_START
 export const craftBento: CraftBentoSettings = {
   captions: "none",
   description:
@@ -59,12 +61,10 @@ export const craftBento: CraftBentoSettings = {
   rowHeight: 400,
   rowGap: 15,
   rows: [
-    [tile("1 · left", "mesh-card-demo", 709), tile("1 · right", "steamify-case-2", 555)],
-    [tile("2 · left", "telegram-quick-stickers", 546), tile("2 · right", "concept-tov", 718)],
-    [
-      tile("3 · left", "concept-whisp", 783),
-      tile("3 · right", "glow-hover-effect", 481),
-    ],
+    [tile("1 · left", "telegram-quick-stickers", 658), tile("1 · right", "steamify-case-2", 555)],
+    [tile("2 · left", "concept-tov", 556), tile("2 · right", "mesh-card-demo", 718)],
+    [tile("3 · left", "glow-hover-effect", 266), tile("3 · right", "concept-whisp", 481)],
   ],
   spacing: 96,
 };
+// CRAFT_BENTO_END
