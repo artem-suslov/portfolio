@@ -33,6 +33,7 @@
   font-size: var(--font-size-sm);
   line-height: var(--line-height-md);
   letter-spacing: var(--letter-spacing-tight);
+  text-wrap: pretty;
 }
 
 .grid {
