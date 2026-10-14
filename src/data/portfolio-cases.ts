@@ -8,8 +8,8 @@ import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.
 export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
-      poster: "/images/video-posters/telegram-quick-stickers.webp",
-      src: "/videos/telegram-quick-stickers.mp4?v=20260903-fs",
+      poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261015",
+      src: "/videos/telegram-quick-stickers.mp4?v=20261015",
       type: "video",
       variant: "quick-stickers",
     },
@@ -26,7 +26,7 @@ export const portfolioCases: PortfolioCaseData[] = [
     },
     title: "Quick stickers for Telegram on iPhone",
   },
-  // Hidden for now; uncomment together with "freelance-tracker" in the craft tab.
+  // Hidden for now; add "freelance-tracker" to `craftBento` in src/data/craft-bento.ts too.
   // {
   //   cover: {
   //     poster: "/images/video-posters/freelance-tracker.webp",
@@ -178,7 +178,7 @@ export const portfolioCases: PortfolioCaseData[] = [
     href: "/steamify-trading-bot",
     title: "Steam trading management dashboard",
   },
-  // Hidden for now; uncomment together with "northstar" in the case-study tab.
+  // Hidden for now; uncomment together with "northstar" in `workCaseIds`.
   // {
   //   cover: {
   //     foreground: {
@@ -229,28 +229,12 @@ export const portfolioCases: PortfolioCaseData[] = [
   },
 ];
 
-export const portfolioTabs = [
-  {
-    id: "case-study",
-    label: "Work",
-    caseIds: [
-      "steamify-case",
-      "animator",
-      "orbit",
-      "s7-case",
-      "ccp-design-system",
-      // "northstar",
-    ],
-  },
-  {
-    id: "craft",
-    label: "Craft",
-    caseIds: [
-      "telegram-quick-stickers",
-      // "freelance-tracker",
-      "mesh-card-demo",
-      "steamify-case-2",
-      "glow-hover-effect",
-    ],
-  },
+/** Case studies, shown as full-width cards at the top of the page. */
+export const workCaseIds = [
+  "steamify-case",
+  "animator",
+  "orbit",
+  "s7-case",
+  "ccp-design-system",
+  // "northstar",
 ] as const;

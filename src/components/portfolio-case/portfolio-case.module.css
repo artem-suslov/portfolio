@@ -10,6 +10,53 @@
   text-decoration: none;
 }
 
+/* A grid cell sets the height; the cover takes whatever the caption leaves. */
+.tileCase {
+  height: 100%;
+  gap: var(--space-3);
+}
+
+.tileCase > .caseVisual,
+.tileCase > .caseVideoFrame,
+.tileCase > .comingSoonCover {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.tileCase .caseVisual {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+/* Tiles in the craft grid sit on plain white, whatever their cover's own surface;
+   the interactive card and the Phantom glow keep their dark stages. */
+.tileCase .caseVisual:not(.interactiveCaseVisual, .phantomCaseVisual),
+.tileCase .caseVideo {
+  background-color: var(--color-surface);
+}
+
+/* Short tiles: the logo fits the height as well as the width. */
+.tileCase .phantomCaseVisual {
+  container-type: size;
+}
+
+.tileCase .phantomCaseTarget {
+  max-width: min(calc(100% - 48px), calc((100cqh - 48px) * 1823 / 1518));
+}
+
+.tileCase .caseCaption {
+  flex: none;
+  min-width: 0;
+}
+
+/* One line per tile, so neighbouring covers in a row keep the same height. */
+.tileCase .caseTitle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .caseLinkOverlay {
   position: absolute;
   inset: 0 0 auto;
@@ -121,9 +168,7 @@
 }
 
 .loopCaseVisual {
-  background-image: url("/images/AI_Bg_02.webp");
-  background-position: center;
-  background-size: cover;
+  background: var(--color-surface-muted);
 }
 
 .ccpCaseVisual {

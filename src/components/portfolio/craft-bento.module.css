@@ -1,0 +1,101 @@
+/* On the page below the card. It can be wider than the card's 700px column, so it
+   centers itself on that column; the page keeps a 24px gutter on either side. */
+.craft {
+  --bento-width: min(var(--bento-max-width), calc(100vw - 2 * var(--space-6)));
+
+  width: var(--bento-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bento-header-gap);
+  margin: var(--bento-spacing) 0 var(--space-18) calc((100% - var(--bento-width)) / 2);
+}
+
+.header {
+  width: min(var(--bento-header-width), 100%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.heading {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--line-height-xl);
+  letter-spacing: -0.02em;
+}
+
+.description {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-tight);
+  text-wrap: pretty;
+}
+
+.grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bento-row-gap);
+  container-type: inline-size;
+}
+
+/* Rows keep the design's height-to-width ratio as the grid narrows; tiles share the
+   row in proportion to their widths at full size. */
+.row {
+  height: calc(var(--bento-row-ratio) * 100cqw);
+  display: flex;
+  gap: var(--bento-gap);
+}
+
+.tile {
+  flex: var(--tile-width) 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+/* Concept frame: fills the tile and shows the shot cropped or whole. */
+.conceptFrame {
+  position: relative;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.concept {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Phones stack the tiles; each keeps the proportions it has on desktop. */
+@media (max-width: 760px) {
+  .craft {
+    width: auto;
+    margin: max(0px, calc(var(--bento-spacing) - var(--space-18))) var(--space-4) var(--space-18);
+  }
+
+  .header {
+    width: 100%;
+  }
+
+  .row {
+    height: auto;
+    flex-direction: column;
+    gap: var(--bento-row-gap);
+  }
+
+  .tile {
+    flex: none;
+    aspect-ratio: var(--tile-width) / var(--bento-row-height);
+  }
+}
