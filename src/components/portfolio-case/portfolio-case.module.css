@@ -458,6 +458,12 @@
   .caseVideo {
     background-image: var(--case-poster-mobile, var(--case-poster, none));
   }
+
+  /* The 16:9 recording shows whole in the taller phone frame instead of losing its sides. */
+  .animatorCaseVideo {
+    object-fit: contain;
+    background-size: contain;
+  }
 }
 
 /* Look and states come from Button's overlay variant; this only places it on the media. */
