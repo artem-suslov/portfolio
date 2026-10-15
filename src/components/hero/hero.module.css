@@ -181,6 +181,15 @@
     text-wrap: pretty;
   }
 
+  /* Phones break the heading after "Product Designer". */
+  .v2NameBreak {
+    display: block;
+  }
+
+  .v2Tagline {
+    display: none;
+  }
+
   .heroToolbar {
     width: 100%;
     min-height: 60px;
