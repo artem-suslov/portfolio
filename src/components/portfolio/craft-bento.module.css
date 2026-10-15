@@ -98,4 +98,8 @@
     flex: none;
     aspect-ratio: var(--tile-width) / var(--bento-row-height);
   }
+
+  .hiddenOnMobile {
+    display: none;
+  }
 }

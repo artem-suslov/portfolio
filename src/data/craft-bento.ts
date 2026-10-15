@@ -68,3 +68,6 @@ export const craftBento: CraftBentoSettings = {
   spacing: 96,
 };
 // CRAFT_BENTO_END
+
+/** Tiles left out of the stacked phone layout. */
+export const craftBentoHiddenOnMobile = new Set(["mesh-card-demo", "glow-hover-effect", "concept-whisp"]);
