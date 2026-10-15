@@ -178,6 +178,7 @@
   }
 
   .v2Name {
+    line-height: var(--line-height-lg);
     text-wrap: pretty;
   }
 
