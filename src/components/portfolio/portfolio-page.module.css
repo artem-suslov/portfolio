@@ -93,6 +93,11 @@
   .work {
     gap: 44px;
   }
+
+  /* Cases left out of the phone layout. */
+  .work > [data-case-id="ccp-design-system"] {
+    display: none;
+  }
 }
 
 /* Returning from a case study (`data-case-return`, see src/lib/case-return.ts): the page
