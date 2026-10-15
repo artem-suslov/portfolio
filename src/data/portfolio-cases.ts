@@ -8,8 +8,8 @@ import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.
 export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
-      poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261015",
-      src: "/videos/telegram-quick-stickers.mp4?v=20261015",
+      poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261015-4",
+      src: "/videos/telegram-quick-stickers.mp4?v=20261015-4",
       type: "video",
       variant: "quick-stickers",
     },
