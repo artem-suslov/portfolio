@@ -159,6 +159,8 @@ export const portfolioCases: PortfolioCaseData[] = [
     cover: {
       alt: "Steam trading management dashboard overview",
       height: steamifyTradingBotScreen.height,
+      // Phones get a crop of the screen that matches their 37:30 cover frame.
+      mobileSrc: "/images/Concept/tradingbot_thumb_case_mobile.png?v=20261015",
       src: steamifyTradingBotScreen,
       type: "image",
       // The exported cover carries its own gray surface, so it fills the frame like Safe's.
