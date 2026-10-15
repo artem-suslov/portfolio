@@ -6,11 +6,18 @@ import { CaseInfo } from "@/components/portfolio-case/case-info";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import caseStyles from "@/components/portfolio-case/portfolio-case.module.css";
 import { type Concept, conceptsById } from "@/data/concepts";
-import { type CraftBentoSettings, type CraftTile, craftBento } from "@/data/craft-bento";
+import {
+  type CraftBentoSettings,
+  type CraftTile,
+  craftBento,
+  craftBentoHiddenOnMobile,
+} from "@/data/craft-bento";
 import { portfolioCases } from "@/data/portfolio-cases";
 import styles from "./craft-bento.module.css";
 
 const casesById = new Map(portfolioCases.map((portfolioCase) => [portfolioCase.id, portfolioCase]));
+
+const isHiddenOnMobile = (tile: CraftTile) => tile.id !== null && craftBentoHiddenOnMobile.has(tile.id);
 
 function ConceptTile({
   captions,
@@ -91,10 +98,15 @@ export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSet
       </header>
       <div className={styles.grid}>
         {settings.rows.map((row, rowIndex) => (
-          <div className={styles.row} key={rowIndex}>
+          <div
+            className={
+              row.every(isHiddenOnMobile) ? `${styles.row} ${styles.hiddenOnMobile}` : styles.row
+            }
+            key={rowIndex}
+          >
             {row.map((tile) => (
               <div
-                className={styles.tile}
+                className={isHiddenOnMobile(tile) ? `${styles.tile} ${styles.hiddenOnMobile}` : styles.tile}
                 key={tile.label}
                 style={{ "--tile-width": tile.width } as CSSProperties}
               >

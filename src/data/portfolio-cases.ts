@@ -8,8 +8,8 @@ import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.
 export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
-      poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261015",
-      src: "/videos/telegram-quick-stickers.mp4?v=20261015",
+      poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261015-4",
+      src: "/videos/telegram-quick-stickers.mp4?v=20261015-4",
       type: "video",
       variant: "quick-stickers",
     },
@@ -108,8 +108,6 @@ export const portfolioCases: PortfolioCaseData[] = [
   },
   {
     cover: {
-      mobilePoster: "/images/video-posters/animator-mobile.webp",
-      mobileSrc: "/videos/animator_demo_mobile.mp4?v=20260903-fs",
       poster: "/images/video-posters/animator.webp?v=20261012",
       src: "/videos/animator_thumb_demo.mp4?v=20261012-2",
       type: "video",
@@ -159,10 +157,12 @@ export const portfolioCases: PortfolioCaseData[] = [
     cover: {
       alt: "Steam trading management dashboard overview",
       height: steamifyTradingBotScreen.height,
+      // Phones get a crop of the screen that matches their 37:30 cover frame.
+      mobileSrc: "/images/Concept/tradingbot_thumb_case_mobile.png?v=20261015",
       src: steamifyTradingBotScreen,
       type: "image",
       // The exported cover carries its own gray surface, so it fills the frame like Safe's.
-      variant: "safe",
+      variant: "dashboard",
       width: steamifyTradingBotScreen.width,
     },
     id: "orbit",

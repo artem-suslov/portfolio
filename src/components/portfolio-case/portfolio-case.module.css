@@ -426,6 +426,21 @@
   transform: none;
 }
 
+/* The screen sits in the middle of an export with the cover's own gray surface,
+   so the whole shot stays centered and visible however the frame's shape changes. */
+.dashboardCaseImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
 .caseVideo {
   position: absolute;
   display: block;
@@ -442,6 +457,12 @@
 @media (max-width: 760px) {
   .caseVideo {
     background-image: var(--case-poster-mobile, var(--case-poster, none));
+  }
+
+  /* The 16:9 recording shows whole in the taller phone frame instead of losing its sides. */
+  .animatorCaseVideo {
+    object-fit: contain;
+    background-size: contain;
   }
 }
 

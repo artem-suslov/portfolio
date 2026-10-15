@@ -16,6 +16,7 @@ const screenCaseRadius = 6;
 
 const imageClassNames: Record<CaseImageVariant, string> = {
   ccp: styles.ccpCaseImage,
+  dashboard: styles.dashboardCaseImage,
   loop: styles.loopCaseImage,
   safe: styles.safeCaseImage,
   steamify: styles.steamifyCaseImage,
@@ -24,6 +25,7 @@ const imageClassNames: Record<CaseImageVariant, string> = {
 
 const imageVisualClassNames: Partial<Record<CaseImageVariant, string>> = {
   ccp: `${styles.ccpCaseVisual} ${styles.caseVisualFlushBottom}`,
+  dashboard: styles.caseVisualFlushBottom,
   loop: styles.loopCaseVisual,
   safe: styles.caseVisualFlushBottom,
   steamify: styles.steamifyCaseVisual,

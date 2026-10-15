@@ -5,7 +5,8 @@ export type CaseImageVariant =
   | "steamify-experiment"
   | "loop"
   | "ccp"
-  | "safe";
+  | "safe"
+  | "dashboard";
 
 export type CaseVideoVariant =
   | "loop"

@@ -50,10 +50,14 @@ const securityHeaders = [
   },
 ];
 
+// In dev, revalidate on every request so replaced images and videos show up
+// after a reload instead of being served from a week-long browser cache.
 const publicAssetCacheHeaders = [
   {
     key: "Cache-Control",
-    value: "public, max-age=604800, stale-while-revalidate=86400",
+    value: isDevelopment
+      ? "no-cache"
+      : "public, max-age=604800, stale-while-revalidate=86400",
   },
 ];
 
@@ -65,6 +69,10 @@ const nextConfig: NextConfig = {
   },
   images: {
     minimumCacheTTL: 604800,
+    // The optimizer keeps resized copies in memory, so an image replaced under
+    // the same name keeps showing the old version until a restart. Serve the
+    // originals in dev; production still optimizes.
+    unoptimized: isDevelopment,
   },
   turbopack: {
     root,

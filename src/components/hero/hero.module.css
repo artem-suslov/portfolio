@@ -177,6 +177,20 @@
     padding: 0 var(--space-4);
   }
 
+  .v2Name {
+    line-height: var(--line-height-lg);
+    text-wrap: pretty;
+  }
+
+  /* Phones break the heading after "Product Designer". */
+  .v2NameBreak {
+    display: block;
+  }
+
+  .v2Tagline {
+    display: none;
+  }
+
   .heroToolbar {
     width: 100%;
     min-height: 60px;
