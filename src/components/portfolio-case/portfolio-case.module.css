@@ -426,6 +426,21 @@
   transform: none;
 }
 
+/* The screen sits in the middle of an export with the cover's own gray surface,
+   so the whole shot stays centered and visible however the frame's shape changes. */
+.dashboardCaseImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
 .caseVideo {
   position: absolute;
   display: block;

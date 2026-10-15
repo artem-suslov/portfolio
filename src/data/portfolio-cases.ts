@@ -162,7 +162,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       src: steamifyTradingBotScreen,
       type: "image",
       // The exported cover carries its own gray surface, so it fills the frame like Safe's.
-      variant: "safe",
+      variant: "dashboard",
       width: steamifyTradingBotScreen.width,
     },
     id: "orbit",
