@@ -43,39 +43,51 @@
 }
 
 .slider {
-  --slider-duration: 250ms;
+  --slider-duration: 300ms;
+  --slider-slide: 84%;
+  --slider-gap: var(--space-3);
 
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
+/* Neighbouring slides peek in from the sides and fade out towards the edges. */
 .sliderViewport {
   overflow: hidden;
-  border-radius: var(--radius-md);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
   touch-action: pan-y;
 }
 
-/* Slides share one grid cell and crossfade in place. */
+/* Percentages in translate() are relative to the track, which is as wide as the viewport. */
 .sliderTrack {
-  display: grid;
+  display: flex;
+  gap: var(--slider-gap);
+  transform: translateX(
+    calc(
+      (100% - var(--slider-slide)) / 2 - var(--slider-index) *
+        (var(--slider-slide) + var(--slider-gap))
+    )
+  );
+  transition: transform var(--slider-duration) var(--ease-in-out-cubic);
 }
 
 .sliderSlide {
-  grid-area: 1 / 1;
+  flex: 0 0 var(--slider-slide);
   min-width: 0;
-  opacity: 0;
-  transition: opacity var(--slider-duration) var(--ease-in-out-cubic);
-}
-
-.sliderSlideActive {
-  opacity: 1;
 }
 
 .sliderSlide img {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: var(--radius-md);
 }
 
 .sliderControls {
@@ -131,6 +143,12 @@
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sliderTrack {
+    transition: none;
+  }
 }
 
 @media (max-width: 760px) {

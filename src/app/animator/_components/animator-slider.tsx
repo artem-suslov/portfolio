@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { type CSSProperties, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { Button } from "@/components/ui/button";
 import { imagePath } from "./animator-case-parts";
@@ -11,7 +11,10 @@ import styles from "./animator-case.module.css";
 // A horizontal swipe shorter than this is treated as a tap, not a slide change.
 const swipeThreshold = 40;
 
-/** Screenshots shown one at a time, switched with chevron buttons below or a swipe. */
+/**
+ * Carousel of screenshots: the current one sits in the middle, its neighbours peek in
+ * from the sides and fade out at the edges. Chevron buttons below or a swipe switch it.
+ */
 export function AnimatorSlider({
   height,
   images,
@@ -49,13 +52,13 @@ export function AnimatorSlider({
           touchStartX.current = event.touches[0].clientX;
         }}
       >
-        <div className={styles.sliderTrack}>
+        <div className={styles.sliderTrack} style={{ "--slider-index": index } as CSSProperties}>
           {images.map(({ alt, name }, slide) => (
             <div
               aria-hidden={slide !== index}
               aria-label={`${slide + 1} / ${images.length}`}
               aria-roledescription="slide"
-              className={slide === index ? `${styles.sliderSlide} ${styles.sliderSlideActive}` : styles.sliderSlide}
+              className={styles.sliderSlide}
               inert={slide !== index}
               key={name}
               role="group"
