@@ -25,6 +25,7 @@ const railSections = [
   { id: "design-direction", label: "Figma layout" },
   { id: "interface-and-presets", label: "Presets" },
   { id: "authentication", label: "Sign-in" },
+  { id: "feedback", label: "Feedback" },
   { id: "results", label: "Results" },
 ] as const;
 
@@ -244,6 +245,19 @@ export function AnimatorCaseContent() {
           <TextLink href="https://supabase.com/">Supabase</TextLink>{" "}
           handles authentication and data storage, while Resend delivers
           email through the configured mail service.
+        </p>
+      </section>
+
+      <section className={shared.divided} id="feedback">
+        <h2>Asking for feedback right after the first successful render</h2>
+        <p>
+          I also thought about when to ask for feedback. Animator asks right
+          after a successful render, once someone has gone through the whole
+          core flow and has a finished video in hand.
+        </p>
+        <p>
+          At that point the questions are easy to answer: what the video is
+          for, and what worked or didn&apos;t along the way.
         </p>
       </section>
 

@@ -23,6 +23,7 @@ const railSections = [
   { id: "design-direction", label: "Макет в Figma" },
   { id: "interface-and-presets", label: "Шаблоны" },
   { id: "authentication", label: "Вход" },
+  { id: "feedback", label: "Обратная связь" },
   { id: "tradeoffs", label: "От чего отказался" },
   { id: "results", label: "Результат" },
 ] as const;
@@ -115,6 +116,12 @@ export function AnimatorCaseRussianContent() {
         <p>Я изменил логику. Пользователь может посмотреть интерфейс и попробовать базовый сценарий без входа. Авторизация нужна только перед экспортом или отправкой обратной связи.</p>
         <CaseImage alt="Animator просит почту только при экспорте" height={1419} name="login-seconda.png" width={2606} />
         <p>Для входа я выбрал Magic Link: пользователь вводит почту, получает ссылку и входит без пароля. <TextLink href="https://supabase.com/">Supabase</TextLink> отвечает за авторизацию и хранение данных, а Resend отправляет письма через настроенный почтовый сервис.</p>
+      </section>
+
+      <section className={shared.divided} id="feedback">
+        <h2>Обратная связь сразу после первого успешного рендера</h2>
+        <p>Я также подумал о том, когда просить обратную связь. Animator спрашивает сразу после успешного рендера, когда человек прошёл весь основной сценарий и уже держит в руках готовое видео.</p>
+        <p>В этот момент на вопросы легко ответить: для чего ему видео и что было хорошо или плохо по ходу.</p>
       </section>
 
       <section className={shared.divided} id="tradeoffs">
