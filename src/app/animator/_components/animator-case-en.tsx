@@ -19,13 +19,13 @@ import {
 
 const railSections = [
   { id: "overview", label: "Overview" },
-  { id: "about-product", label: "About product" },
+  { id: "about-product", label: "Product" },
   { id: "understanding-the-task", label: "Problem" },
-  { id: "mvp", label: "MVP" },
-  { id: "editing-panel", label: "Editing panel" },
-  { id: "design-direction", label: "Design direction" },
-  { id: "interface-and-presets", label: "Interface and presets" },
-  { id: "authentication", label: "Authentication" },
+  { id: "mvp", label: "MVP flow" },
+  { id: "editing-panel", label: "Settings panel" },
+  { id: "design-direction", label: "Figma layout" },
+  { id: "interface-and-presets", label: "Presets" },
+  { id: "authentication", label: "Sign-in" },
   { id: "results", label: "Results" },
 ] as const;
 
@@ -52,7 +52,7 @@ export function AnimatorCaseContent() {
       </CaseOverview>
 
       <section className={shared.divided} id="about-product">
-        <h2>About product</h2>
+        <h2>A web tool that turns screenshots into looping MP4s</h2>
         <p>
           Animator is a web tool for uploading a set of images, choosing a
           motion preset, and quickly exporting a looping carousel as an MP4.{" "}
@@ -80,7 +80,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="mvp">
-        <h2>I started by limiting the MVP</h2>
+        <h2>MVP: three steps instead of a video editor</h2>
         <p>
           The main mistake in projects like this is trying to build a full
           video editor from day one. So I started with the core flow:
@@ -99,7 +99,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided}>
-        <h2>The first version: function before polish</h2>
+        <h2>First prototype: built with Codex, renders in the browser</h2>
         <p>
           I built the first prototype with Codex. In the initial prompt, I
           included the flow diagram, described the problem and the expected
@@ -122,7 +122,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="editing-panel">
-        <h2>The editing panel</h2>
+        <h2>Settings panel: from DialKit to ToolCraft</h2>
         <p>
           I experimented with the right-side panel. First, I used{" "}
           <TextLink href="https://joshpuckett.me/dialkit">
@@ -147,7 +147,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="design-direction">
-        <h2>A little Figma before the prompts</h2>
+        <h2>A rough Figma layout passed to Codex through Figma MCP</h2>
         <p>
           Over time, I realised it was inefficient to explain visual
           direction to Codex through long prompts: colors, typography, sizes,
@@ -166,7 +166,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
-        <h2>Interface and presets</h2>
+        <h2>Presets with previews, iPhone frames, and fewer shadows</h2>
         <p>After the first version, I reworked the editor structure.</p>
         <p>
           The left panel gained presets with previews, so users could
@@ -186,7 +186,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="authentication">
-        <h2>Authentication with Supabase and Resend</h2>
+        <h2>Sign-in only before export: Magic Link with Supabase and Resend</h2>
         <p>
           Initially, I put authentication before the product. Users could not
           upload images or preview animation until they entered an email
@@ -219,7 +219,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided}>
-        <h2>Decisions I chose not to pursue</h2>
+        <h2>What I left out: WebM and custom controls</h2>
         <p>
           I considered adding WebM as a second export format. It is often
           smaller and well suited to the web, but it would have introduced
@@ -237,7 +237,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided}>
-        <h2>What was harder than expected</h2>
+        <h2>Emails from the new domain landed in spam</h2>
         <p>
           The most surprising work was not the animation itself, but the
           infrastructure around it.
@@ -252,7 +252,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="results">
-        <h2>The outcome</h2>
+        <h2>80 sign-ups and 164 exports since launch</h2>
         <AnimatorMetrics
           items={[
             { label: "Visitors", value: "~1,100" },
