@@ -144,7 +144,7 @@ export function AnimatorCaseRussianContent() {
         <h2>80 регистраций и 164 экспорта с запуска</h2>
         <AnimatorMetrics
           items={[
-            { label: "Посетителей", value: "~1 100" },
+            { label: "Пользователей", value: "~1 100" },
             { label: "Регистраций", value: "80" },
             { label: "Экспортов MP4", value: "164" },
           ]}

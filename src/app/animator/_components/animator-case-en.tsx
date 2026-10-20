@@ -305,7 +305,7 @@ export function AnimatorCaseContent() {
         <h2>80 sign-ups and 164 exports since launch</h2>
         <AnimatorMetrics
           items={[
-            { label: "Visitors", value: "~1,100" },
+            { label: "Users", value: "~1,100" },
             { label: "Sign-ups", value: "80" },
             { label: "MP4 exports", value: "164" },
           ]}
