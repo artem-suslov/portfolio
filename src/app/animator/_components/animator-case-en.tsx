@@ -5,7 +5,6 @@ import {
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
 import { CaseMorph } from "@/components/case-study/case-morph";
-import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
@@ -14,7 +13,6 @@ import {
   AnimatorMetrics,
   CaseImage,
   ImageStack,
-  imagePath,
 } from "./animator-case-parts";
 
 const railSections = [
@@ -234,6 +232,12 @@ export function AnimatorCaseContent() {
           basic path without signing in. Authentication is only required
           before export or feedback submission.
         </p>
+        <CaseImage
+          alt="Animator asks for an email only when someone exports"
+          height={1419}
+          name="login-seconda.png"
+          width={2606}
+        />
         <p>
           For sign-in, I chose Magic Link: a user enters an email address,
           receives a link, and signs in without a password.{" "}
@@ -241,13 +245,6 @@ export function AnimatorCaseContent() {
           handles authentication and data storage, while Resend delivers
           email through the configured mail service.
         </p>
-        <Image
-          alt="Authentication screen comparison"
-          className={shared.media}
-          height={298}
-          src={`${imagePath}/08.png`}
-          width={508}
-        />
       </section>
 
       <section className={shared.divided}>

@@ -3,7 +3,6 @@ import {
   CaseOverview,
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
-import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
@@ -12,7 +11,6 @@ import {
   AnimatorMetrics,
   CaseImage,
   ImageStack,
-  imagePath,
 } from "./animator-case-parts";
 
 const railSections = [
@@ -115,8 +113,8 @@ export function AnimatorCaseRussianContent() {
         <CaseImage alt="Первая версия Animator открывалась с экрана входа" height={1481} name="login-first.png" width={2363} />
         <p>Технически это работало, но как продуктовый сценарий было слабым решением: так как сервис новый и мало кому известный, я блокировал пользователя от первого касания экраном авторизации.</p>
         <p>Я изменил логику. Пользователь может посмотреть интерфейс и попробовать базовый сценарий без входа. Авторизация нужна только перед экспортом или отправкой обратной связи.</p>
+        <CaseImage alt="Animator просит почту только при экспорте" height={1419} name="login-seconda.png" width={2606} />
         <p>Для входа я выбрал Magic Link: пользователь вводит почту, получает ссылку и входит без пароля. <TextLink href="https://supabase.com/">Supabase</TextLink> отвечает за авторизацию и хранение данных, а Resend отправляет письма через настроенный почтовый сервис.</p>
-        <Image alt="Сравнение экранов авторизации" className={shared.media} height={298} src={`${imagePath}/08.png`} width={508} />
       </section>
 
       <section className={shared.divided} id="tradeoffs">
