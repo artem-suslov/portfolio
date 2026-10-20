@@ -31,9 +31,9 @@ const railSections = [
 ] as const;
 
 const meta = [
-  { label: "Team", value: "Solo project" },
-  { label: "My role", value: "Design Engineer" },
-  { label: "Timeline", value: "2026" },
+  { label: "Role", value: "Design Engineer, solo" },
+  { label: "Built in", value: "~2 weeks with Codex" },
+  { label: "Status", value: "Live, 165 exports" },
 ];
 
 const panelScreens = [
