@@ -113,6 +113,11 @@ export function AnimatorCaseContent() {
       <section className={shared.divided}>
         <h2>First prototype: built with Codex, renders in the browser</h2>
         <p>
+          At first my goal was simple: build a working prototype without
+          trying to make the interface perfect. What mattered was testing the
+          main user path: upload images, set up the carousel, and get a video.
+        </p>
+        <p>
           I built the first prototype with Codex. In the initial prompt, I
           included the flow diagram, described the problem and the expected
           solution. I pictured the product as a studio: presets on the left,
@@ -120,16 +125,19 @@ export function AnimatorCaseContent() {
         </p>
         <CaseImage alt="The first Animator interface" name="04.png" />
         <p>
-          The first version looked rough: overly bright colors, simple
-          controls, and an imperfect composition. But it already solved the
-          core task: users could upload images, preview the animation, and
-          export a video.
+          Visually, the first version came out pretty sloppy: colors that were
+          too bright, basic solutions, and a few small bugs. But the main flow
+          already worked from start to finish.
         </p>
         <p>
           Rendering happens entirely in the browser. Canvas assembles the
           animation frame by frame, WebCodecs encodes those frames, and
           mp4-muxer packages them into an MP4. Images never need to be sent
           to a separate rendering server.
+        </p>
+        <p>
+          I tested the whole path after that, and everything worked: images
+          uploaded, the carousel played, and the MP4 exported.
         </p>
       </section>
 
