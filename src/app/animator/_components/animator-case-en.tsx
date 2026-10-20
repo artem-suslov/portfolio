@@ -26,7 +26,7 @@ const railSections = [
   { id: "interface-and-presets", label: "Presets" },
   { id: "authentication", label: "Sign-in" },
   { id: "feedback", label: "Feedback" },
-  { id: "decisions", label: "Key decisions" },
+  { id: "decisions", label: "Trade-offs" },
   { id: "results", label: "Results" },
 ] as const;
 
@@ -265,7 +265,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="decisions">
-        <h2>Key decisions and what they cost</h2>
+        <h2>Trade-offs</h2>
         <ul>
           <li>
             <strong>Magic Link instead of Google sign-in.</strong> A new law
@@ -273,8 +273,8 @@ export function AnimatorCaseContent() {
             step and open an email.
           </li>
           <li>
-            <strong>Rendering in the browser, not on a server.</strong> No
-            server costs, and images never leave the user&apos;s computer. The
+            <strong>Rendering in the browser, not on a server.</strong>{" "}
+            No server costs, and images never leave the user&apos;s computer. The
             catch is that export speed depends on their machine.
           </li>
           <li>

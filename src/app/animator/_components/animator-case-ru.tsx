@@ -24,7 +24,7 @@ const railSections = [
   { id: "interface-and-presets", label: "Шаблоны" },
   { id: "authentication", label: "Вход" },
   { id: "feedback", label: "Обратная связь" },
-  { id: "decisions", label: "Ключевые решения" },
+  { id: "decisions", label: "Компромиссы" },
   { id: "results", label: "Результат" },
 ] as const;
 
@@ -123,7 +123,7 @@ export function AnimatorCaseRussianContent() {
       </section>
 
       <section className={shared.divided} id="decisions">
-        <h2>Ключевые решения и их цена</h2>
+        <h2>Компромиссы</h2>
         <ul>
           <li><strong>Magic Link вместо входа через Google.</strong> Закон запрещает российским сайтам вход через Google, поэтому человеку приходится сделать лишний шаг и открыть письмо.</li>
           <li><strong>Рендер в браузере, а не на сервере.</strong> Не нужно платить за сервер, а изображения не покидают компьютер пользователя. Цена: скорость экспорта зависит от его машины.</li>
