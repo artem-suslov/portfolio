@@ -50,26 +50,17 @@ export function AnimatorClip({ label, src }: { label: string; src: string }) {
   );
 }
 
-/** Headline numbers for the results section, with the source and date underneath. */
-export function AnimatorMetrics({
-  items,
-  note,
-}: {
-  items: readonly { label: string; value: string }[];
-  note: string;
-}) {
+/** Headline numbers for the results section. */
+export function AnimatorMetrics({ items }: { items: readonly { label: string; value: string }[] }) {
   return (
-    <figure className={styles.metrics}>
-      <dl>
-        {items.map(({ label, value }) => (
-          <div key={label}>
-            <dd>{value}</dd>
-            <dt>{label}</dt>
-          </div>
-        ))}
-      </dl>
-      <figcaption>{note}</figcaption>
-    </figure>
+    <dl className={styles.metrics}>
+      {items.map(({ label, value }) => (
+        <div key={label}>
+          <dd>{value}</dd>
+          <dt>{label}</dt>
+        </div>
+      ))}
+    </dl>
   );
 }
 

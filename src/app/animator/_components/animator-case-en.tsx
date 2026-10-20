@@ -289,7 +289,6 @@ export function AnimatorCaseContent() {
             { label: "Sign-ups", value: "80" },
             { label: "MP4 exports", value: "164" },
           ]}
-          note="Since launch in July 2026, as of October 20, 2026. Yandex Metrica and Supabase; the numbers include my own use."
         />
         <p>In the end, I built a working web service that lets people:</p>
         <ul>
