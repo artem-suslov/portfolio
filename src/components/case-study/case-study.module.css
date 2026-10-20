@@ -44,24 +44,24 @@
   margin: 0;
 }
 
-/* Avoid a lone last word on headings. */
+/* Even out heading lines instead of leaving a lone last word. */
 .article h1,
 .article h2,
 .article h3 {
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
 .article h1 {
   font-size: var(--font-size-5xl);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.32;
   letter-spacing: -0.01em;
 }
 
 .article h2 {
   font-size: var(--font-size-2xl);
   font-weight: 500;
-  line-height: var(--line-height-xl);
+  line-height: calc(var(--line-height-xl) * 1.1);
   letter-spacing: -0.44px;
 }
 
@@ -337,7 +337,7 @@
   }
 
   .article h2 {
-    line-height: 1.2;
+    line-height: 1.32;
   }
 
   .article section[id] {
