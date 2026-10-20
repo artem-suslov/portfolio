@@ -32,7 +32,7 @@ const railSections = [
 
 const meta = [
   { label: "Team", value: "Solo project" },
-  { label: "My role", value: "Product Design, Design System, AI-assisted development with Codex" },
+  { label: "My role", value: "Design Engineer" },
   { label: "Timeline", value: "2026" },
 ];
 
