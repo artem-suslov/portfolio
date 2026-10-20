@@ -22,7 +22,6 @@ const railSections = [
   { id: "user-flow", label: "User flow" },
   { id: "mvp", label: "MVP flow" },
   { id: "editing-panel", label: "Settings panel" },
-  { id: "design-direction", label: "Figma layout" },
   { id: "interface-and-presets", label: "Presets" },
   { id: "authentication", label: "Sign-in" },
   { id: "feedback", label: "Feedback" },
@@ -169,25 +168,6 @@ export function AnimatorCaseContent() {
           but the core structure and logic stayed the same.
         </p>
         <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Settings panel screenshots" }} width={2914} />
-      </section>
-
-      <section className={shared.divided} id="design-direction">
-        <h2>A rough Figma layout passed to Codex through Figma MCP</h2>
-        <p>
-          Over time, I realised it was inefficient to explain visual
-          direction to Codex through long prompts: colors, typography, sizes,
-          and layout.
-        </p>
-        <p>
-          So I quickly made a rough layout in Figma using another file with
-          existing color tokens, type styles, and components. I then passed
-          that layout to Codex through Figma MCP.
-        </p>
-        <CaseImage alt="Animator Figma layout" name="06.png" />
-        <p>
-          That gave the agent a clear visual direction and saved me dozens of
-          messages about minor refinements.
-        </p>
       </section>
 
       <section className={shared.divided} id="interface-and-presets">

@@ -20,7 +20,6 @@ const railSections = [
   { id: "user-flow", label: "Пользовательский сценарий" },
   { id: "mvp", label: "MVP-флоу" },
   { id: "editing-panel", label: "Панель настроек" },
-  { id: "design-direction", label: "Макет в Figma" },
   { id: "interface-and-presets", label: "Шаблоны" },
   { id: "authentication", label: "Вход" },
   { id: "feedback", label: "Обратная связь" },
@@ -88,14 +87,6 @@ export function AnimatorCaseRussianContent() {
         <p>Потом я попробовал собрать контролы своими компонентами. Но они выглядели разрозненно, а на доводку интерактивности ушло бы слишком много времени.</p>
         <p>В итоге я нашёл <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>. В этой библиотеке есть готовые слайдеры, селекты и другие контролы, которые можно гибко использовать в своём интерфейсе. С её помощью я собрал более компактную и цельную правую панель.</p>
         <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты панели настроек" }} width={2914} />
-      </section>
-
-      <section className={shared.divided} id="design-direction">
-        <h2>Черновой макет в Figma, переданный в Codex через Figma MCP</h2>
-        <p>Спустя время я понял, что долго объяснять Codex через промпты визуальное направление: цвета, шрифты, размеры и расположение элементов.</p>
-        <p>Поэтому я быстро собрал черновой макет в Figma. Я использовал другой свой файл, где уже были готовы цветовые токены, шрифты и компоненты. Затем передал этот макет в Codex через Figma MCP.</p>
-        <CaseImage alt="Черновой макет Animator в Figma" name="06.png" />
-        <p>Так агент сразу получил понятное визуальное направление, а мне не пришлось тратить десятки сообщений на мелкие правки.</p>
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
