@@ -9,6 +9,7 @@ import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import { AnimatorSlider } from "./animator-slider";
 import {
+  AnimatorClip,
   AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
@@ -187,7 +188,7 @@ export function AnimatorCaseContent() {
           decision, but it keeps the interface from becoming unnecessarily
           complex.
         </p>
-        <CaseImage alt="Updated Animator interface" name="07.png" />
+        <AnimatorClip label="The reworked editor: presets with previews on the left, uploads and background settings on the right" src="/videos/sidebar.mp4" />
       </section>
 
       <section className={shared.divided} id="authentication">

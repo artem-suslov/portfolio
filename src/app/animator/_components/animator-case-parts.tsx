@@ -41,6 +41,15 @@ export function AnimatorHeroVideo() {
   );
 }
 
+/** Looping, muted product clip that plays inline like the hero video. */
+export function AnimatorClip({ label, src }: { label: string; src: string }) {
+  return (
+    <video aria-label={label} autoPlay className={`${shared.media} ${styles.clip}`} loop muted playsInline preload="metadata">
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+}
+
 /** Headline numbers for the results section, with the source and date underneath. */
 export function AnimatorMetrics({
   items,

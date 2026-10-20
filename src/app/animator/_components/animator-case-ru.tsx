@@ -7,6 +7,7 @@ import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import { AnimatorSlider } from "./animator-slider";
 import {
+  AnimatorClip,
   AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
@@ -95,7 +96,7 @@ export function AnimatorCaseRussianContent() {
         <p>В левой панели появились шаблоны с превью, чтобы пользователь сразу понимал, какую анимацию получит.</p>
         <p>В правую панель я перенёс загрузку изображений и настройки фона. Добавил готовые обои, формат iPhone и автоматическое скругление углов, чтобы мобильные экраны сразу выглядели естественно.</p>
         <p>Также я ограничил выбор теней несколькими понятными вариантами. Это небольшое решение, но оно защищает интерфейс от лишней сложности.</p>
-        <CaseImage alt="Обновлённый интерфейс Animator" name="07.png" />
+        <AnimatorClip label="Переработанный редактор: шаблоны с превью слева, загрузка и настройки фона справа" src="/videos/sidebar.mp4" />
       </section>
 
       <section className={shared.divided} id="authentication">

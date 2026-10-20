@@ -5,6 +5,13 @@
   object-fit: cover;
 }
 
+.clip {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1920 / 1080;
+}
+
 .flow {
   --flow-gap: var(--space-8);
 
