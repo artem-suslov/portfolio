@@ -126,10 +126,10 @@ export const portfolioCases: PortfolioCaseData[] = [
       },
       period: "2026",
       role: "Design Engineer",
-      title: "Tool for creating looping MP4 showcases",
+      title: "Animator: a looping MP4 tool I designed and built with AI",
     },
     href: "/animator",
-    title: "Tool for creating looping MP4 showcases",
+    title: "Animator: a looping MP4 tool I designed and built with AI",
   },
   {
     cover: {
