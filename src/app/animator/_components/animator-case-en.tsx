@@ -26,6 +26,7 @@ const railSections = [
   { id: "interface-and-presets", label: "Presets" },
   { id: "authentication", label: "Sign-in" },
   { id: "feedback", label: "Feedback" },
+  { id: "decisions", label: "Key decisions" },
   { id: "results", label: "Results" },
 ] as const;
 
@@ -249,24 +250,6 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided}>
-        <h2>What I left out: WebM and custom controls</h2>
-        <p>
-          I considered adding WebM as a second export format. It is often
-          smaller and well suited to the web, but it would have introduced
-          more technical details and test cases to the first version.
-        </p>
-        <p>
-          So I kept MP4 only. It is familiar to most users and solves the
-          core problem. WebM can return later, once the primary flow is
-          stable.
-        </p>
-        <p>
-          The same went for the control panel: rather than polishing my own
-          components endlessly, I settled on ToolCraft.
-        </p>
-      </section>
-
-      <section className={shared.divided}>
         <h2>Emails from the new domain landed in spam</h2>
         <p>
           The most surprising work was not the animation itself, but the
@@ -279,6 +262,36 @@ export function AnimatorCaseContent() {
           <TextLink href="https://resend.com/">Resend</TextLink> as a
           separate SMTP service.
         </p>
+      </section>
+
+      <section className={shared.divided} id="decisions">
+        <h2>Key decisions and what they cost</h2>
+        <ul>
+          <li>
+            <strong>Magic Link instead of Google sign-in.</strong> A new law
+            bars Russian sites from Google sign-in, so people take one extra
+            step and open an email.
+          </li>
+          <li>
+            <strong>Rendering in the browser, not on a server.</strong> No
+            server costs, and images never leave the user&apos;s computer. The
+            catch is that export speed depends on their machine.
+          </li>
+          <li>
+            <strong>Analytics count successful exports, not visits.</strong>{" "}
+            Emails, files, and images never reach analytics.
+          </li>
+          <li>
+            <strong>One feedback form instead of a chat.</strong> Messages go
+            straight to the database, where repeated problems are easy to
+            spot.
+          </li>
+          <li>
+            <strong>MP4 only, with just quality and frame rate in export.</strong>{" "}
+            WebM is lighter and suits websites, but a second format meant more
+            settings and more test cases for the first version.
+          </li>
+        </ul>
       </section>
 
       <section className={shared.divided} id="results">
