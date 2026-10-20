@@ -112,6 +112,10 @@
   text-align: center;
 }
 
+.tradeoffs strong {
+  font-weight: 500;
+}
+
 .metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

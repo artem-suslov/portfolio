@@ -6,6 +6,7 @@ import {
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import { AnimatorSlider } from "./animator-slider";
+import styles from "./animator-case.module.css";
 import {
   AnimatorClip,
   AnimatorFlow,
@@ -124,7 +125,7 @@ export function AnimatorCaseRussianContent() {
 
       <section className={shared.divided} id="decisions">
         <h2>Компромиссы</h2>
-        <ul>
+        <ul className={styles.tradeoffs}>
           <li><strong>Magic Link вместо входа через Google.</strong> Закон запрещает российским сайтам вход через Google, поэтому человеку приходится сделать лишний шаг и открыть письмо.</li>
           <li><strong>Рендер в браузере, а не на сервере.</strong> Не нужно платить за сервер, а изображения не покидают компьютер пользователя. Цена: скорость экспорта зависит от его машины.</li>
           <li><strong>В аналитике считаются успешные экспорты, а не визиты.</strong> Почта, файлы и изображения в аналитику не попадают.</li>

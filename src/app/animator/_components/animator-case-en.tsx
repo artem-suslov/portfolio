@@ -8,6 +8,7 @@ import { CaseMorph } from "@/components/case-study/case-morph";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import { AnimatorSlider } from "./animator-slider";
+import styles from "./animator-case.module.css";
 import {
   AnimatorClip,
   AnimatorFlow,
@@ -266,7 +267,7 @@ export function AnimatorCaseContent() {
 
       <section className={shared.divided} id="decisions">
         <h2>Trade-offs</h2>
-        <ul>
+        <ul className={styles.tradeoffs}>
           <li>
             <strong>Magic Link instead of Google sign-in.</strong> A new law
             bars Russian sites from Google sign-in, so people take one extra
