@@ -218,6 +218,12 @@ export function AnimatorCaseContent() {
           upload images or preview animation until they entered an email
           address.
         </p>
+        <CaseImage
+          alt="The first Animator version opened on a sign-in screen"
+          height={1481}
+          name="login-first.png"
+          width={2363}
+        />
         <p>
           It worked technically, but it was a weak product decision. Because
           the service was new and unfamiliar, I was blocking users from the
