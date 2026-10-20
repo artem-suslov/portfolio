@@ -52,7 +52,7 @@ export function AnimatorCaseContent() {
       </CaseOverview>
 
       <section className={shared.divided} id="about-product">
-        <h2>A web tool that turns screenshots into looping MP4s</h2>
+        <h2>Screenshots in, looping MP4 out</h2>
         <p>
           Animator is a web tool for uploading a set of images, choosing a
           motion preset, and quickly exporting a looping carousel as an MP4.{" "}
@@ -80,7 +80,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="user-flow">
-        <h2>First, the main user flow: from uploaded images to a looping MP4</h2>
+        <h2>First, the main user flow</h2>
         <p>
           I started with the flow, before any code, and drew it in FigJam. You
           upload images and adjust the settings: preset, image size, speed,
@@ -110,7 +110,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided}>
-        <h2>First prototype: built with Codex, renders in the browser</h2>
+        <h2>First prototype, built with Codex</h2>
         <p>
           At first my goal was simple: build a working prototype without
           trying to make the interface perfect. What mattered was testing the
@@ -172,7 +172,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
-        <h2>Presets with previews, iPhone frames, and fewer shadows</h2>
+        <h2>Presets with previews and iPhone frames</h2>
         <p>After the first version, I reworked the editor structure.</p>
         <p>
           The left panel gained presets with previews, so users could
@@ -192,7 +192,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="authentication">
-        <h2>Sign-in only before export: Magic Link with Supabase and Resend</h2>
+        <h2>Sign-in only before export</h2>
         <p>
           Initially, I put authentication before the product. Users could not
           upload images or preview animation until they entered an email
@@ -230,7 +230,7 @@ export function AnimatorCaseContent() {
       </section>
 
       <section className={shared.divided} id="feedback">
-        <h2>Asking for feedback right after the first successful render</h2>
+        <h2>Feedback after the first render</h2>
         <p>
           I also thought about when to ask for feedback. Animator asks right
           after a successful render, once someone has gone through the whole
