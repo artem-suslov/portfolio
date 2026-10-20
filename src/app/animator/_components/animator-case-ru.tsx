@@ -31,7 +31,7 @@ const railSections = [
 
 const meta = [
   { label: "Команда", value: "Личный проект" },
-  { label: "Моя роль", value: "Product Design, Design System, Frontend Development" },
+  { label: "Моя роль", value: "Продуктовый дизайн, дизайн-система, разработка с AI в Codex" },
   { label: "Период", value: "2026" },
 ];
 
@@ -50,7 +50,7 @@ const dataScreens = [
 export function AnimatorCaseRussianContent() {
   return (
     <CaseStudyLayout sections={railSections}>
-      <CaseOverview eyebrow="Animator · Creator tool" title="Animator — инструмент для создания зацикленных MP4-шоукейсов">
+      <CaseOverview eyebrow="Animator · Creator tool" title="Animator: инструмент для зацикленных MP4, который я спроектировал и собрал с AI">
         <AnimatorHeroVideo />
         <CaseMeta items={meta} />
       </CaseOverview>

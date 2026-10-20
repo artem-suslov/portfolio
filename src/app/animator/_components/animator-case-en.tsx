@@ -32,7 +32,7 @@ const railSections = [
 
 const meta = [
   { label: "Team", value: "Solo project" },
-  { label: "My role", value: "Product Design, Design System, Frontend Development" },
+  { label: "My role", value: "Product Design, Design System, AI-assisted development with Codex" },
   { label: "Timeline", value: "2026" },
 ];
 
@@ -51,7 +51,7 @@ const dataScreens = [
 export function AnimatorCaseContent() {
   return (
     <CaseStudyLayout sections={railSections}>
-      <CaseOverview eyebrow="Animator · Creator tool" title="Animator: a tool for creating looping MP4 showcases">
+      <CaseOverview eyebrow="Animator · Creator tool" title="Animator: a looping MP4 tool I designed and built with AI">
         <CaseMorph slug="animator">
           <AnimatorHeroVideo />
         </CaseMorph>
