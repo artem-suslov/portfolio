@@ -113,7 +113,8 @@
 }
 
 .tradeoffs strong {
-  font-weight: 500;
+  color: var(--color-text-primary);
+  font-weight: 400;
 }
 
 .metrics {
