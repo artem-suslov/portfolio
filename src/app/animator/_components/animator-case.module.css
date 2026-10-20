@@ -134,7 +134,7 @@
   margin: 0;
   color: var(--color-text-primary);
   font-size: var(--font-size-5xl);
-  line-height: var(--line-height-md);
+  line-height: 1;
   letter-spacing: var(--letter-spacing-tight);
 }
 
