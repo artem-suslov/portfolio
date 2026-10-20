@@ -10,6 +10,7 @@ import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
   AnimatorHeroVideo,
+  AnimatorMetrics,
   CaseImage,
   ImageTriptych,
   imagePath,
@@ -54,7 +55,8 @@ export function AnimatorCaseContent() {
         <h2>About product</h2>
         <p>
           Animator is a web tool for uploading a set of images, choosing a
-          motion preset, and quickly exporting a looping carousel as an MP4.
+          motion preset, and quickly exporting a looping carousel as an MP4.{" "}
+          <TextLink href="https://getanimator.xyz/">Try it live</TextLink>.
         </p>
       </section>
 
@@ -264,6 +266,14 @@ export function AnimatorCaseContent() {
 
       <section className={shared.divided} id="results">
         <h2>The outcome</h2>
+        <AnimatorMetrics
+          items={[
+            { label: "Visitors", value: "~1,100" },
+            { label: "Sign-ups", value: "80" },
+            { label: "MP4 exports", value: "164" },
+          ]}
+          note="Since launch in July 2026, as of October 20, 2026. Yandex Metrica and Supabase; the numbers include my own use."
+        />
         <p>In the end, I built a working web service that lets people:</p>
         <ul>
           <li>Upload interface screenshots</li>
@@ -275,9 +285,10 @@ export function AnimatorCaseContent() {
         </ul>
         <p>
           The service is deployed on its own domain and is already part of my
-          video-making workflow. I brought in the first 300 users in three
+          video-making workflow. Around 300 visitors came in the first three
           days through my own YouTube, Telegram, Threads, and LinkedIn
-          channels.
+          channels. Visitors stayed for 3 min 24 s on average, with a 31.5%
+          bounce rate.
         </p>
         <div className={shared.block}>
           <CaseLabel>What I learned</CaseLabel>

@@ -25,7 +25,51 @@
   object-position: left center;
 }
 
+.metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.metrics dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.metrics dl > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-1);
+}
+
+.metrics dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-5xl);
+  line-height: var(--line-height-md);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.metrics dt {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-md);
+}
+
+.metrics figcaption {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-md);
+}
+
 @media (max-width: 760px) {
+  .metrics dl {
+    grid-template-columns: 1fr;
+  }
+
   .mediaTriptych {
     grid-template-columns: 1fr;
   }

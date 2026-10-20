@@ -8,6 +8,7 @@ import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
   AnimatorHeroVideo,
+  AnimatorMetrics,
   CaseImage,
   ImageTriptych,
   imagePath,
@@ -23,6 +24,7 @@ const railSections = [
   { id: "design-direction", label: "Дизайн-направление" },
   { id: "interface-and-presets", label: "Интерфейс и шаблоны" },
   { id: "authentication", label: "Авторизация" },
+  { id: "tradeoffs", label: "Компромиссы" },
   { id: "results", label: "Результат" },
 ] as const;
 
@@ -48,18 +50,18 @@ export function AnimatorCaseRussianContent() {
 
       <section className={shared.divided} id="about-product">
         <h2>О продукте</h2>
-        <p>Animator — веб-инструмент, который помогает загрузить несколько изображений, выбрать движение и быстро экспортировать видео зацикленной карусели в MP4.</p>
+        <p>Animator — веб-инструмент, который помогает загрузить несколько изображений, выбрать движение и быстро экспортировать видео зацикленной карусели в MP4. <TextLink href="https://getanimator.xyz/">Попробовать</TextLink>.</p>
       </section>
 
       <section className={shared.divided} id="understanding-the-task">
-        <p className={shared.eyebrow}>Problem</p>
+        <p className={shared.eyebrow}>Проблема</p>
         <h2>Мне нужно было быстро превращать экраны интерфейса в зацикленные видео</h2>
         <p>В роликах о дизайне важно показывать интерфейс в движении, а не только статичными скриншотами. Но ручная анимация в Figma Motion, After Effects или монтажной программе отнимает слишком много времени.</p>
         <p>Я хотел сделать простой инструмент: загрузить экраны, выбрать шаблон движения и сразу получить готовый зацикленный MP4-файл.</p>
       </section>
 
       <section className={shared.divided} id="mvp">
-        <p className={shared.eyebrow}>Process</p>
+        <p className={shared.eyebrow}>Процесс</p>
         <h2>Сначала я ограничил MVP</h2>
         <p>Главная ошибка в таких проектах — сразу пытаться сделать полноценный видеоредактор. Поэтому я начал с основного сценария:</p>
         <p className={styles.emphasis}>Загрузить изображения → настроить движение → экспортировать MP4.</p>
@@ -102,7 +104,7 @@ export function AnimatorCaseRussianContent() {
       </section>
 
       <section className={shared.divided} id="authentication">
-        <p className={shared.eyebrow}>What I’ve learned</p>
+        <p className={shared.eyebrow}>Урок</p>
         <h2>Авторизация через Supabase и Resend</h2>
         <p>Сначала я сделал авторизацию до входа в продукт. Пользователь не мог загрузить изображения или посмотреть анимацию, пока не введёт почту.</p>
         <p>Технически это работало, но как продуктовый сценарий было слабым решением: так как сервис новый и мало кому известный, я блокировал пользователя от первого касания экраном авторизации.</p>
@@ -111,8 +113,8 @@ export function AnimatorCaseRussianContent() {
         <Image alt="Сравнение экранов авторизации" className={shared.media} height={298} src={`${imagePath}/08.png`} width={508} />
       </section>
 
-      <section className={shared.divided} id="results">
-        <p className={shared.eyebrow}>Tradeoffs</p>
+      <section className={shared.divided} id="tradeoffs">
+        <p className={shared.eyebrow}>Компромиссы</p>
         <h2>Решения, от которых я отказался</h2>
         <p>Я думал добавить WebM как второй формат экспорта. Он часто весит меньше и хорошо подходит для сайтов. Но для первой версии это означало бы больше технических деталей и сценариев для проверки.</p>
         <p>Поэтому я оставил только MP4. Он понятен большинству пользователей и закрывает основную задачу. К WebM можно вернуться позже, когда базовый сценарий будет стабильно работать.</p>
@@ -125,8 +127,16 @@ export function AnimatorCaseRussianContent() {
         <p>У стандартной отправки писем были ограничения, а часть писем с нового домена попадала в спам. Пришлось купить домен, настроить DNS-записи и подключить <TextLink href="https://resend.com/">Resend</TextLink> как отдельный SMTP-сервер.</p>
       </section>
 
-      <section className={shared.divided}>
+      <section className={shared.divided} id="results">
         <h2>Что получилось</h2>
+        <AnimatorMetrics
+          items={[
+            { label: "Посетителей", value: "~1 100" },
+            { label: "Регистраций", value: "80" },
+            { label: "Экспортов MP4", value: "164" },
+          ]}
+          note="С запуска в июле 2026 по 20 октября 2026. Яндекс Метрика и Supabase; в цифры входит моё использование."
+        />
         <p>В итоге я собрал работающий веб-сервис, который позволяет:</p>
         <ul>
           <li>Загружать изображения интерфейсов</li>
@@ -136,7 +146,7 @@ export function AnimatorCaseRussianContent() {
           <li>Экспортировать видео в MP4</li>
           <li>Оставлять обратную связь прямо внутри продукта</li>
         </ul>
-        <p>Сервис задеплоен на собственный домен и уже используется как инструмент для моих видео. За первые 3 дня я привлёк 300 пользователей через свои каналы: YouTube, Telegram, Threads и LinkedIn.</p>
+        <p>Сервис задеплоен на собственный домен и уже используется как инструмент для моих видео. Около 300 посетителей пришли в первые три дня через мои каналы: YouTube, Telegram, Threads и LinkedIn. Среднее время на сайте — 3 мин 24 с, отказы — 31,5%.</p>
       </section>
 
       <section className={shared.divided}>

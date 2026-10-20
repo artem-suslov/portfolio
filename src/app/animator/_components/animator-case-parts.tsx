@@ -24,7 +24,7 @@ export function AnimatorHeroVideo() {
       loop
       muted
       playsInline
-      poster={`${imagePath}/03.png`}
+      poster="/images/video-posters/animator.webp"
     >
       <source src="/videos/animator_thumb_demo.mp4" type="video/mp4" />
     </video>
@@ -43,5 +43,28 @@ export function ImageTriptych({
         <Image alt={alt} height={298} key={name} src={`${imagePath}/${name}`} width={width} />
       ))}
     </div>
+  );
+}
+
+/** Headline numbers for the results section, with the source and date underneath. */
+export function AnimatorMetrics({
+  items,
+  note,
+}: {
+  items: readonly { label: string; value: string }[];
+  note: string;
+}) {
+  return (
+    <figure className={styles.metrics}>
+      <dl>
+        {items.map(({ label, value }) => (
+          <div key={label}>
+            <dd>{value}</dd>
+            <dt>{label}</dt>
+          </div>
+        ))}
+      </dl>
+      <figcaption>{note}</figcaption>
+    </figure>
   );
 }
