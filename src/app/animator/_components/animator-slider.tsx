@@ -12,8 +12,8 @@ import styles from "./animator-case.module.css";
 const swipeThreshold = 40;
 
 /**
- * Carousel of screenshots: the current one sits in the middle, its neighbours peek in
- * from the sides and fade out at the edges. Chevron buttons below or a swipe switch it.
+ * Carousel of screenshots: the current one sits in the middle and its neighbours peek in
+ * from the sides. Chevron buttons below or a swipe switch it.
  */
 export function AnimatorSlider({
   images,
