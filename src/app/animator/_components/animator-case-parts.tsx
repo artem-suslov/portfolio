@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { CaseImage as ExpandableImage } from "@/components/case-study/case-media";
 import shared from "@/components/case-study/case-study.module.css";
 import styles from "./animator-case.module.css";
 
@@ -17,9 +16,8 @@ export function CaseImage({
   width?: number;
 }) {
   return (
-    <ExpandableImage
+    <Image
       alt={alt}
-      caseId="animator"
       className={shared.media}
       height={height}
       src={`${imagePath}/${name}`}
