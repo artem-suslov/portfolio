@@ -1,49 +1,57 @@
 import {
-  CaseLabel,
   CaseMeta,
   CaseOverview,
   CaseStudyLayout,
 } from "@/components/case-study/case-study-layout";
 import { CaseMorph } from "@/components/case-study/case-morph";
-import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
-import {
-  AnimatorHeroVideo,
-  CaseImage,
-  ImageTriptych,
-  imagePath,
-} from "./animator-case-parts";
+import { AnimatorSlider } from "./animator-slider";
 import styles from "./animator-case.module.css";
+import {
+  AnimatorClip,
+  AnimatorFlow,
+  AnimatorHeroVideo,
+  AnimatorMetrics,
+  CaseImage,
+} from "./animator-case-parts";
 
 const railSections = [
   { id: "overview", label: "Overview" },
-  { id: "about-product", label: "About product" },
-  { id: "understanding-the-task", label: "Understanding the Task" },
-  { id: "mvp", label: "MVP" },
-  { id: "editing-panel", label: "Editing panel" },
-  { id: "design-direction", label: "Design direction" },
-  { id: "interface-and-presets", label: "Interface and presets" },
-  { id: "authentication", label: "Authentication" },
+  { id: "about-product", label: "Product" },
+  { id: "understanding-the-task", label: "Problem" },
+  { id: "user-flow", label: "User flow" },
+  { id: "mvp", label: "MVP flow" },
+  { id: "editing-panel", label: "Settings panel" },
+  { id: "interface-and-presets", label: "Presets" },
+  { id: "authentication", label: "Sign-in" },
+  { id: "feedback", label: "Feedback" },
+  { id: "decisions", label: "Trade-offs" },
   { id: "results", label: "Results" },
 ] as const;
 
 const meta = [
   { label: "Team", value: "Solo project" },
-  { label: "My role", value: "Product Design, Design System, Frontend Development" },
+  { label: "My role", value: "Product Design, Design System, AI-assisted development with Codex" },
   { label: "Timeline", value: "2026" },
 ];
 
-const triptych = [
-  { alt: "Animator settings", name: "01.png", width: 508 },
-  { alt: "Animator settings", name: "02.png", width: 508 },
-  { alt: "Animator settings", name: "05.png", width: 495 },
+const panelScreens = [
+  { alt: "Animator settings", name: "01.png", width: 2914, height: 1666 },
+  { alt: "Animator settings", name: "02.png", width: 2914, height: 1666 },
+  { alt: "Animator settings", name: "05.png", width: 2914, height: 1666 },
+];
+
+const dataScreens = [
+  { alt: "Yandex Metrica traffic since launch: 1,116 users, 3 min 24 s on site, 31.45% bounce rate", name: "metrics.png", width: 4491, height: 1361 },
+  { alt: "Supabase profiles table: 81 accounts, emails blurred", name: "users.png", width: 3909, height: 2130 },
+  { alt: "Supabase renders table: one row per successful export", name: "renders.png", width: 3909, height: 2130 },
 ];
 
 export function AnimatorCaseContent() {
   return (
     <CaseStudyLayout sections={railSections}>
-      <CaseOverview eyebrow="Animator · Creator tool" title="Animator: a tool for creating looping MP4 showcases">
+      <CaseOverview eyebrow="Animator · Creator tool" title="Animator: a looping MP4 tool I designed and built with AI">
         <CaseMorph slug="animator">
           <AnimatorHeroVideo />
         </CaseMorph>
@@ -51,247 +59,254 @@ export function AnimatorCaseContent() {
       </CaseOverview>
 
       <section className={shared.divided} id="about-product">
-        <h2>About product</h2>
+        <h2>Screenshots in, looping MP4 out</h2>
         <p>
-          Animator is a web tool for uploading a set of images, choosing a
-          motion preset, and quickly exporting a looping carousel as an MP4.
+          Animator is a browser tool: you drop in up to ten interface
+          screenshots, pick how they move, and download a looping MP4.{" "}
+          <TextLink href="https://getanimator.xyz/">Try it live</TextLink> or{" "}
+          <TextLink href="https://youtu.be/d9Nve2VaHQ4?si=Jy_Wdt_buRd10kKW">
+            watch how I built it
+          </TextLink>
+          .
         </p>
       </section>
 
-      <section
-        className={`${shared.divided} ${shared.spacious}`}
-        id="understanding-the-task"
-      >
-        <h2>Understanding the Task</h2>
-        <div className={shared.block}>
-          <CaseLabel prominent>Context</CaseLabel>
-          <p>
-            I often edit videos for YouTube and create posts for Telegram. I
-            need visually engaging looping galleries to showcase interface
-            screens in motion. They make product moments easier to understand
-            and give video and social content a more polished feel.
-          </p>
-        </div>
-        <div className={shared.block}>
-          <CaseLabel prominent>Problem</CaseLabel>
-          <div className={shared.prose}>
-            <p>
-              Static screenshots were not enough, but manually animating
-              screens in Figma Motion, After Effects, or a video editor took
-              too much time.
-            </p>
-            <p>
-              I wanted a simple tool: upload screens, choose a motion preset,
-              and immediately get a finished looping MP4.
-            </p>
-          </div>
-        </div>
+      <section className={shared.divided} id="understanding-the-task">
+        <h2>Problem</h2>
+        <p>
+          I edit YouTube videos and write posts for my Telegram channel, and I
+          kept wanting interface screens to move instead of sitting there as
+          static screenshots. Each time that meant laying out screens and
+          keyframes by hand in Figma or a video editor, which took far too long
+          for a few seconds of footage.
+        </p>
+        <p>
+          What I wanted was simpler: upload the screens, pick the motion, get a
+          finished loop.
+        </p>
+      </section>
+
+      <section className={shared.divided} id="user-flow">
+        <h2>First, the main user flow</h2>
+        <p>
+          Before writing a single prompt, I drew the flow in FigJam. You upload
+          images and set the preset, image size, speed, and gap between
+          screens; on export you choose quality and frame rate and check how
+          big the MP4 will be, and then the browser renders the loop.
+        </p>
+        <CaseImage
+          alt="Core user flow: upload images, adjust settings, export, render, and get a looping MP4"
+          height={1530}
+          name="user-flow.png"
+          width={3486}
+        />
       </section>
 
       <section className={shared.divided} id="mvp">
-        <h2>I started by limiting the MVP</h2>
+        <h2>MVP: three steps instead of a video editor</h2>
         <p>
-          The main mistake in projects like this is trying to build a full
-          video editor from day one. So I started with the core flow:
+          The quickest way to never ship this was to start rebuilding After
+          Effects, so I cut the flow down to three steps:
         </p>
-        <p className={styles.emphasis}>
-          Upload images → adjust motion → export MP4.
-        </p>
+        <AnimatorFlow steps={["Upload images", "Adjust motion", "Export MP4"]} />
         <p>
-          Before development, I mapped the flow. It helped separate essential
-          features from later additions: motion presets, screen spacing,
-          speed, easing, quality, and frame rate.
-        </p>
-        <CaseImage alt="Animator core flow diagram" name="03.png" />
-        <p>
-          At launch, I deliberately left out advanced formats, dozens of
-          presets, project saving, and other secondary features.
+          Music, dozens of presets, project saving, and a second export format
+          all waited until after launch.
         </p>
       </section>
 
       <section className={shared.divided}>
-        <h2>The first version: function before polish</h2>
+        <h2>First prototype, built with Codex</h2>
         <p>
-          I built the first prototype with Codex. In the initial prompt, I
-          included the flow diagram, described the problem and the expected
-          solution. I pictured the product as a studio: presets on the left,
-          video preview in the center, and a settings panel on the right.
+          I didn&apos;t try to make the first version pretty. I only needed to
+          know that someone could upload images, set up the carousel, and walk
+          away with a video.
+        </p>
+        <p>
+          My first prompt to Codex had the flow diagram, the problem, and how I
+          pictured the answer: a studio layout with presets on the left, the
+          preview in the middle, and settings on the right.
         </p>
         <CaseImage alt="The first Animator interface" name="04.png" />
         <p>
-          The first version looked rough: overly bright colors, simple
-          controls, and an imperfect composition. But it already solved the
-          core task: users could upload images, preview the animation, and
-          export a video.
+          It came out pretty sloppy, with colors that were far too bright, crude
+          controls, and a few small bugs, but the whole path from upload to
+          download already worked.
         </p>
         <p>
-          Rendering happens entirely in the browser. Canvas assembles the
-          animation frame by frame, WebCodecs encodes those frames, and
-          mp4-muxer packages them into an MP4. Images never need to be sent
-          to a separate rendering server.
+          Everything renders in the browser. Canvas draws each frame, WebCodecs
+          encodes the frames to H.264, and mp4-muxer wraps them into an MP4, so
+          nobody&apos;s images ever go to a server.
+        </p>
+        <p>
+          I tested the whole path before moving on, and it held up: images
+          uploaded, the carousel played, and the MP4 downloaded.
         </p>
       </section>
 
       <section className={shared.divided} id="editing-panel">
-        <h2>The editing panel</h2>
+        <h2>Settings panel: from DialKit to ToolCraft</h2>
         <p>
-          I experimented with the right-side panel. First, I used{" "}
-          <TextLink href="https://joshpuckett.me/dialkit">
-            DialKit
-          </TextLink>
-          , a library for tuning animation parameters. It quickly provided
-          working controls, but the panel itself was too large and did not
-          adapt well to my interface.
+          Next came the settings panel on the right. I wanted every control to
+          be compact and to show its effect right away, so you&apos;d know what
+          it changes without reading the label twice.
         </p>
         <p>
-          Then I tried building the controls from custom components. They
-          felt disconnected, though, and polishing the interaction would have
-          taken too much time.
+          I started with{" "}
+          <TextLink href="https://joshpuckett.me/dialkit">DialKit</TextLink>, a
+          library for tuning animation and effect parameters. Its controls were
+          too big for my layout, though, and the panel got so tall that people
+          would have had to scroll through it all the time.
         </p>
         <p>
-          I eventually found{" "}
-          <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>.
-          Its sliders, selects, and other controls were flexible enough to
-          create a more compact and cohesive editing panel.
+          Then I remembered{" "}
+          <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>, which
+          the Pixel Point team had shown off: an open-source kit of sliders,
+          selects, segmented controls, and other inputs for animation and
+          effect settings. I gave Codex its GitHub repository and, over the
+          next iterations, asked for specific components in specific places.
+          The panel below is what came out of that; I kept tuning it
+          afterwards, but its structure stayed.
         </p>
-        <ImageTriptych images={triptych} />
-      </section>
-
-      <section className={shared.divided} id="design-direction">
-        <h2>A little Figma before the prompts</h2>
-        <p>
-          Over time, I realised it was inefficient to explain visual
-          direction to Codex through long prompts: colors, typography, sizes,
-          and layout.
-        </p>
-        <p>
-          So I quickly made a rough layout in Figma using another file with
-          existing color tokens, type styles, and components. I then passed
-          that layout to Codex through Figma MCP.
-        </p>
-        <CaseImage alt="Animator Figma layout" name="06.png" />
-        <p>
-          That gave the agent a clear visual direction and saved me dozens of
-          messages about minor refinements.
-        </p>
+        <AnimatorSlider images={panelScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Settings panel screenshots" }} />
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
-        <h2>Interface and presets</h2>
-        <p>After the first version, I reworked the editor structure.</p>
+        <h2>Presets with previews and iPhone frames</h2>
         <p>
-          The left panel gained presets with previews, so users could
-          understand the result before choosing an animation.
+          Once the first version worked, I reorganised the editor. Presets got
+          previews in the left panel, so you see the motion before you pick it.
         </p>
         <p>
-          I moved image uploads and background controls to the right panel. I
-          also added ready-made wallpapers, an iPhone format, and automatic
-          corner rounding so mobile screens looked natural immediately.
+          Image uploads and background settings moved to the right, along with
+          ready-made wallpapers, an iPhone frame, and automatic corner rounding
+          that makes phone screenshots look right without any tweaking. I also
+          cut shadows down to a few presets instead of a full set of controls.
         </p>
-        <p>
-          I limited shadow selection to a few clear options. It is a small
-          decision, but it keeps the interface from becoming unnecessarily
-          complex.
-        </p>
-        <CaseImage alt="Updated Animator interface" name="07.png" />
+        <AnimatorClip label="The reworked editor: presets with previews on the left, uploads and background settings on the right" src="/videos/sidebar.mp4" />
       </section>
 
       <section className={shared.divided} id="authentication">
-        <h2>Authentication with Supabase and Resend</h2>
+        <h2>Sign-in only before export</h2>
         <p>
-          Initially, I put authentication before the product. Users could not
-          upload images or preview animation until they entered an email
-          address.
+          At first, sign-in came before everything: you couldn&apos;t upload an
+          image or see a preview until you&apos;d entered an email.
+        </p>
+        <CaseImage
+          alt="The first Animator version opened on a sign-in screen"
+          height={1481}
+          name="login-first.png"
+          width={2363}
+        />
+        <p>
+          Technically it worked. As a product decision it was weak, because a
+          new tool nobody had heard of asked for an email before showing
+          anything useful.
         </p>
         <p>
-          It worked technically, but it was a weak product decision. Because
-          the service was new and unfamiliar, I was blocking users from the
-          first useful interaction with an authentication screen.
+          So I moved sign-in into a modal that only appears when you export or
+          send feedback; until then the whole editor is open.
         </p>
+        <CaseImage
+          alt="Animator asks for an email only when someone exports"
+          height={1419}
+          name="login-seconda.png"
+          width={2606}
+        />
         <p>
-          I changed the flow. Users can explore the interface and try the
-          basic path without signing in. Authentication is only required
-          before export or feedback submission.
+          Sign-in uses Magic Link: you type your email, get a link, and
+          you&apos;re in without a password.{" "}
+          <TextLink href="https://supabase.com/">Supabase</TextLink> handles
+          accounts and data, and Resend delivers the emails.
         </p>
+      </section>
+
+      <section className={shared.divided} id="feedback">
+        <h2>Feedback after the first render</h2>
         <p>
-          For sign-in, I chose Magic Link: a user enters an email address,
-          receives a link, and signs in without a password.{" "}
-          <TextLink href="https://supabase.com/">Supabase</TextLink>{" "}
-          handles authentication and data storage, while Resend delivers
-          email through the configured mail service.
+          The feedback prompt shows up right after a successful render, when
+          someone has been through the whole flow and has a video in hand.
+          That&apos;s the moment two questions are easy to answer: what the
+          video is for, and what got in the way.
         </p>
-        <Image
-          alt="Authentication screen comparison"
-          className={shared.media}
-          height={298}
-          src={`${imagePath}/08.png`}
-          width={508}
+        <CaseImage
+          alt="Feedback dialog after export: what the video is for and what could be better"
+          height={1091}
+          name="feedback.webp"
+          width={2000}
+        />
+        <p>
+          Answers land in a Supabase table, 23 so far. I read through them and
+          turned the concrete ones into tasks for Codex: people asked for
+          iPhone mockups and reported images freezing and flickering during
+          playback, and both are fixed now.
+        </p>
+        <CaseImage
+          alt="Supabase feedback table with user messages and what each video was exported for"
+          height={2130}
+          name="feedback.png"
+          width={3909}
         />
       </section>
 
       <section className={shared.divided}>
-        <h2>Decisions I chose not to pursue</h2>
+        <h2>Emails from the new domain landed in spam</h2>
         <p>
-          I considered adding WebM as a second export format. It is often
-          smaller and well suited to the web, but it would have introduced
-          more technical details and test cases to the first version.
-        </p>
-        <p>
-          So I kept MP4 only. It is familiar to most users and solves the
-          core problem. WebM can return later, once the primary flow is
-          stable.
-        </p>
-        <p>
-          The same went for the control panel: rather than polishing my own
-          components endlessly, I settled on ToolCraft.
+          Email took more effort than the animation did. Supabase&apos;s
+          built-in mail sends only two emails an hour, which is fine for
+          testing and useless once real people sign up, so I bought a domain,
+          set up its DNS records, and connected{" "}
+          <TextLink href="https://resend.com/">Resend</TextLink> as a custom
+          SMTP service. For a while, some sign-in emails from the new domain
+          still went to spam.
         </p>
       </section>
 
-      <section className={shared.divided}>
-        <h2>What was harder than expected</h2>
-        <p>
-          The most surprising work was not the animation itself, but the
-          infrastructure around it.
-        </p>
-        <p>
-          Default email delivery had limits, and some messages from the new
-          domain landed in spam. I had to buy a domain, configure DNS
-          records, and connect{" "}
-          <TextLink href="https://resend.com/">Resend</TextLink> as a
-          separate SMTP service.
-        </p>
+      <section className={shared.divided} id="decisions">
+        <h2>Trade-offs</h2>
+        <ul className={styles.tradeoffs}>
+          <li>
+            <strong>Magic Link instead of Google sign-in.</strong> A recent
+            Russian law rules out Google sign-in for sites like mine, so people
+            take one extra step and open an email.
+          </li>
+          <li>
+            <strong>Rendering in the browser, not on a server.</strong>{" "}
+            There&apos;s no server bill and images never leave the user&apos;s
+            computer; the catch is that export speed depends on their machine.
+          </li>
+          <li>
+            <strong>Analytics count successful exports, not visits.</strong>{" "}
+            Emails, files, and images never reach analytics.
+          </li>
+          <li>
+            <strong>One feedback form instead of a chat.</strong> Messages go
+            straight into the database, where repeats are easy to spot.
+          </li>
+          <li>
+            <strong>MP4 only, with just quality and frame rate in export.</strong>{" "}
+            WebM is lighter and better for websites, but a second format meant
+            more settings and more to test in the first version.
+          </li>
+        </ul>
       </section>
 
       <section className={shared.divided} id="results">
-        <h2>The outcome</h2>
-        <p>In the end, I built a working web service that lets people:</p>
-        <ul>
-          <li>Upload interface screenshots</li>
-          <li>Choose a motion preset</li>
-          <li>Adjust animation parameters</li>
-          <li>Preview the result on the canvas</li>
-          <li>Export an MP4 video</li>
-          <li>Leave feedback inside the product</li>
-        </ul>
+        <h2>81 sign-ups and 165 exports since launch</h2>
+        <AnimatorMetrics
+          items={[
+            { label: "Users", value: "~1,100" },
+            { label: "Sign-ups", value: "81" },
+            { label: "MP4 exports", value: "165" },
+          ]}
+        />
+        <AnimatorSlider images={dataScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Animator data screenshots" }} />
         <p>
-          The service is deployed on its own domain and is already part of my
-          video-making workflow. I brought in the first 300 users in three
-          days through my own YouTube, Telegram, Threads, and LinkedIn
-          channels.
+          Animator runs on its own domain, and I use it for my own videos.
+          About 300 people came in the first three days from my YouTube,
+          Telegram, Threads, and LinkedIn channels; on average they stay 3 min
+          24 s, and the bounce rate is 31.5%.
         </p>
-        <div className={shared.block}>
-          <CaseLabel>What I learned</CaseLabel>
-          <ul>
-            <li>
-              For the first time, I used AI to build working authentication
-              with users stored in a database.
-            </li>
-            <li>
-              I implemented Magic Link sign-in and configured my own SMTP
-              server through Resend.
-            </li>
-          </ul>
-        </div>
       </section>
     </CaseStudyLayout>
   );

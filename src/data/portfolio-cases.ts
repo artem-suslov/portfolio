@@ -119,17 +119,17 @@ export const portfolioCases: PortfolioCaseData[] = [
       companyHref: "https://getanimator.xyz/",
       companyLabel: "Project",
       description:
-        "Designed and built Animator from scratch — a browser-based tool for creating looping MP4 showcases. Reached 300 users in the first three days.",
+        "Designed and built Animator solo with AI (Codex): a browser-based tool for creating looping MP4 showcases. Since launch: ~1,100 users, 81 sign-ups, and 165 MP4 exports.",
       descriptionLink: {
         href: "https://youtu.be/d9Nve2VaHQ4?si=Jy_Wdt_buRd10kKW",
         label: "Watch how I built it",
       },
       period: "2026",
       role: "Design Engineer",
-      title: "Tool for creating looping MP4 showcases",
+      title: "Animator: a looping MP4 tool I designed and built with AI",
     },
     href: "/animator",
-    title: "Tool for creating looping MP4 showcases",
+    title: "Animator: a looping MP4 tool I designed and built with AI",
   },
   {
     cover: {
