@@ -259,6 +259,12 @@ export function AnimatorCaseContent() {
           At that point the questions are easy to answer: what the video is
           for, and what worked or didn&apos;t along the way.
         </p>
+        <CaseImage
+          alt="Feedback dialog after export: what the video is for and what could be better"
+          height={1091}
+          name="feedback.webp"
+          width={2000}
+        />
       </section>
 
       <section className={shared.divided}>
