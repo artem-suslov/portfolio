@@ -254,6 +254,17 @@ export function AnimatorCaseContent() {
           name="feedback.webp"
           width={2000}
         />
+        <p>
+          All responses go to a feedback table in Supabase, 23 so far. I read
+          through them, picked out the concrete problems, and handed them to
+          the agent to fix.
+        </p>
+        <CaseImage
+          alt="Supabase feedback table with user messages and what each video was exported for"
+          height={2130}
+          name="feedback.png"
+          width={3909}
+        />
       </section>
 
       <section className={shared.divided}>
