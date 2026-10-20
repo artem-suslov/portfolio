@@ -144,24 +144,30 @@ export function AnimatorCaseContent() {
       <section className={shared.divided} id="editing-panel">
         <h2>Settings panel: from DialKit to ToolCraft</h2>
         <p>
-          I experimented with the right-side panel. First, I used{" "}
-          <TextLink href="https://joshpuckett.me/dialkit">
-            DialKit
-          </TextLink>
-          , a library for tuning animation parameters. It quickly provided
-          working controls, but the panel itself was too large and did not
-          adapt well to my interface.
+          Next I took on the right-hand settings panel. I wanted every control
+          to be compact and give clear feedback, so it&apos;s obvious what it
+          changes without any explanation.
         </p>
         <p>
-          Then I tried building the controls from custom components. They
-          felt disconnected, though, and polishing the interaction would have
-          taken too much time.
+          First I tried{" "}
+          <TextLink href="https://joshpuckett.me/dialkit">DialKit</TextLink>,
+          a library for tuning animation and effect parameters. Its look
+          didn&apos;t suit me, though: the controls felt too large, and the
+          panel was hard to fit into my interface. I didn&apos;t want it so
+          tall that people would have to keep scrolling.
         </p>
         <p>
-          I eventually found{" "}
-          <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>.
-          Its sliders, selects, and other controls were flexible enough to
-          create a more compact and cohesive editing panel.
+          Then I remembered{" "}
+          <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>, which
+          the Pixel Point team had shown. It&apos;s an open-source set of
+          controls for animations, effects, and other parameters: sliders,
+          selects, segmented controls, and more.
+        </p>
+        <p>
+          I found its GitHub repository, gave it to Codex, and in later
+          iterations asked it to use specific components for specific jobs.
+          This is the panel that came out of it. I kept refining it later,
+          but the core structure and logic stayed the same.
         </p>
         <ImageTriptych images={triptych} />
       </section>
