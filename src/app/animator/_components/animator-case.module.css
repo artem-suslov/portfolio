@@ -164,7 +164,15 @@
     transform: translate(-50%, -50%) rotate(90deg);
   }
 
-  .metrics {
-    grid-template-columns: 1fr;
+  .metrics dd {
+    font-size: var(--font-size-3xl);
+  }
+
+  .slider {
+    --slider-slide: 92%;
+  }
+
+  .slider .sliderButton {
+    --button-size: 44px;
   }
 }

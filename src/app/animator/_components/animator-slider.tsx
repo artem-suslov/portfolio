@@ -65,13 +65,13 @@ export function AnimatorSlider({
         </div>
       </div>
       <div className={styles.sliderControls}>
-        <Button aria-label={labels.previous} disabled={index === 0} iconOnly onClick={() => goTo(index - 1)}>
+        <Button aria-label={labels.previous} className={styles.sliderButton} disabled={index === 0} iconOnly onClick={() => goTo(index - 1)}>
           <ChevronLeft aria-hidden="true" size={16} strokeWidth={1.7} />
         </Button>
         <span aria-live="polite" className={styles.sliderCount}>
           {index + 1} / {images.length}
         </span>
-        <Button aria-label={labels.next} disabled={index === last} iconOnly onClick={() => goTo(index + 1)}>
+        <Button aria-label={labels.next} className={styles.sliderButton} disabled={index === last} iconOnly onClick={() => goTo(index + 1)}>
           <ChevronRight aria-hidden="true" size={16} strokeWidth={1.7} />
         </Button>
       </div>

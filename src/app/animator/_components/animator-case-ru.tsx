@@ -143,12 +143,12 @@ export function AnimatorCaseRussianContent() {
       </section>
 
       <section className={shared.divided} id="results">
-        <h2>80 регистраций и 164 экспорта с запуска</h2>
+        <h2>81 регистрация и 165 экспортов с запуска</h2>
         <AnimatorMetrics
           items={[
             { label: "Пользователей", value: "~1 100" },
-            { label: "Регистраций", value: "80" },
-            { label: "Экспортов MP4", value: "164" },
+            { label: "Регистраций", value: "81" },
+            { label: "Экспортов MP4", value: "165" },
           ]}
         />
         <AnimatorSlider images={dataScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты данных Animator" }} />

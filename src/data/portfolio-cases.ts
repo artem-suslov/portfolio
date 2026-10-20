@@ -119,7 +119,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       companyHref: "https://getanimator.xyz/",
       companyLabel: "Project",
       description:
-        "Designed and built Animator from scratch — a browser-based tool for creating looping MP4 showcases. Since launch: ~1,100 visitors, 80 sign-ups, and 164 MP4 exports.",
+        "Designed and built Animator from scratch — a browser-based tool for creating looping MP4 showcases. Since launch: ~1,100 users, 81 sign-ups, and 165 MP4 exports.",
       descriptionLink: {
         href: "https://youtu.be/d9Nve2VaHQ4?si=Jy_Wdt_buRd10kKW",
         label: "Watch how I built it",
