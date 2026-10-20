@@ -75,6 +75,7 @@
 /* Percentages in translate() are relative to the track, which is as wide as the viewport. */
 .sliderTrack {
   display: flex;
+  align-items: center;
   gap: var(--slider-gap);
   transform: translateX(
     calc(

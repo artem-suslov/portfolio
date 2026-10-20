@@ -38,9 +38,15 @@ const meta = [
 ];
 
 const panelScreens = [
-  { alt: "Animator settings", name: "01.png" },
-  { alt: "Animator settings", name: "02.png" },
-  { alt: "Animator settings", name: "05.png" },
+  { alt: "Animator settings", name: "01.png", width: 2914, height: 1666 },
+  { alt: "Animator settings", name: "02.png", width: 2914, height: 1666 },
+  { alt: "Animator settings", name: "05.png", width: 2914, height: 1666 },
+];
+
+const dataScreens = [
+  { alt: "Yandex Metrica traffic since launch: 1,116 users, 3 min 24 s on site, 31.45% bounce rate", name: "metrics.png", width: 4491, height: 1361 },
+  { alt: "Supabase profiles table: 81 accounts, emails blurred", name: "users.png", width: 3909, height: 2130 },
+  { alt: "Supabase renders table: one row per successful export", name: "renders.png", width: 3909, height: 2130 },
 ];
 
 export function AnimatorCaseContent() {
@@ -170,7 +176,7 @@ export function AnimatorCaseContent() {
           This is the panel that came out of it. I kept refining it later,
           but the core structure and logic stayed the same.
         </p>
-        <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Settings panel screenshots" }} width={2914} />
+        <AnimatorSlider images={panelScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Settings panel screenshots" }} />
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
@@ -304,6 +310,7 @@ export function AnimatorCaseContent() {
             { label: "MP4 exports", value: "164" },
           ]}
         />
+        <AnimatorSlider images={dataScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Animator data screenshots" }} />
         <p>In the end, I built a working web service that lets people:</p>
         <ul>
           <li>Upload interface screenshots</li>

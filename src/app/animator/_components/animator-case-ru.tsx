@@ -36,9 +36,15 @@ const meta = [
 ];
 
 const panelScreens = [
-  { alt: "Настройки Animator", name: "01.png" },
-  { alt: "Настройки Animator", name: "02.png" },
-  { alt: "Настройки Animator", name: "05.png" },
+  { alt: "Настройки Animator", name: "01.png", width: 2914, height: 1666 },
+  { alt: "Настройки Animator", name: "02.png", width: 2914, height: 1666 },
+  { alt: "Настройки Animator", name: "05.png", width: 2914, height: 1666 },
+];
+
+const dataScreens = [
+  { alt: "Трафик в Яндекс Метрике с запуска: 1116 посетителей, 3 мин 24 с на сайте, 31,45% отказов", name: "metrics.png", width: 4491, height: 1361 },
+  { alt: "Таблица profiles в Supabase: 81 аккаунт, почты размыты", name: "users.png", width: 3909, height: 2130 },
+  { alt: "Таблица renders в Supabase: по строке на каждый успешный экспорт", name: "renders.png", width: 3909, height: 2130 },
 ];
 
 export function AnimatorCaseRussianContent() {
@@ -87,7 +93,7 @@ export function AnimatorCaseRussianContent() {
         <p>С правой панелью пришлось поэкспериментировать. Сначала я использовал <TextLink href="https://joshpuckett.me/dialkit">DialKit</TextLink> — это библиотека для настройки параметров анимации. Она быстро дала рабочие контролы, но сама панель оказалась слишком крупной и плохо подстраивалась под мой интерфейс.</p>
         <p>Потом я попробовал собрать контролы своими компонентами. Но они выглядели разрозненно, а на доводку интерактивности ушло бы слишком много времени.</p>
         <p>В итоге я нашёл <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>. В этой библиотеке есть готовые слайдеры, селекты и другие контролы, которые можно гибко использовать в своём интерфейсе. С её помощью я собрал более компактную и цельную правую панель.</p>
-        <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты панели настроек" }} width={2914} />
+        <AnimatorSlider images={panelScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты панели настроек" }} />
       </section>
 
       <section className={shared.divided} id="interface-and-presets">
@@ -143,6 +149,7 @@ export function AnimatorCaseRussianContent() {
             { label: "Экспортов MP4", value: "164" },
           ]}
         />
+        <AnimatorSlider images={dataScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты данных Animator" }} />
         <p>В итоге я собрал работающий веб-сервис, который позволяет:</p>
         <ul>
           <li>Загружать изображения интерфейсов</li>

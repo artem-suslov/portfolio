@@ -16,15 +16,11 @@ const swipeThreshold = 40;
  * from the sides and fade out at the edges. Chevron buttons below or a swipe switch it.
  */
 export function AnimatorSlider({
-  height,
   images,
   labels,
-  width,
 }: {
-  height: number;
-  images: readonly { alt: string; name: string }[];
+  images: readonly { alt: string; height: number; name: string; width: number }[];
   labels: { next: string; previous: string; slider: string };
-  width: number;
 }) {
   const [index, setIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -53,7 +49,7 @@ export function AnimatorSlider({
         }}
       >
         <div className={styles.sliderTrack} style={{ "--slider-index": index } as CSSProperties}>
-          {images.map(({ alt, name }, slide) => (
+          {images.map(({ alt, height, name, width }, slide) => (
             <div
               aria-hidden={slide !== index}
               aria-label={`${slide + 1} / ${images.length}`}
