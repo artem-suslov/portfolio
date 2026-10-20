@@ -45,12 +45,12 @@ export function AnimatorHeroVideo() {
 export function ImageStack({
   images,
 }: {
-  images: readonly { alt: string; name: string; width: number }[];
+  images: readonly { alt: string; name: string }[];
 }) {
   return (
     <div className={styles.mediaStack}>
-      {images.map(({ alt, name, width }) => (
-        <Image alt={alt} height={298} key={name} src={`${imagePath}/${name}`} width={width} />
+      {images.map(({ alt, name }) => (
+        <Image alt={alt} height={1666} key={name} src={`${imagePath}/${name}`} width={2914} />
       ))}
     </div>
   );

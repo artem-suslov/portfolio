@@ -37,9 +37,9 @@ const meta = [
 ];
 
 const panelScreens = [
-  { alt: "Animator settings", name: "01.png", width: 508 },
-  { alt: "Animator settings", name: "02.png", width: 508 },
-  { alt: "Animator settings", name: "05.png", width: 495 },
+  { alt: "Animator settings", name: "01.png" },
+  { alt: "Animator settings", name: "02.png" },
+  { alt: "Animator settings", name: "05.png" },
 ];
 
 export function AnimatorCaseContent() {

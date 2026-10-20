@@ -36,9 +36,9 @@ const meta = [
 ];
 
 const panelScreens = [
-  { alt: "Настройки Animator", name: "01.png", width: 508 },
-  { alt: "Настройки Animator", name: "02.png", width: 508 },
-  { alt: "Настройки Animator", name: "05.png", width: 495 },
+  { alt: "Настройки Animator", name: "01.png" },
+  { alt: "Настройки Animator", name: "02.png" },
+  { alt: "Настройки Animator", name: "05.png" },
 ];
 
 export function AnimatorCaseRussianContent() {
