@@ -5,12 +5,12 @@ import {
 } from "@/components/case-study/case-study-layout";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
+import { AnimatorSlider } from "./animator-slider";
 import {
   AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
-  ImageStack,
 } from "./animator-case-parts";
 
 const railSections = [
@@ -87,7 +87,7 @@ export function AnimatorCaseRussianContent() {
         <p>С правой панелью пришлось поэкспериментировать. Сначала я использовал <TextLink href="https://joshpuckett.me/dialkit">DialKit</TextLink> — это библиотека для настройки параметров анимации. Она быстро дала рабочие контролы, но сама панель оказалась слишком крупной и плохо подстраивалась под мой интерфейс.</p>
         <p>Потом я попробовал собрать контролы своими компонентами. Но они выглядели разрозненно, а на доводку интерактивности ушло бы слишком много времени.</p>
         <p>В итоге я нашёл <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>. В этой библиотеке есть готовые слайдеры, селекты и другие контролы, которые можно гибко использовать в своём интерфейсе. С её помощью я собрал более компактную и цельную правую панель.</p>
-        <ImageStack images={panelScreens} />
+        <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Следующий скриншот", previous: "Предыдущий скриншот", slider: "Скриншоты панели настроек" }} width={2914} />
       </section>
 
       <section className={shared.divided} id="design-direction">

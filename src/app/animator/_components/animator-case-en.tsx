@@ -7,12 +7,12 @@ import {
 import { CaseMorph } from "@/components/case-study/case-morph";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
+import { AnimatorSlider } from "./animator-slider";
 import {
   AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
-  ImageStack,
 } from "./animator-case-parts";
 
 const railSections = [
@@ -168,7 +168,7 @@ export function AnimatorCaseContent() {
           This is the panel that came out of it. I kept refining it later,
           but the core structure and logic stayed the same.
         </p>
-        <ImageStack images={panelScreens} />
+        <AnimatorSlider height={1666} images={panelScreens} labels={{ next: "Next screenshot", previous: "Previous screenshot", slider: "Settings panel screenshots" }} width={2914} />
       </section>
 
       <section className={shared.divided} id="design-direction">

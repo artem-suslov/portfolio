@@ -41,21 +41,6 @@ export function AnimatorHeroVideo() {
   );
 }
 
-/** Settings screenshots stacked one under another at full width. */
-export function ImageStack({
-  images,
-}: {
-  images: readonly { alt: string; name: string }[];
-}) {
-  return (
-    <div className={styles.mediaStack}>
-      {images.map(({ alt, name }) => (
-        <Image alt={alt} height={1666} key={name} src={`${imagePath}/${name}`} width={2914} />
-      ))}
-    </div>
-  );
-}
-
 /** Headline numbers for the results section, with the source and date underneath. */
 export function AnimatorMetrics({
   items,

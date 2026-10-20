@@ -42,17 +42,55 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8h12M9 3l5 5-5 5'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.mediaStack {
+.slider {
+  --slider-duration: 300ms;
+
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
-.mediaStack img {
+.sliderViewport {
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  touch-action: pan-y;
+}
+
+.sliderTrack {
+  display: flex;
+  transition: transform var(--slider-duration) var(--ease-in-out-cubic);
+}
+
+.sliderSlide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.sliderSlide img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-md);
+}
+
+.sliderControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.sliderCount {
+  min-width: 3ch;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sliderTrack {
+    transition: none;
+  }
 }
 
 .metrics {
