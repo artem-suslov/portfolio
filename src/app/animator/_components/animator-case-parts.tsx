@@ -68,3 +68,19 @@ export function AnimatorMetrics({
     </figure>
   );
 }
+
+/** Core flow as outlined steps joined by arrows (stacked on phones). */
+export function AnimatorFlow({ steps }: { steps: readonly string[] }) {
+  return (
+    <ol className={styles.flow}>
+      {steps.map((step, index) => (
+        <li key={step}>
+          <span className={styles.flowStep}>{step}</span>
+          {index < steps.length - 1 ? (
+            <span aria-hidden="true" className={styles.flowArrow} />
+          ) : null}
+        </li>
+      ))}
+    </ol>
+  );
+}

@@ -7,13 +7,13 @@ import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
+  AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
   ImageTriptych,
   imagePath,
 } from "./animator-case-parts";
-import styles from "./animator-case.module.css";
 
 const railSections = [
   { id: "overview", label: "Обзор" },
@@ -64,7 +64,7 @@ export function AnimatorCaseRussianContent() {
         <p className={shared.eyebrow}>Процесс</p>
         <h2>Сначала я ограничил MVP</h2>
         <p>Главная ошибка в таких проектах — сразу пытаться сделать полноценный видеоредактор. Поэтому я начал с основного сценария:</p>
-        <p className={styles.emphasis}>Загрузить изображения → настроить движение → экспортировать MP4.</p>
+        <AnimatorFlow steps={["Загрузить изображения", "Настроить движение", "Экспортировать MP4"]} />
         <p>Перед разработкой я собрал простую схему флоу. Она помогла отделить обязательные функции от тех, которые можно добавить позже: выбор шаблона, расстояния между экранами, скорость, плавность движения, качество и частота кадров.</p>
         <CaseImage alt="Схема основного сценария Animator" name="03.png" />
         <p>На старте я сознательно не добавлял сложные форматы, десятки шаблонов, сохранение проектов и другие второстепенные функции.</p>

@@ -9,13 +9,13 @@ import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
 import { TextLink } from "@/components/ui/text-link";
 import {
+  AnimatorFlow,
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
   ImageTriptych,
   imagePath,
 } from "./animator-case-parts";
-import styles from "./animator-case.module.css";
 
 const railSections = [
   { id: "overview", label: "Overview" },
@@ -85,9 +85,7 @@ export function AnimatorCaseContent() {
           The main mistake in projects like this is trying to build a full
           video editor from day one. So I started with the core flow:
         </p>
-        <p className={styles.emphasis}>
-          Upload images → adjust motion → export MP4.
-        </p>
+        <AnimatorFlow steps={["Upload images", "Adjust motion", "Export MP4"]} />
         <p>
           Before development, I mapped the flow. It helped separate essential
           features from later additions: motion presets, screen spacing,
