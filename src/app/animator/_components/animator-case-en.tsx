@@ -21,6 +21,7 @@ const railSections = [
   { id: "overview", label: "Overview" },
   { id: "about-product", label: "Product" },
   { id: "understanding-the-task", label: "Problem" },
+  { id: "user-flow", label: "User flow" },
   { id: "mvp", label: "MVP flow" },
   { id: "editing-panel", label: "Settings panel" },
   { id: "design-direction", label: "Figma layout" },
@@ -79,19 +80,30 @@ export function AnimatorCaseContent() {
         </p>
       </section>
 
+      <section className={shared.divided} id="user-flow">
+        <h2>First, the main user flow: from uploaded images to a looping MP4</h2>
+        <p>
+          I started with the flow, before any code, and drew it in FigJam. You
+          upload images and adjust the settings: preset, image size, speed,
+          and the gap between screens. Then you export, picking quality and
+          frame rate and checking the MP4 size, and the app renders a looping
+          video.
+        </p>
+        <CaseImage
+          alt="Core user flow: upload images, adjust settings, export, render, and get a looping MP4"
+          height={1530}
+          name="user-flow.png"
+          width={3486}
+        />
+      </section>
+
       <section className={shared.divided} id="mvp">
         <h2>MVP: three steps instead of a video editor</h2>
         <p>
           The main mistake in projects like this is trying to build a full
-          video editor from day one. So I started with the core flow:
+          video editor from day one. So I cut the flow down to three steps:
         </p>
         <AnimatorFlow steps={["Upload images", "Adjust motion", "Export MP4"]} />
-        <p>
-          Before development, I mapped the flow. It helped separate essential
-          features from later additions: motion presets, screen spacing,
-          speed, easing, quality, and frame rate.
-        </p>
-        <CaseImage alt="Animator core flow diagram" name="03.png" />
         <p>
           At launch, I deliberately left out advanced formats, dozens of
           presets, project saving, and other secondary features.

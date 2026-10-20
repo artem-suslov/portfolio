@@ -4,14 +4,24 @@ import styles from "./animator-case.module.css";
 
 export const imagePath = "/images/animator-case";
 
-export function CaseImage({ alt, name }: { alt: string; name: string }) {
+export function CaseImage({
+  alt,
+  height = 1192,
+  name,
+  width = 2032,
+}: {
+  alt: string;
+  height?: number;
+  name: string;
+  width?: number;
+}) {
   return (
     <Image
       alt={alt}
       className={shared.media}
-      height={1192}
+      height={height}
       src={`${imagePath}/${name}`}
-      width={2032}
+      width={width}
     />
   );
 }
