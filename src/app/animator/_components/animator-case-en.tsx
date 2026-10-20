@@ -13,7 +13,7 @@ import {
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
-  ImageTriptych,
+  ImageStack,
   imagePath,
 } from "./animator-case-parts";
 
@@ -36,7 +36,7 @@ const meta = [
   { label: "Timeline", value: "2026" },
 ];
 
-const triptych = [
+const panelScreens = [
   { alt: "Animator settings", name: "01.png", width: 508 },
   { alt: "Animator settings", name: "02.png", width: 508 },
   { alt: "Animator settings", name: "05.png", width: 495 },
@@ -169,7 +169,7 @@ export function AnimatorCaseContent() {
           This is the panel that came out of it. I kept refining it later,
           but the core structure and logic stayed the same.
         </p>
-        <ImageTriptych images={triptych} />
+        <ImageStack images={panelScreens} />
       </section>
 
       <section className={shared.divided} id="design-direction">

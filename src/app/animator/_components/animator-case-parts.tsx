@@ -41,14 +41,14 @@ export function AnimatorHeroVideo() {
   );
 }
 
-/** Three settings screenshots side by side (stacked on phones). */
-export function ImageTriptych({
+/** Settings screenshots stacked one under another at full width. */
+export function ImageStack({
   images,
 }: {
   images: readonly { alt: string; name: string; width: number }[];
 }) {
   return (
-    <div className={styles.mediaTriptych}>
+    <div className={styles.mediaStack}>
       {images.map(({ alt, name, width }) => (
         <Image alt={alt} height={298} key={name} src={`${imagePath}/${name}`} width={width} />
       ))}

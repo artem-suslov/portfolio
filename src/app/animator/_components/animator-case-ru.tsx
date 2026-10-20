@@ -11,7 +11,7 @@ import {
   AnimatorHeroVideo,
   AnimatorMetrics,
   CaseImage,
-  ImageTriptych,
+  ImageStack,
   imagePath,
 } from "./animator-case-parts";
 
@@ -35,7 +35,7 @@ const meta = [
   { label: "Период", value: "2026" },
 ];
 
-const triptych = [
+const panelScreens = [
   { alt: "Настройки Animator", name: "01.png", width: 508 },
   { alt: "Настройки Animator", name: "02.png", width: 508 },
   { alt: "Настройки Animator", name: "05.png", width: 495 },
@@ -88,7 +88,7 @@ export function AnimatorCaseRussianContent() {
         <p>С правой панелью пришлось поэкспериментировать. Сначала я использовал <TextLink href="https://joshpuckett.me/dialkit">DialKit</TextLink> — это библиотека для настройки параметров анимации. Она быстро дала рабочие контролы, но сама панель оказалась слишком крупной и плохо подстраивалась под мой интерфейс.</p>
         <p>Потом я попробовал собрать контролы своими компонентами. Но они выглядели разрозненно, а на доводку интерактивности ушло бы слишком много времени.</p>
         <p>В итоге я нашёл <TextLink href="https://toolcraft.sh/">ToolCraft</TextLink>. В этой библиотеке есть готовые слайдеры, селекты и другие контролы, которые можно гибко использовать в своём интерфейсе. С её помощью я собрал более компактную и цельную правую панель.</p>
-        <ImageTriptych images={triptych} />
+        <ImageStack images={panelScreens} />
       </section>
 
       <section className={shared.divided} id="design-direction">
