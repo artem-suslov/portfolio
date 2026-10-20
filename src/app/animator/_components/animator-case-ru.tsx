@@ -18,7 +18,7 @@ import styles from "./animator-case.module.css";
 const railSections = [
   { id: "overview", label: "Обзор" },
   { id: "about-product", label: "О продукте" },
-  { id: "understanding-the-task", label: "Задача" },
+  { id: "understanding-the-task", label: "Проблема" },
   { id: "mvp", label: "MVP" },
   { id: "editing-panel", label: "Панель редактирования" },
   { id: "design-direction", label: "Дизайн-направление" },

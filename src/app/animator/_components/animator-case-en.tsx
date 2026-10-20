@@ -20,7 +20,7 @@ import styles from "./animator-case.module.css";
 const railSections = [
   { id: "overview", label: "Overview" },
   { id: "about-product", label: "About product" },
-  { id: "understanding-the-task", label: "Understanding the Task" },
+  { id: "understanding-the-task", label: "Problem" },
   { id: "mvp", label: "MVP" },
   { id: "editing-panel", label: "Editing panel" },
   { id: "design-direction", label: "Design direction" },
@@ -60,34 +60,23 @@ export function AnimatorCaseContent() {
         </p>
       </section>
 
-      <section
-        className={`${shared.divided} ${shared.spacious}`}
-        id="understanding-the-task"
-      >
-        <h2>Understanding the Task</h2>
-        <div className={shared.block}>
-          <CaseLabel prominent>Context</CaseLabel>
-          <p>
-            I often edit videos for YouTube and create posts for Telegram. I
-            need visually engaging looping galleries to showcase interface
-            screens in motion. They make product moments easier to understand
-            and give video and social content a more polished feel.
-          </p>
-        </div>
-        <div className={shared.block}>
-          <CaseLabel prominent>Problem</CaseLabel>
-          <div className={shared.prose}>
-            <p>
-              Static screenshots were not enough, but manually animating
-              screens in Figma Motion, After Effects, or a video editor took
-              too much time.
-            </p>
-            <p>
-              I wanted a simple tool: upload screens, choose a motion preset,
-              and immediately get a finished looping MP4.
-            </p>
-          </div>
-        </div>
+      <section className={shared.divided} id="understanding-the-task">
+        <h2>Problem</h2>
+        <p>
+          I often edit videos for YouTube and create posts for Telegram. I
+          need visually engaging looping galleries to showcase interface
+          screens in motion. They make product moments easier to understand
+          and give video and social content a more polished feel.
+        </p>
+        <p>
+          Static screenshots were not enough, but manually animating screens
+          in Figma Motion, After Effects, or a video editor took too much
+          time.
+        </p>
+        <p>
+          I wanted a simple tool: upload screens, choose a motion preset, and
+          immediately get a finished looping MP4.
+        </p>
       </section>
 
       <section className={shared.divided} id="mvp">
