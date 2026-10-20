@@ -43,7 +43,7 @@
 }
 
 .slider {
-  --slider-duration: 300ms;
+  --slider-duration: 250ms;
 
   display: flex;
   flex-direction: column;
@@ -56,14 +56,20 @@
   touch-action: pan-y;
 }
 
+/* Slides share one grid cell and crossfade in place. */
 .sliderTrack {
-  display: flex;
-  transition: transform var(--slider-duration) var(--ease-in-out-cubic);
+  display: grid;
 }
 
 .sliderSlide {
-  flex: 0 0 100%;
+  grid-area: 1 / 1;
   min-width: 0;
+  opacity: 0;
+  transition: opacity var(--slider-duration) var(--ease-in-out-cubic);
+}
+
+.sliderSlideActive {
+  opacity: 1;
 }
 
 .sliderSlide img {
@@ -85,12 +91,6 @@
   font-size: var(--font-size-sm);
   font-variant-numeric: tabular-nums;
   text-align: center;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sliderTrack {
-    transition: none;
-  }
 }
 
 .metrics {

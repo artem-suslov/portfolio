@@ -49,13 +49,13 @@ export function AnimatorSlider({
           touchStartX.current = event.touches[0].clientX;
         }}
       >
-        <div className={styles.sliderTrack} style={{ transform: `translateX(${-index * 100}%)` }}>
+        <div className={styles.sliderTrack}>
           {images.map(({ alt, name }, slide) => (
             <div
               aria-hidden={slide !== index}
               aria-label={`${slide + 1} / ${images.length}`}
               aria-roledescription="slide"
-              className={styles.sliderSlide}
+              className={slide === index ? `${styles.sliderSlide} ${styles.sliderSlideActive}` : styles.sliderSlide}
               inert={slide !== index}
               key={name}
               role="group"
