@@ -83,8 +83,11 @@
    * the roll instead of 24px above it.
    */
   24.01% { transform: translate3d(0, var(--paper-top), 0); }
-  99.9% { visibility: visible; }
-  100% { transform: translate3d(0, calc(100lvh + 64px), 0); visibility: hidden; }
+  /* Transform only: a discrete property such as visibility here would keep the whole
+     animation off the compositor, and it would stutter while the page hydrates and
+     the cover videos start. The cover ends below the fold, and the timer in
+     paper-intro.tsx hides it afterwards. */
+  100% { transform: translate3d(0, calc(100lvh + 64px), 0); }
 }
 
 @keyframes rollEnter {
