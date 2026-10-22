@@ -32,23 +32,30 @@
   gap: var(--space-12);
 }
 
+/* Section spacing comes from src/data/page-spacing.ts through --page-* properties
+   on the viewport; phones keep their own values below. */
 .aboutSection {
   width: min(700px, 100%);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  margin: var(--space-12) auto 0;
-  padding: 0 88px var(--space-18);
+  margin: var(--page-craft-to-about) auto 0;
+  padding: 0 88px var(--page-about-to-colophon);
 }
 
 /* Same type as the hero's name and description. */
 .aboutHeading {
-  margin: 0;
+  margin: 0 0 var(--page-about-heading-gap);
   color: var(--color-text-primary);
   font-size: var(--font-size-xl);
   font-weight: 500;
   line-height: var(--line-height-xl);
   letter-spacing: -0.02em;
+}
+
+.aboutBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-about-paragraph-gap);
 }
 
 .aboutText {
@@ -100,7 +107,7 @@
 
   .aboutSection {
     width: 100%;
-    margin-top: var(--space-10);
+    margin-top: calc(var(--space-10) + var(--space-18));
     padding: 0 var(--space-4) var(--space-6);
   }
 
@@ -137,9 +144,9 @@
   }
 }
 
-/* Closes the page; with the viewport's own bottom padding the gap below is 100px. */
+/* Closes the page; the viewport adds its own 24px bottom padding. */
 .colophon {
-  padding-bottom: calc(100px - var(--space-6));
+  padding-bottom: var(--page-colophon-bottom);
 }
 
 @media (max-width: 760px) {
