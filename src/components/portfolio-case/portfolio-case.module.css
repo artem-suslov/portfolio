@@ -736,6 +736,17 @@
     transform: translateX(-50%);
   }
 
+  /* The recording's white backdrop merges with the page on phones; a hairline keeps the frame visible. */
+  .case[data-case-id="telegram-quick-stickers"] .caseVisual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border: 1px solid #f5f5f5;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
   /* Phones use the shared frame; the muted fill continues the image's own backdrop. */
   .case[data-case-id="steamify-case"] .steamifyExperimentCaseVisual {
     aspect-ratio: 37 / 30;
