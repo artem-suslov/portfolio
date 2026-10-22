@@ -147,10 +147,6 @@
   max-width: 540px;
 }
 
-.v2Description p:nth-child(2) {
-  max-width: 577px;
-}
-
 
 .v2Actions {
   display: flex;

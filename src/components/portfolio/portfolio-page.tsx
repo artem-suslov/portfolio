@@ -1,9 +1,12 @@
 import type { ReactNode } from "react";
 import { FeedbackWidget } from "@/components/feedback/feedback-widget";
+import { SocialPreviewLink } from "@/components/hero/social-preview-link";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
+import { TextLink } from "@/components/ui/text-link";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
+import { links } from "@/lib/site";
 import { AboutCollage } from "./about-collage";
 import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
@@ -71,6 +74,15 @@ export async function PortfolioPage({
               <h2 className={styles.aboutHeading} id="about-me">
                 About Me
               </h2>
+              <p className={styles.aboutText}>
+                I also share practical insights on{" "}
+                <SocialPreviewLink href={links.youtube} previewSrc="/videos/youtube_tooltip.mp4">
+                  YouTube
+                </SocialPreviewLink>{" "}
+                and run a <TextLink href={links.telegramChannel}>Telegram</TextLink> channel for
+                designers and tech enthusiasts. Outside of work, I play tennis, go to the gym, and
+                compete in Counter-Strike 2.
+              </p>
               <AboutSection />
             </section>
           ) : null}
