@@ -178,6 +178,8 @@
 @media (max-width: 760px) {
   .collage {
     --collage-gutter: var(--space-4);
+    /* Photos can grow past the screen edges; the page clips horizontal overflow. */
+    --stage-width: calc((100vw - 2 * var(--collage-gutter)) * var(--collage-mobile-scale));
 
     /* The stage shrinks to a third here, so a fixed desktop offset would push it
        into the text above. */

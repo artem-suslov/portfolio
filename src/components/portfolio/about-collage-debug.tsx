@@ -25,6 +25,7 @@ const config = {
     width: [aboutCollage.width, 600, 1600, 1] as Slider,
     height: [aboutCollage.height, 300, 2400, 1] as Slider,
     spacing: [aboutCollage.spacing, -600, 200, 1] as Slider,
+    mobileScale: [aboutCollage.mobileScale, 0.5, 1.8, 0.01] as Slider,
     mobileSpacing: [aboutCollage.mobileSpacing, -200, 200, 1] as Slider,
   },
   frame: {
@@ -116,6 +117,7 @@ export function AboutCollageDebug() {
         z: item.z,
       };
     }),
+    mobileScale: values.stage.mobileScale,
     mobileSpacing: values.stage.mobileSpacing,
     shadow: values.style.shadow,
     spacing: values.stage.spacing,

@@ -51,6 +51,8 @@ export type AboutCollageSettings = {
   /** How much a photo grows on hover; 1 turns it off. */
   hoverScale: number;
   items: CollageItem[];
+  /** Stage size on phones (≤760px) relative to the screen width; above 1 the edges crop. */
+  mobileScale: number;
   /** Space above the stage on phones (≤760px), where the stage is much smaller. */
   mobileSpacing: number;
   /** 0–1: strength of the drop shadow under every photo. */
@@ -140,6 +142,7 @@ export const aboutCollage: AboutCollageSettings = {
     { id: "teeth", visible: true, frame: "circle", x: 186, y: 566, width: 150, rotate: -12.5, z: 8, caption: "", captionX: 0, captionY: 30 },
     { id: "sunset-3", visible: true, frame: "circle", x: 795, y: 464, width: 229, rotate: 5, z: 9, caption: "", captionX: 0, captionY: 30 },
   ],
+  mobileScale: 1,
   mobileSpacing: 24,
   shadow: 0.6,
   spacing: -40,

@@ -58,6 +58,7 @@ function createSource(settings: AboutCollageSettings) {
   items: [
 ${items}
   ],
+  mobileScale: ${settings.mobileScale},
   mobileSpacing: ${settings.mobileSpacing},
   shadow: ${settings.shadow},
   spacing: ${settings.spacing},
@@ -89,6 +90,7 @@ function isValidSettings(value: unknown): value is AboutCollageSettings {
     isInRange(value.framePadding, 0, 100) &&
     isInRange(value.height, 100, 4000) &&
     isInRange(value.hoverScale, 1, 2) &&
+    isInRange(value.mobileScale, 0.3, 3) &&
     isInRange(value.mobileSpacing, -1000, 400) &&
     isInRange(value.shadow, 0, 1) &&
     isInRange(value.spacing, -1000, 400) &&
