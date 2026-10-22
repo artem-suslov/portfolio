@@ -42,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# CapCut export temp folders
+.__capcut_export_temp_folder_*/
