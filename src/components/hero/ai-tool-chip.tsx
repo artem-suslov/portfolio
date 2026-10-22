@@ -85,6 +85,8 @@ const TOOL_NAMES: Record<Tool, string> = { claude: "Claude", chatgpt: "ChatGPT" 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 const LETTER_STAGGER = 0.02;
 
+type LetterPosition = { index: number; count: number };
+
 const MARK_SPRING = { type: "spring", duration: 0.5, bounce: 0.25 } as const;
 
 const FADE_VARIANTS: Variants = {
@@ -110,16 +112,17 @@ const MARK_VARIANTS: Variants = {
 /** Letters roll up out of the line and in from below it, one after another. */
 const LETTER_VARIANTS: Variants = {
   hidden: { opacity: 0, transform: "translateY(100%)" },
-  shown: (index: number) => ({
+  shown: ({ index }: LetterPosition) => ({
     opacity: 1,
     transform: "translateY(0%)",
     transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
   }),
-  // Leaves as unhurriedly as it arrives, so the swap reads as one roll, not a cut.
-  gone: (index: number) => ({
+  // Leaves as unhurriedly as it arrives, so the swap reads as one roll, not a cut. Letters
+  // leave from the end, so a longer outgoing name clears the pill's right edge first.
+  gone: ({ index, count }: LetterPosition) => ({
     opacity: 0,
     transform: "translateY(-100%)",
-    transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
+    transition: { duration: 0.32, ease: EASE_OUT, delay: (count - 1 - index) * LETTER_STAGGER },
   }),
 };
 
@@ -150,7 +153,11 @@ export function AiToolChip() {
           scaleX and corrects the rounded ends, while the mark and letters stay unscaled. */}
       <m.span
         layout={!reduceMotion}
-        transition={{ layout: { duration: 0.32, ease: EASE_OUT } }}
+        // Narrowing waits for the outgoing name's last letters to fade, so they never
+        // hang past the pill's edge; widening starts at once to make room for the new ones.
+        transition={{
+          layout: { duration: 0.32, ease: EASE_OUT, delay: tool === "claude" ? 0.1 : 0 },
+        }}
         style={{ borderRadius: 999 }}
         className={styles.aiToolFill}
         aria-hidden="true"
@@ -175,7 +182,7 @@ export function AiToolChip() {
               {tail.map((letter, index) => (
                 <m.span
                   key={`${letter}-${index}`}
-                  custom={index}
+                  custom={{ index, count: tail.length } satisfies LetterPosition}
                   className={styles.aiToolLetter}
                   variants={reduceMotion ? FADE_VARIANTS : LETTER_VARIANTS}
                   {...presence}
