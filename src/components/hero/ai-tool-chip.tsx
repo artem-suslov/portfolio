@@ -17,23 +17,23 @@ const CODEX_PROMPT_PATH =
 
 type Tool = "claude" | "chatgpt";
 
+/** The soft sticker shadow both marks sit on. */
+function MarkShadow({ id }: { id: string }) {
+  return (
+    <filter id={id} x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.06" />
+      <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#000" floodOpacity="0.1" />
+    </filter>
+  );
+}
+
 function ClaudeMark() {
   const shadowId = useId();
 
   return (
     <svg className={styles.aiToolMark} viewBox="0 0 36 36" aria-hidden="true" focusable="false">
       <defs>
-        <filter
-          id={shadowId}
-          x="-50%"
-          y="-50%"
-          width="200%"
-          height="200%"
-          colorInterpolationFilters="sRGB"
-        >
-          <feDropShadow dx="0" dy="1" stdDeviation="1" floodColor="#000" floodOpacity="0.06" />
-          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#000" floodOpacity="0.1" />
-        </filter>
+        <MarkShadow id={shadowId} />
       </defs>
       <g transform="translate(2 2)">
         {/* White sticker outline under the mark. */}
@@ -54,6 +54,7 @@ function ClaudeMark() {
 
 function CodexMark() {
   const gradientId = useId();
+  const shadowId = useId();
 
   return (
     <svg
@@ -68,13 +69,16 @@ function CodexMark() {
           <stop offset="0.5" stopColor="#7a9dff" />
           <stop offset="1" stopColor="#3941ff" />
         </linearGradient>
+        <MarkShadow id={shadowId} />
       </defs>
-      <path
-        d={`${CODEX_CLOUD_PATH}${CODEX_PROMPT_PATH}`}
-        fillRule="nonzero"
-        fill={`url(#${gradientId})`}
-      />
-      <path d={CODEX_CLOUD_PATH} fill="none" stroke="#fff" strokeWidth="2" />
+      <g filter={`url(#${shadowId})`}>
+        <path
+          d={`${CODEX_CLOUD_PATH}${CODEX_PROMPT_PATH}`}
+          fillRule="nonzero"
+          fill={`url(#${gradientId})`}
+        />
+        <path d={CODEX_CLOUD_PATH} fill="none" stroke="#fff" strokeWidth="2" />
+      </g>
     </svg>
   );
 }
