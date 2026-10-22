@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <>
       <PaperIntro />
-      <PortfolioPage hero={<V2Hero />} showAbout={false} variant="v2" />
+      <PortfolioPage hero={<V2Hero />} variant="v2" />
     </>
   );
 }

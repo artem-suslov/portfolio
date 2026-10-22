@@ -8,7 +8,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--bento-header-gap);
-  margin: var(--bento-spacing) 0 var(--space-18) calc((100% - var(--bento-width)) / 2);
+  /* The space below belongs to the next section (see src/data/page-spacing.ts). */
+  margin: var(--bento-spacing) 0 0 calc((100% - var(--bento-width)) / 2);
 }
 
 .header {
@@ -30,8 +31,8 @@
 .description {
   margin: 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-md);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
   letter-spacing: var(--letter-spacing-tight);
   text-wrap: pretty;
 }
@@ -81,7 +82,7 @@
 @media (max-width: 760px) {
   .craft {
     width: auto;
-    margin: max(0px, calc(var(--bento-spacing) - var(--space-18))) var(--space-4) var(--space-18);
+    margin: max(0px, calc(var(--bento-spacing) - var(--space-18))) var(--space-4) 0;
   }
 
   .header {

@@ -116,9 +116,9 @@
 .v2Tagline {
   margin: 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
   letter-spacing: var(--letter-spacing-tight);
 }
 
@@ -141,14 +141,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-}
-
-.v2Description p:first-child {
-  max-width: 540px;
-}
-
-.v2Description p:nth-child(2) {
-  max-width: 577px;
 }
 
 

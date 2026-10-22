@@ -51,12 +51,12 @@ const tile = (
 export const craftBento: CraftBentoSettings = {
   captions: "none",
   description:
-    "I genuinely love this craft. Building concepts with AI is how I keep learning — here are a few of them.",
+    "I genuinely love this craft. Building concepts with AI is how I keep learning: new tools, new interactions, new ways to turn an idea into something real. Here are a few of my favorites.",
   gap: 16,
   heading: "Concepts and craft",
   headerGap: 32,
   headerWidth: 636,
-  maxWidth: 1280,
+  maxWidth: 1077,
   radius: 8,
   rowHeight: 400,
   rowGap: 15,

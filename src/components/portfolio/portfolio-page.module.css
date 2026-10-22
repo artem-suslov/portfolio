@@ -8,6 +8,33 @@
   padding: var(--space-6) max(24px, calc((100vw - 700px) / 2));
 }
 
+/* Section rail: placed like the case-study rail (32px from the left, 24px from the top),
+   shown only while the gutter beside the 700px card fits it. */
+.rail {
+  position: fixed;
+  z-index: 1;
+  top: var(--space-6);
+  left: var(--space-8);
+  display: none;
+  transition: opacity var(--duration-hover) ease;
+}
+
+.rail[data-covered] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Rail targets stop 32px below the top edge; Work still reaches the very top. */
+.viewport :is([id="top"], [id="craft"], [id="about-me"]) {
+  scroll-margin-top: var(--space-8);
+}
+
+@media (min-width: 1041px) {
+  .rail {
+    display: block;
+  }
+}
+
 .portfolio {
   position: relative;
   width: 700px;
@@ -32,22 +59,40 @@
   gap: var(--space-12);
 }
 
+/* Section spacing comes from src/data/page-spacing.ts through --page-* properties
+   on the viewport; phones keep their own values below. */
 .aboutSection {
   width: min(700px, 100%);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  margin: var(--space-12) auto 0;
-  padding: 0 88px var(--space-18);
+  margin: var(--page-craft-to-about) auto 0;
+  padding: 0 88px var(--page-about-to-colophon);
 }
 
+/* Same type as the hero's name and description. */
 .aboutHeading {
-  margin: 0;
+  margin: 0 0 var(--page-about-heading-gap);
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--line-height-xl);
+  letter-spacing: -0.02em;
+}
+
+.aboutBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--page-about-paragraph-gap);
+}
+
+.aboutText {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
   letter-spacing: var(--letter-spacing-tight);
+  text-wrap: pretty;
 }
 
 .anchor {
@@ -84,9 +129,13 @@
     box-shadow: none;
   }
 
+  .aboutHeading {
+    line-height: var(--line-height-lg);
+  }
+
   .aboutSection {
     width: 100%;
-    margin-top: var(--space-10);
+    margin-top: calc(var(--space-10) + var(--space-18));
     padding: 0 var(--space-4) var(--space-6);
   }
 
@@ -118,14 +167,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .rail {
+    transition: none;
+  }
+
   .viewport {
     scroll-behavior: auto;
   }
 }
 
-/* Closes the page; with the viewport's own bottom padding the gap below is 100px. */
+/* Closes the page; the viewport adds its own 24px bottom padding. */
 .colophon {
-  padding-bottom: calc(100px - var(--space-6));
+  padding-bottom: var(--page-colophon-bottom);
 }
 
 @media (max-width: 760px) {
