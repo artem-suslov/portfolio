@@ -224,22 +224,17 @@
 }
 
 /* Rolling letters fade out through soft top and bottom edges (the NumberFlow trick) instead
-   of a hard clip. The padding gives the gradient room outside the line, and the negative
-   margin keeps the box the line's height. The shared "C" stays outside the mask. */
+   of a hard clip, all within the pill's height. The stops sit in the line's half-leading and
+   above the cap height / below the baseline, so letters at rest stay fully opaque.
+   The mask also hides anything outside the box, so it reaches 1em further right (padding
+   undone by the negative margin) for a longer outgoing word ("hatGPT") to roll away whole.
+   The shared "C" stays outside the mask. */
 .aiToolTail {
-  --ai-tool-fade: 0.3em;
-
   position: relative;
   display: inline-flex;
-  padding-block: var(--ai-tool-fade);
-  margin-block: calc(-1 * var(--ai-tool-fade));
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    #000 var(--ai-tool-fade),
-    #000 calc(100% - var(--ai-tool-fade)),
-    transparent
-  );
+  padding-right: 1em;
+  margin-right: -1em;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 88%, transparent);
 }
 
 .aiToolTailWord,
