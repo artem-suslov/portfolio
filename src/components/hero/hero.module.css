@@ -157,6 +157,10 @@
     background-color var(--duration-hover) ease;
 }
 
+.aiToolChip[data-tool="chatgpt"] {
+  padding-right: var(--space-3);
+}
+
 @media (hover: hover) and (pointer: fine) {
   /* 5 points darker: #f2f2f2 → #e6e6e6. */
   .aiToolChip:hover {
@@ -257,12 +261,12 @@
   }
 
   .v2Name {
-    /* "who can ship frontend with [ChatGPT]" (the longer of the two chips) is ~18.1em wide;
+    /* "who can ship frontend with [ChatGPT]" (the longer of the two chips) is ~18.4em wide;
        narrow phones shrink the headline just enough to keep it on one line under the 16px
-       gutters. */
+       gutters, with a little slack for font rendering differences. */
     font-size: min(
       var(--hero-name-mobile-font-size, var(--font-size-xl)),
-      calc((100vw - 2 * var(--space-4)) / 18.4)
+      calc((100vw - 2 * var(--space-4)) / 18.8)
     );
     line-height: var(--hero-name-mobile-line-height, var(--line-height-lg));
     text-wrap: pretty;

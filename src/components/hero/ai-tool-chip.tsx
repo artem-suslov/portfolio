@@ -138,6 +138,7 @@ export function AiToolChip() {
     <button
       type="button"
       className={styles.aiToolChip}
+      data-tool={tool}
       aria-label={name}
       onClick={() => {
         setTool((current) => (current === "claude" ? "chatgpt" : "claude"));
