@@ -9,8 +9,8 @@
   align-items: center;
   gap: var(--space-2);
   color: var(--color-text-secondary);
-  /* Quieter than the rail; the type scale has no 12px step. */
-  font-size: 12px;
+  /* A step quieter than the rail. */
+  font-size: var(--font-size-xs);
   font-variant-numeric: tabular-nums;
   line-height: var(--line-height-2xl);
   transition: opacity var(--duration-hover) ease;
