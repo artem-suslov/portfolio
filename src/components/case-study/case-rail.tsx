@@ -16,9 +16,26 @@ export function CaseRail({
 }: {
   sections: readonly CaseRailSection[];
 }) {
-  const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
   const { playTap } = useInteractionSound();
   useMarkCaseReturn();
+
+  return <aside className={styles.rail} aria-label="Case navigation">
+    {/* The home page restores its own scroll position on return (`useRestoreHomeScroll`). */}
+    <ButtonLink className={styles.back} href="/" onClick={playTap} scroll={false} variant="outline">
+      Home
+    </ButtonLink>
+    <RailNav sections={sections} />
+  </aside>;
+}
+
+/** Scroll-spied list of page sections with a sliding dot next to the current one. */
+export function RailNav({
+  sections,
+}: {
+  sections: readonly CaseRailSection[];
+}) {
+  const [activeId, setActiveId] = useState(sections[0]?.id ?? "");
+  const { playTap } = useInteractionSound();
   const navRef = useRef<HTMLElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
   // While a click-triggered scroll runs, the scroll spy stays paused so the dot
@@ -91,31 +108,25 @@ export function CaseRail({
     };
   }, [sections]);
 
-  return <aside className={styles.rail} aria-label="Case navigation">
-    {/* The home page restores its own scroll position on return (`useRestoreHomeScroll`). */}
-    <ButtonLink className={styles.back} href="/" onClick={playTap} scroll={false} variant="outline">
-      Home
-    </ButtonLink>
-    <nav ref={navRef} aria-label="Table of contents" className={styles.railItems}>
-      <span ref={dotRef} className={styles.railDot} aria-hidden="true" />
-      {sections.map(({ id, label }) => <a
-        key={id}
-        href={`#${id}`}
-        className={styles.railItem}
-        aria-current={activeId === id ? "location" : undefined}
-        onClick={() => {
-          if (activeId === id) return;
-          playTap();
-          setActiveId(id);
-          isClickScrollingRef.current = true;
-          // Released by the scroll handler once scrolling settles; this longer first wait gives
-          // smooth scrolling time to start, and covers clicks where the page doesn't need to move.
-          window.clearTimeout(releaseTimerRef.current);
-          releaseTimerRef.current = window.setTimeout(() => {
-            isClickScrollingRef.current = false;
-          }, 300);
-        }}
-      >{label}</a>)}
-    </nav>
-  </aside>;
+  return <nav ref={navRef} aria-label="Table of contents" className={styles.railItems}>
+    <span ref={dotRef} className={styles.railDot} aria-hidden="true" />
+    {sections.map(({ id, label }) => <a
+      key={id}
+      href={`#${id}`}
+      className={styles.railItem}
+      aria-current={activeId === id ? "location" : undefined}
+      onClick={() => {
+        if (activeId === id) return;
+        playTap();
+        setActiveId(id);
+        isClickScrollingRef.current = true;
+        // Released by the scroll handler once scrolling settles; this longer first wait gives
+        // smooth scrolling time to start, and covers clicks where the page doesn't need to move.
+        window.clearTimeout(releaseTimerRef.current);
+        releaseTimerRef.current = window.setTimeout(() => {
+          isClickScrollingRef.current = false;
+        }, 300);
+      }}
+    >{label}</a>)}
+  </nav>;
 }

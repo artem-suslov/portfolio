@@ -11,8 +11,16 @@ import { links } from "@/lib/site";
 import { AboutCollage } from "./about-collage";
 import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
+import { HomeRail } from "./home-rail";
 import { HomeScrollRestore } from "./home-scroll-restore";
 import styles from "./portfolio-page.module.css";
+
+const homeSections = [
+  // Work opens the page, so it scrolls to the very top rather than to the case list.
+  { id: "top", label: "Work" },
+  { id: "craft", label: "Craft" },
+  { id: "about-me", label: "About" },
+] as const;
 
 const casesById = new Map(portfolioCases.map((portfolioCase) => [portfolioCase.id, portfolioCase]));
 
@@ -54,13 +62,17 @@ export async function PortfolioPage({
     process.env.NODE_ENV === "development"
       ? (await import("./page-spacing-debug")).PageSpacingDebug
       : null;
+  const SavePanel =
+    process.env.NODE_ENV === "development" ? (await import("./dial-save")).DialSaveDebug : null;
 
   return (
     <main className={styles.viewport} style={pageSpacingVars(pageSpacing) as CSSProperties}>
       <HomeScrollRestore />
       <SoundProvider>
         <MotionProvider>
+          <HomeRail sections={homeSections} />
           <article
+            id="top"
             className={
               variant === "v2" ? `${styles.portfolio} ${styles.v2Portfolio}` : styles.portfolio
             }
@@ -108,6 +120,7 @@ export async function PortfolioPage({
           <Colophon className={styles.colophon} />
           <FeedbackWidget />
           {SpacingPanel ? <SpacingPanel /> : null}
+          {SavePanel ? <SavePanel /> : null}
           {DebugPanel ? (
             <DebugPanel cases={portfolioCases.map(({ id, title }) => ({ id, label: title }))} />
           ) : null}

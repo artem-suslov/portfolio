@@ -1,7 +1,7 @@
 "use client";
 
 import { useDialKitController } from "dialkit";
-import { type PointerEvent, useEffect, useRef, useState } from "react";
+import { type PointerEvent, useEffect, useRef } from "react";
 import "dialkit/styles.css";
 import {
   type AboutCollageSettings,
@@ -10,11 +10,12 @@ import {
   aboutCollage,
 } from "@/data/about-collage";
 import { AboutCollage } from "./about-collage";
+import { useDialSave } from "./dial-save";
 
 // Dev-only: live DialKit controls for the About Me collage, plus dragging photos right
 // on the page. Values are not persisted, so a reload always shows src/data/about-collage.ts.
-// "Save to code" writes the current layout into that file; "Copy layout" puts it on the
-// clipboard as JSON. The panel shows up in the DialRoot that CraftBentoDebug mounts.
+// The shared "Save to code" (dial-save.tsx) writes the current layout into that file;
+// "Copy layout" puts it on the clipboard as JSON. The panel shows up in the DialRoot that CraftBentoDebug mounts.
 
 type Slider = [number, number, number, number];
 
@@ -59,7 +60,6 @@ const config = {
       },
     ]),
   ),
-  save: { label: "Save to code", type: "action" as const },
   copy: { label: "Copy layout", type: "action" as const },
   reset: { label: "Reset", type: "action" as const },
 };
@@ -70,15 +70,11 @@ export function AboutCollageDebug() {
   // Actions read the latest render through refs, whatever closure the panel kept.
   const settingsRef = useRef<AboutCollageSettings>(aboutCollage);
   const resetRef = useRef<() => void>(() => undefined);
-  const [status, setStatus] = useState<string | null>(null);
+  useDialSave("About collage", { endpoint: "/api/debug/about-collage", valueRef: settingsRef });
   const dial = useDialKitController("About collage", config, {
     onAction: (action) => {
       if (action === "reset") {
         resetRef.current();
-      }
-
-      if (action === "save") {
-        void saveToCode(settingsRef.current).then(setStatus);
       }
 
       if (action === "copy") {
@@ -129,15 +125,6 @@ export function AboutCollageDebug() {
     resetRef.current = dial.resetValues;
   });
 
-  useEffect(() => {
-    if (!status) {
-      return;
-    }
-
-    const timeout = window.setTimeout(() => setStatus(null), 2400);
-    return () => window.clearTimeout(timeout);
-  }, [status]);
-
   // Drag a photo: pointer movement in screen pixels becomes stage pixels and goes
   // straight into the panel's x/y sliders.
   const startDrag = (id: string, event: PointerEvent<HTMLElement>) => {
@@ -171,39 +158,6 @@ export function AboutCollageDebug() {
   return (
     <>
       <AboutCollage editable onItemPointerDown={startDrag} settings={settings} />
-      {status ? (
-        <div role="status" style={statusStyle}>
-          {status}
-        </div>
-      ) : null}
     </>
   );
 }
-
-async function saveToCode(settings: AboutCollageSettings) {
-  try {
-    const response = await fetch("/api/debug/about-collage", {
-      body: JSON.stringify(settings),
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-    });
-
-    return response.ok ? "Saved to src/data/about-collage.ts" : "Couldn’t save the collage";
-  } catch {
-    return "Couldn’t save the collage";
-  }
-}
-
-const statusStyle = {
-  position: "fixed",
-  bottom: 24,
-  left: "50%",
-  zIndex: 2147483000,
-  padding: "6px 12px",
-  borderRadius: 999,
-  background: "#111",
-  color: "#fff",
-  fontSize: 13,
-  lineHeight: "20px",
-  transform: "translateX(-50%)",
-} as const;
