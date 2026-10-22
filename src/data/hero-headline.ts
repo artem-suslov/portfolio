@@ -18,14 +18,14 @@ export type HeroHeadline = {
 // "Save to code" in the Headline DialKit panel rewrites everything between these markers.
 // HERO_HEADLINE_START
 export const heroHeadline: HeroHeadline = {
-  descriptionGap: 16,
   desktopBreak: true,
-  fontSize: 28,
+  descriptionGap: 16,
+  fontSize: 26,
   fontWeight: 500,
   letterSpacing: -0.03,
-  lineHeight: 34,
-  mobileFontSize: 18,
-  mobileLineHeight: 22,
+  lineHeight: 30,
+  mobileFontSize: 22,
+  mobileLineHeight: 26,
 };
 // HERO_HEADLINE_END
 
