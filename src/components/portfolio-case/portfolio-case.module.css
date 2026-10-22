@@ -588,17 +588,17 @@
 
 .caseDetails dt {
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
 }
 
 .caseDetails dd {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
   text-align: right;
 }
 
