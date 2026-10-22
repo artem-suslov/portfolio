@@ -115,10 +115,11 @@ const LETTER_VARIANTS: Variants = {
     transform: "translateY(0%)",
     transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
   }),
+  // Leaves as unhurriedly as it arrives, so the swap reads as one roll, not a cut.
   gone: (index: number) => ({
     opacity: 0,
     transform: "translateY(-100%)",
-    transition: { duration: 0.2, ease: EASE_OUT, delay: index * LETTER_STAGGER },
+    transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
   }),
 };
 
@@ -145,6 +146,15 @@ export function AiToolChip() {
         playTap();
       }}
     >
+      {/* The pill's fill is its own layer: when the name changes width, Motion eases it with
+          scaleX and corrects the rounded ends, while the mark and letters stay unscaled. */}
+      <m.span
+        layout={!reduceMotion}
+        transition={{ layout: { duration: 0.32, ease: EASE_OUT } }}
+        style={{ borderRadius: 999 }}
+        className={styles.aiToolFill}
+        aria-hidden="true"
+      />
       <span className={styles.aiToolMarkSlot} aria-hidden="true">
         <AnimatePresence mode="popLayout" initial={false}>
           <m.span

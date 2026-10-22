@@ -137,33 +137,42 @@
   display: var(--hero-name-break, inline);
 }
 
-/* Sized in em/lh so it follows the Headline DialKit typography. */
+/* Sized in em/lh so it follows the Headline DialKit typography. The pill's colour lives on
+   .aiToolFill so its width change can animate with a transform. */
 .aiToolChip {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   height: 1lh;
   padding: 0 var(--space-2) 0 0;
   border: 0;
   border-radius: var(--radius-full);
-  background: var(--color-page);
+  background: none;
   color: inherit;
   font: inherit;
   letter-spacing: inherit;
   vertical-align: top;
   white-space: nowrap;
   cursor: pointer;
-  transition:
-    transform var(--duration-press) var(--ease-out-snappy),
-    background-color var(--duration-hover) ease;
+  transition: transform var(--duration-press) var(--ease-out-snappy);
 }
 
 .aiToolChip[data-tool="chatgpt"] {
   padding-right: var(--space-3);
 }
 
+.aiToolFill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-page);
+  transition: background-color var(--duration-hover) ease;
+}
+
 @media (hover: hover) and (pointer: fine) {
   /* 5 points darker: #f2f2f2 → #e6e6e6. */
-  .aiToolChip:hover {
+  .aiToolChip:hover .aiToolFill {
     background: color-mix(in srgb, var(--color-page), #000 5%);
   }
 }
@@ -179,7 +188,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .aiToolChip {
-    transition: background-color var(--duration-hover) ease;
+    transition: none;
   }
 }
 
@@ -214,13 +223,23 @@
   display: inline-flex;
 }
 
-/* Clips the rolling letters to the line; the shared "C" stays outside it. Only the
-   vertical axis is clipped, so a longer outgoing word ("laude") isn't cut at the side. */
+/* Rolling letters fade out through soft top and bottom edges (the NumberFlow trick) instead
+   of a hard clip. The padding gives the gradient room outside the line, and the negative
+   margin keeps the box the line's height. The shared "C" stays outside the mask. */
 .aiToolTail {
+  --ai-tool-fade: 0.3em;
+
   position: relative;
   display: inline-flex;
-  overflow-x: visible;
-  overflow-y: clip;
+  padding-block: var(--ai-tool-fade);
+  margin-block: calc(-1 * var(--ai-tool-fade));
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 var(--ai-tool-fade),
+    #000 calc(100% - var(--ai-tool-fade)),
+    transparent
+  );
 }
 
 .aiToolTailWord,
