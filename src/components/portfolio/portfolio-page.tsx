@@ -82,8 +82,8 @@ export async function PortfolioPage({
               </h2>
               <div className={styles.aboutBody}>
                 <p className={styles.aboutText}>
-                  I was born and raised in Saint Petersburg. In 2020 I got hooked on UX/UI design, and
-                  it&apos;s been a big part of my life ever since. I still genuinely love what I do.
+                  I was born and raised in Saint Petersburg. In 2020 I fell in love with UX/UI design, and
+                  it&apos;s been a big part of my life ever since.
                 </p>
                 <p className={styles.aboutText}>
                   I started out with simple landing pages, banners, and business cards in Photoshop.

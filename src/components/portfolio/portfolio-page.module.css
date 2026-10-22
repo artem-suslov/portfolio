@@ -65,6 +65,7 @@
   font-weight: 400;
   line-height: var(--line-height-lg);
   letter-spacing: var(--letter-spacing-tight);
+  text-wrap: pretty;
 }
 
 .anchor {
