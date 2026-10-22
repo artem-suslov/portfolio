@@ -117,7 +117,7 @@ export const aboutCollage: AboutCollageSettings = {
   hoverScale: 1.04,
   innerRadius: 29,
   items: [
-    { id: "st-isaacs", visible: true, frame: "circle", x: 255, y: 259, width: 200, rotate: 10.5, z: 2, caption: "🏠 St. Petersburg", captionX: -24, captionY: 19 },
+    { id: "st-isaacs", visible: true, frame: "oval", x: 274, y: 249, width: 170, rotate: -15.5, z: 2, caption: "🏠 St. Petersburg", captionX: -24, captionY: 19 },
     { id: "home-setup", visible: true, frame: "photo", x: 485, y: 256, width: 210, rotate: -11, z: 1, caption: "Home setup", captionX: -66, captionY: -293 },
     { id: "video-note", visible: false, frame: "circle", x: 785, y: 492, width: 220, rotate: 4, z: 2, caption: "", captionX: 0, captionY: 30 },
     { id: "coconut-desk", visible: false, frame: "photo", x: 210, y: 610, width: 230, rotate: -6, z: 3, caption: "", captionX: 0, captionY: 30 },
@@ -125,7 +125,7 @@ export const aboutCollage: AboutCollageSettings = {
     { id: "moto-ride", visible: false, frame: "plain", x: 345, y: 534, width: 169, rotate: -16.5, z: 0, caption: "", captionX: 0, captionY: 30 },
     { id: "friends", visible: false, frame: "photo", x: 308, y: 467, width: 340, rotate: -3, z: 5, caption: "", captionX: 0, captionY: 30 },
     { id: "sunset-peace", visible: true, frame: "stamp", x: 548, y: 503, width: 293, rotate: 4, z: 9, caption: "", captionX: 0, captionY: 25 },
-    { id: "skyline", visible: true, frame: "circle", x: 730, y: 219, width: 223, rotate: 19.5, z: 5, caption: "SUUUUUUIIIIII", captionX: 7, captionY: -246 },
+    { id: "skyline", visible: true, frame: "photo", x: 725, y: 233, width: 151, rotate: 19.5, z: 5, caption: "SUUUUUUIIIIII", captionX: -4, captionY: -219 },
     { id: "moto-sea", visible: false, frame: "photo", x: 500, y: 417, width: 240, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-711", visible: false, frame: "photo", x: 500, y: 550, width: 240, rotate: 3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-green", visible: true, frame: "photo", x: 332, y: 503, width: 136, rotate: -4, z: 7, caption: "", captionX: 0, captionY: 30 },
@@ -144,7 +144,7 @@ export const aboutCollage: AboutCollageSettings = {
   ],
   mobileScale: 1.26,
   mobileSpacing: 21,
-  shadow: 0.6,
+  shadow: 0.2,
   spacing: -40,
   width: 1046,
 };
