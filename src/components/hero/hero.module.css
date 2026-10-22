@@ -173,6 +173,9 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
+}
+
+.aiToolChip[data-swapped] .aiToolContent {
   animation: ai-tool-enter 240ms var(--ease-out-quint);
 }
 
@@ -197,7 +200,7 @@
     transition: none;
   }
 
-  .aiToolContent {
+  .aiToolChip[data-swapped] .aiToolContent {
     animation-name: ai-tool-fade;
   }
 }

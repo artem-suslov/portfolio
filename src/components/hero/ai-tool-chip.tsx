@@ -77,14 +77,18 @@ function CodexMark() {
 export function AiToolChip() {
   const { playTap } = useInteractionSound();
   const [tool, setTool] = useState<Tool>("claude");
+  // The entrance plays only on a swap, not when the page first renders the chip.
+  const [swapped, setSwapped] = useState(false);
 
   return (
     <button
       type="button"
       className={styles.aiToolChip}
       data-tool={tool}
+      data-swapped={swapped || undefined}
       onClick={() => {
         setTool((current) => (current === "claude" ? "codex" : "claude"));
+        setSwapped(true);
         playTap();
       }}
     >
