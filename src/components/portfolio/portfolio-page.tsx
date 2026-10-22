@@ -4,7 +4,7 @@ import { MotionProvider } from "@/components/motion/motion-provider";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
-import { AboutMeContent } from "./about-me-content";
+import { AboutCollage } from "./about-collage";
 import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
 import { HomeScrollRestore } from "./home-scroll-restore";
@@ -36,11 +36,15 @@ export async function PortfolioPage({
     process.env.NODE_ENV === "development"
       ? (await import("@/components/portfolio-case/portfolio-debug-panel")).PortfolioDebugPanel
       : null;
-  // In development the grid comes with live DialKit controls.
+  // In development the grid and the About Me collage come with live DialKit controls.
   const CraftSection =
     process.env.NODE_ENV === "development"
       ? (await import("./craft-bento-debug")).CraftBentoDebug
       : CraftBento;
+  const AboutSection =
+    process.env.NODE_ENV === "development"
+      ? (await import("./about-collage-debug")).AboutCollageDebug
+      : AboutCollage;
 
   return (
     <main className={styles.viewport}>
@@ -67,7 +71,7 @@ export async function PortfolioPage({
               <h2 className={styles.aboutHeading} id="about-me">
                 About Me
               </h2>
-              <AboutMeContent />
+              <AboutSection />
             </section>
           ) : null}
           <Colophon className={styles.colophon} />

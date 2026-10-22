@@ -1,0 +1,122 @@
+/* The stage can be wider than the page's 700px column, so it centers itself on that
+   column. Every size inside is in stage pixels: --u is one of them at the current
+   width, so the whole collage scales down as one piece on narrow screens. */
+.collage {
+  --collage-gutter: var(--space-6);
+  --stage-width: min(calc(var(--collage-width) * 1px), calc(100vw - 2 * var(--collage-gutter)));
+
+  position: relative;
+  width: var(--stage-width);
+  aspect-ratio: var(--collage-width) / var(--collage-height);
+  margin: var(--collage-spacing) 0 0 calc((100% - var(--stage-width)) / 2);
+  container-type: inline-size;
+}
+
+.item {
+  /* Resolved on each photo, where 100cqw is the stage width. */
+  --u: calc(100cqw / var(--collage-width));
+  --scale: 1;
+
+  position: absolute;
+  top: calc(var(--item-y) * var(--u));
+  left: calc(var(--item-x) * var(--u));
+  width: calc(var(--item-width) * var(--u));
+  margin: 0;
+  transform: translate(-50%, -50%) rotate(var(--item-rotate)) scale(var(--scale));
+  transition: transform 320ms var(--ease-out-quint);
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--item-ratio);
+  background: var(--color-surface-placeholder);
+  box-shadow:
+    0 calc(10 * var(--u)) calc(28 * var(--u)) rgb(0 0 0 / calc(var(--collage-shadow) * 24%)),
+    0 1px 2px rgb(0 0 0 / calc(var(--collage-shadow) * 20%));
+}
+
+.media img,
+.media video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+}
+
+/* Frames */
+
+.item[data-frame="plain"] .media {
+  border-radius: calc(6 * var(--u));
+}
+
+/* A white border around the picture; the ratio stays the picture's own, and the
+   border fits inside the photo's width. */
+.item[data-frame="photo"] .media,
+.item[data-frame="oval"] .media,
+.item[data-frame="circle"] .media {
+  --border: calc(var(--collage-frame-padding) * var(--u));
+
+  width: calc(100% - 2 * var(--border));
+  box-sizing: content-box;
+  border: var(--border) solid var(--color-surface);
+}
+
+.item[data-frame="photo"] .media {
+  outline: 1px solid rgb(0 0 0 / 6%);
+}
+
+/* A cameo: thinner border with a fine gilt line around it. */
+.item[data-frame="oval"] .media,
+.item[data-frame="circle"] .media {
+  --border: calc(var(--collage-frame-padding) * 0.6 * var(--u));
+
+  border-radius: 50%;
+  outline: 1px solid rgb(120 100 60 / 40%);
+}
+
+.caption {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  color: var(--color-text-secondary);
+  /* Notes stay legible when the stage shrinks on phones. */
+  font-size: max(13px, calc(var(--collage-caption-size) * var(--u)));
+  line-height: 1.1;
+  white-space: nowrap;
+  transform: translate(
+    calc(-50% + var(--caption-x) * var(--u)),
+    calc(var(--caption-y) * var(--u) - 50%)
+  );
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .collage:not([data-editable]) .item:hover {
+    --scale: var(--collage-hover-scale);
+  }
+}
+
+/* Dev: drag photos around the stage. */
+.collage[data-editable] .item {
+  cursor: grab;
+  touch-action: none;
+  transition: none;
+}
+
+.collage[data-editable] .item:active {
+  cursor: grabbing;
+}
+
+@media (max-width: 760px) {
+  .collage {
+    --collage-gutter: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+  }
+}
