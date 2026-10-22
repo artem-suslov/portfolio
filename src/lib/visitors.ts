@@ -51,7 +51,8 @@ export async function getVisitorStats(): Promise<VisitorStats | null> {
     if (!Number.isFinite(total) || !Array.isArray(daily)) return null;
     return { total, daily: daily.map(Number) };
   } catch (error) {
-    console.error("Visitor stats unavailable", error);
+    // The counter is decoration: log it without raising the dev error overlay.
+    console.warn("Visitor stats unavailable", error);
     return null;
   }
 }
