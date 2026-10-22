@@ -1,23 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import { RailNav, type CaseRailSection } from "@/components/case-study/case-rail";
 import styles from "./portfolio-page.module.css";
 
 /**
- * The case-study table of contents, pinned in the left gutter of the home page.
- * The craft grid is wider than the card and can pass under the rail, so the rail
- * steps aside while the grid overlaps it.
+ * The craft grid is wider than the card and can pass under elements pinned in the
+ * gutters; reports whether it currently overlaps the given one.
  */
-export function HomeRail({ sections }: { sections: readonly CaseRailSection[] }) {
-  const railRef = useRef<HTMLElement>(null);
+export function useCraftGridCover(ref: RefObject<HTMLElement | null>) {
   const [isCovered, setIsCovered] = useState(false);
 
   useEffect(() => {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const rail = railRef.current?.getBoundingClientRect();
+      const rail = ref.current?.getBoundingClientRect();
       const grid = document.querySelector("[data-craft-grid]")?.getBoundingClientRect();
       if (!rail || !grid || rail.width === 0) return;
       setIsCovered(
@@ -38,7 +36,18 @@ export function HomeRail({ sections }: { sections: readonly CaseRailSection[] })
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, []);
+  }, [ref]);
+
+  return isCovered;
+}
+
+/**
+ * The case-study table of contents, pinned in the left gutter of the home page.
+ * It steps aside while the craft grid passes under it.
+ */
+export function HomeRail({ sections }: { sections: readonly CaseRailSection[] }) {
+  const railRef = useRef<HTMLElement>(null);
+  const isCovered = useCraftGridCover(railRef);
 
   return (
     <aside

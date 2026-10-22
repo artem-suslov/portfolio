@@ -1,0 +1,70 @@
+/* Mirrors the section rail: 32px from the right, 24px from the top, the same 32px
+   line as a rail item, and only while the gutter beside the 700px card fits it. */
+.count {
+  position: fixed;
+  z-index: 1;
+  top: var(--space-6);
+  right: var(--space-8);
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  /* A step quieter than the rail. */
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-2xl);
+  transition: opacity var(--duration-hover) ease;
+}
+
+.count[data-covered] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1041px) {
+  .count {
+    display: flex;
+  }
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+/* Full-height bars scaled from the bottom, so both motions stay on the compositor:
+   `transform` grows each bar to its day's level as the digits roll in, and the
+   separate `scale` property keeps it breathing, each bar out of step with the others. */
+.bar {
+  width: 3px;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-text-muted);
+  transform: scaleY(var(--level));
+  transform-origin: bottom;
+  transition: transform 900ms var(--ease-out-quint) calc(var(--index) * 80ms);
+  animation: breathe 2.4s ease-in-out calc(var(--index) * -0.8s) infinite alternate;
+}
+
+@keyframes breathe {
+  from {
+    scale: 1 1;
+  }
+
+  to {
+    scale: 1 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .count,
+  .bar {
+    transition: none;
+  }
+
+  .bar {
+    animation: none;
+  }
+}
