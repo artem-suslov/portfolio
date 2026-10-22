@@ -138,24 +138,74 @@
 }
 
 /* Sized in em/lh so it follows the Headline DialKit typography. */
-.claudeChip {
+.aiToolChip {
+  display: inline-flex;
+  align-items: center;
+  height: 1lh;
+  padding: 0 var(--space-2) 0 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-page);
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  vertical-align: top;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--duration-press) var(--ease-out-snappy);
+}
+
+/* The Codex cloud sits a touch off the pill's left edge. */
+.aiToolChip[data-tool="codex"] {
+  padding-left: 2px;
+}
+
+.aiToolChip:active {
+  transform: scale(0.96);
+}
+
+.aiToolChip:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.aiToolContent {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  height: 1lh;
-  padding-right: var(--space-2);
-  border-radius: var(--radius-full);
-  background: var(--color-page);
-  vertical-align: top;
-  white-space: nowrap;
+  animation: ai-tool-enter 240ms var(--ease-out-quint);
 }
 
 /* Overhangs the pill, like a sticker on its left end. */
-.claudeMark {
+.aiToolMark {
   flex-shrink: 0;
   width: 1.385em;
   height: 1.385em;
   overflow: visible;
+}
+
+@keyframes ai-tool-enter {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+    transform: scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aiToolChip {
+    transition: none;
+  }
+
+  .aiToolContent {
+    animation-name: ai-tool-fade;
+  }
+}
+
+@keyframes ai-tool-fade {
+  from {
+    opacity: 0;
+  }
 }
 
 .v2Description {

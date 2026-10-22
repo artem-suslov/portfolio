@@ -1,4 +1,4 @@
-import { ClaudeChip } from "./claude-chip";
+import { AiToolChip } from "./ai-tool-chip";
 import { ContactButton } from "./contact-button";
 import styles from "./hero.module.css";
 import { HeroVideo } from "./hero-video";
@@ -17,7 +17,7 @@ export function V2Hero() {
         <h1 className={styles.v2Name}>
           Artem Suslov, a Product Designer{" "}
           <span className={styles.v2NameBreak}>
-            who can ship frontend with <ClaudeChip />
+            who can ship frontend with <AiToolChip />
           </span>
         </h1>
         <V2Description />
