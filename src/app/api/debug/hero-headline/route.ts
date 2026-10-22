@@ -13,13 +13,13 @@ const sourcePath = path.join(process.cwd(), "src/data/hero-headline.ts");
 const startMarker = "// HERO_HEADLINE_START";
 const endMarker = "// HERO_HEADLINE_END";
 const numberKeys = [
+  "descriptionGap",
   "fontSize",
   "fontWeight",
   "letterSpacing",
   "lineHeight",
   "mobileFontSize",
   "mobileLineHeight",
-  "taglineGap",
 ] as const;
 
 export async function POST(request: Request) {

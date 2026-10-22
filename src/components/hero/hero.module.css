@@ -112,8 +112,7 @@
   padding: 0 var(--space-8);
 }
 
-.v2Description p,
-.v2Tagline {
+.v2Description p {
   margin: 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-md);
@@ -130,16 +129,12 @@
   font-weight: var(--hero-name-font-weight, 500);
   line-height: var(--hero-name-line-height, var(--line-height-xl));
   letter-spacing: var(--hero-name-letter-spacing, -0.02em);
+  /* Tops up (or eats into) the content gap so the description sits --hero-name-description-gap below. */
+  margin-bottom: calc(var(--hero-name-description-gap, var(--space-4)) - var(--space-4));
 }
 
 .v2NameBreak {
   display: var(--hero-name-break, inline);
-}
-
-.v2Identity {
-  display: flex;
-  flex-direction: column;
-  gap: var(--hero-name-tagline-gap, var(--space-1));
 }
 
 .v2Description {
@@ -183,10 +178,6 @@
   /* Phones break the heading after "Product Designer". */
   .v2NameBreak {
     display: block;
-  }
-
-  .v2Tagline {
-    display: none;
   }
 
   .heroToolbar {

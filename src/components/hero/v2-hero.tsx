@@ -13,15 +13,10 @@ export function V2Hero() {
         <SoundToggleButton />
       </div>
       <div className={styles.v2Content}>
-        <div className={styles.v2Identity}>
-          <h1 className={styles.v2Name}>
-            Artem Suslov, a Product Designer{" "}
-            <span className={styles.v2NameBreak}>who can ship frontend</span>
-          </h1>
-          <p className={styles.v2Tagline}>
-            Designing B2C products for Web and Mobile
-          </p>
-        </div>
+        <h1 className={styles.v2Name}>
+          Artem Suslov, a Product Designer{" "}
+          <span className={styles.v2NameBreak}>who can ship frontend</span>
+        </h1>
         <V2Description />
         <div className={styles.v2Actions}>
           <ResumeButton />

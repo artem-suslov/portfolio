@@ -25,7 +25,7 @@ const config = {
   },
   fontWeight: [heroHeadline.fontWeight, 300, 800, 10] as Slider,
   letterSpacing: [heroHeadline.letterSpacing, -0.1, 0.1, 0.005] as Slider,
-  taglineGap: [heroHeadline.taglineGap, 0, 48, 1] as Slider,
+  descriptionGap: [heroHeadline.descriptionGap, 0, 64, 1] as Slider,
   reset: { label: "Reset", type: "action" as const },
 };
 
@@ -44,6 +44,7 @@ export function HeroHeadlineDebug() {
   });
   const { values } = dial;
   const headline: HeroHeadline = {
+    descriptionGap: values.descriptionGap,
     desktopBreak: values.desktop.lineBreak,
     fontSize: values.desktop.fontSize,
     fontWeight: values.fontWeight,
@@ -51,7 +52,6 @@ export function HeroHeadlineDebug() {
     lineHeight: values.desktop.lineHeight,
     mobileFontSize: values.mobile.fontSize,
     mobileLineHeight: values.mobile.lineHeight,
-    taglineGap: values.taglineGap,
   };
 
   useEffect(() => {
