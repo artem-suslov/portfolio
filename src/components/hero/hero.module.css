@@ -155,11 +155,6 @@
   transition: transform var(--duration-press) var(--ease-out-snappy);
 }
 
-/* The Codex cloud sits a touch off the pill's left edge. */
-.aiToolChip[data-tool="codex"] {
-  padding-left: 2px;
-}
-
 .aiToolChip:active {
   transform: scale(0.96);
 }
@@ -169,46 +164,55 @@
   outline-offset: 2px;
 }
 
-.aiToolContent {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
+@media (prefers-reduced-motion: reduce) {
+  .aiToolChip {
+    transition: none;
+  }
 }
 
-.aiToolChip[data-swapped] .aiToolContent {
-  animation: ai-tool-enter 240ms var(--ease-out-quint);
+/* Fixed-size slot, so swapping marks never moves the name. The outgoing mark is popped
+   out of flow (AnimatePresence popLayout) and spins away on top of the incoming one. */
+.aiToolMarkSlot {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.385em;
+  height: 1.385em;
+  margin-right: var(--space-1);
+}
+
+.aiToolMarkFrame {
+  display: inline-flex;
 }
 
 /* Overhangs the pill, like a sticker on its left end. */
 .aiToolMark {
-  flex-shrink: 0;
   width: 1.385em;
   height: 1.385em;
   overflow: visible;
 }
 
-@keyframes ai-tool-enter {
-  from {
-    opacity: 0;
-    filter: blur(2px);
-    transform: scale(0.92);
-  }
+/* The Codex cloud fills its box, so it sits a touch off the pill's left edge. */
+.codexMark {
+  translate: 2px 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .aiToolChip {
-    transition: none;
-  }
-
-  .aiToolChip[data-swapped] .aiToolContent {
-    animation-name: ai-tool-fade;
-  }
+.aiToolName {
+  display: inline-flex;
 }
 
-@keyframes ai-tool-fade {
-  from {
-    opacity: 0;
-  }
+/* Clips the rolling letters to the line; the shared "C" stays outside it. Only the
+   vertical axis is clipped, so a longer outgoing word ("laude") isn't cut at the side. */
+.aiToolTail {
+  position: relative;
+  display: inline-flex;
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+.aiToolTailWord,
+.aiToolLetter {
+  display: inline-block;
 }
 
 .v2Description {
@@ -244,11 +248,12 @@
   }
 
   .v2Name {
-    /* "who can ship frontend with [Claude]" is ~17.4em wide; narrow phones shrink the
-       headline just enough to keep it on one line under the 16px gutters. */
+    /* "who can ship frontend with [ChatGPT]" (the longer of the two chips) is ~18.1em wide;
+       narrow phones shrink the headline just enough to keep it on one line under the 16px
+       gutters. */
     font-size: min(
       var(--hero-name-mobile-font-size, var(--font-size-xl)),
-      calc((100vw - 2 * var(--space-4)) / 17.6)
+      calc((100vw - 2 * var(--space-4)) / 18.4)
     );
     line-height: var(--hero-name-mobile-line-height, var(--line-height-lg));
     text-wrap: pretty;

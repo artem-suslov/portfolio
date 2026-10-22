@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, m, useReducedMotion, type Variants } from "framer-motion";
 import { useId, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import styles from "./hero.module.css";
@@ -14,7 +15,7 @@ const CODEX_CLOUD_PATH =
 const CODEX_PROMPT_PATH =
   "M19.092 21.82C18.768 21.836 18.46 21.98 18.236 22.216 18.012 22.452 17.888 22.764 17.888 23.092 17.888 23.416 18.012 23.728 18.236 23.964 18.46 24.204 18.768 24.344 19.092 24.364L26.364 24.364C26.536 24.372 26.708 24.348 26.872 24.288 27.036 24.228 27.184 24.136 27.312 24.016 27.436 23.896 27.536 23.752 27.604 23.596 27.672 23.436 27.708 23.264 27.708 23.092 27.708 22.916 27.672 22.744 27.604 22.588 27.536 22.428 27.436 22.284 27.312 22.164 27.184 22.044 27.036 21.952 26.872 21.896 26.708 21.836 26.536 21.808 26.364 21.82L19.092 21.82ZM10.924 12.46C10.752 12.18 10.476 11.976 10.156 11.892 9.832 11.812 9.492 11.856 9.208 12.02 8.92 12.184 8.708 12.452 8.616 12.772 8.524 13.088 8.556 13.432 8.712 13.724L11.256 18.172 8.724 22.444C8.64 22.588 8.584 22.744 8.56 22.912 8.536 23.076 8.544 23.244 8.584 23.408 8.628 23.568 8.7 23.72 8.8 23.856 8.9 23.988 9.024 24.1 9.168 24.188 9.312 24.272 9.472 24.328 9.64 24.352 9.804 24.376 9.972 24.368 10.132 24.324 10.296 24.284 10.448 24.212 10.58 24.112 10.716 24.012 10.828 23.884 10.912 23.74L13.82 18.832C13.936 18.636 13.996 18.416 14 18.192 14 17.968 13.944 17.744 13.832 17.552L10.924 12.46Z";
 
-type Tool = "claude" | "codex";
+type Tool = "claude" | "chatgpt";
 
 function ClaudeMark() {
   const shadowId = useId();
@@ -55,7 +56,12 @@ function CodexMark() {
   const gradientId = useId();
 
   return (
-    <svg className={styles.aiToolMark} viewBox="0 0 36 36" aria-hidden="true" focusable="false">
+    <svg
+      className={`${styles.aiToolMark} ${styles.codexMark}`}
+      viewBox="0 0 36 36"
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
         <linearGradient id={gradientId} x1="0.5" y1="0" x2="0.5" y2="1">
           <stop offset="0" stopColor="#b1a7ff" />
@@ -73,29 +79,102 @@ function CodexMark() {
   );
 }
 
-/** "Claude" with its mark, set inline in the hero headline; a click swaps it for Codex and back. */
+const TOOL_NAMES: Record<Tool, string> = { claude: "Claude", chatgpt: "ChatGPT" };
+
+// Strong ease-out (same curve as --ease-out-snappy).
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+const LETTER_STAGGER = 0.02;
+
+const MARK_SPRING = { type: "spring", duration: 0.5, bounce: 0.25 } as const;
+
+const FADE_VARIANTS: Variants = {
+  hidden: { opacity: 0 },
+  shown: { opacity: 1, transition: { duration: 0.2 } },
+  gone: { opacity: 0, transition: { duration: 0.15 } },
+};
+
+const MARK_VARIANTS: Variants = {
+  hidden: { opacity: 0, transform: "rotate(-90deg) scale(0.5)" },
+  shown: {
+    opacity: 1,
+    transform: "rotate(0deg) scale(1)",
+    transition: { ...MARK_SPRING, opacity: { duration: 0.15 } },
+  },
+  gone: {
+    opacity: 0,
+    transform: "rotate(90deg) scale(0.5)",
+    transition: { duration: 0.18, ease: EASE_OUT },
+  },
+};
+
+/** Letters roll up out of the line and in from below it, one after another. */
+const LETTER_VARIANTS: Variants = {
+  hidden: { opacity: 0, transform: "translateY(100%)" },
+  shown: (index: number) => ({
+    opacity: 1,
+    transform: "translateY(0%)",
+    transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
+  }),
+  gone: (index: number) => ({
+    opacity: 0,
+    transform: "translateY(-100%)",
+    transition: { duration: 0.2, ease: EASE_OUT, delay: index * LETTER_STAGGER },
+  }),
+};
+
+/** "Claude" with its mark, set inline in the hero headline; a click swaps it for ChatGPT and back.
+    The marks swap with a spin, and the letters after the shared "C" roll like a flap display. */
 export function AiToolChip() {
   const { playTap } = useInteractionSound();
+  const reduceMotion = useReducedMotion();
   const [tool, setTool] = useState<Tool>("claude");
-  // The entrance plays only on a swap, not when the page first renders the chip.
-  const [swapped, setSwapped] = useState(false);
+  const name = TOOL_NAMES[tool];
+  // Both names start with "C", so it stays put while the rest rolls.
+  const tail = name.slice(1).split("");
+  // Reduced motion keeps the crossfade and drops the spin and roll.
+  const presence = { initial: "hidden", animate: "shown", exit: "gone" } as const;
 
   return (
     <button
       type="button"
       className={styles.aiToolChip}
-      data-tool={tool}
-      data-swapped={swapped || undefined}
+      aria-label={name}
       onClick={() => {
-        setTool((current) => (current === "claude" ? "codex" : "claude"));
-        setSwapped(true);
+        setTool((current) => (current === "claude" ? "chatgpt" : "claude"));
         playTap();
       }}
     >
-      {/* Keyed so each swap remounts and replays the entrance. */}
-      <span key={tool} className={styles.aiToolContent}>
-        {tool === "claude" ? <ClaudeMark /> : <CodexMark />}
-        {tool === "claude" ? "Claude" : "Codex"}
+      <span className={styles.aiToolMarkSlot} aria-hidden="true">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <m.span
+            key={tool}
+            className={styles.aiToolMarkFrame}
+            variants={reduceMotion ? FADE_VARIANTS : MARK_VARIANTS}
+            {...presence}
+          >
+            {tool === "claude" ? <ClaudeMark /> : <CodexMark />}
+          </m.span>
+        </AnimatePresence>
+      </span>
+      <span className={styles.aiToolName} aria-hidden="true">
+        C
+        <span className={styles.aiToolTail}>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <m.span key={tool} className={styles.aiToolTailWord}>
+              {tail.map((letter, index) => (
+                <m.span
+                  key={`${letter}-${index}`}
+                  custom={index}
+                  className={styles.aiToolLetter}
+                  variants={reduceMotion ? FADE_VARIANTS : LETTER_VARIANTS}
+                  {...presence}
+                >
+                  {letter}
+                </m.span>
+              ))}
+            </m.span>
+          </AnimatePresence>
+        </span>
       </span>
     </button>
   );
