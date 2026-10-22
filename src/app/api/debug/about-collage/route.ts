@@ -89,7 +89,7 @@ function isValidSettings(value: unknown): value is AboutCollageSettings {
     isInRange(value.height, 100, 4000) &&
     isInRange(value.hoverScale, 1, 2) &&
     isInRange(value.shadow, 0, 1) &&
-    isInRange(value.spacing, 0, 400) &&
+    isInRange(value.spacing, -1000, 400) &&
     isInRange(value.width, 200, 2400) &&
     Array.isArray(value.items) &&
     value.items.length <= 60 &&

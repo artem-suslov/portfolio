@@ -10,12 +10,17 @@
   aspect-ratio: var(--collage-width) / var(--collage-height);
   margin: var(--collage-spacing) 0 0 calc((100% - var(--stage-width)) / 2);
   container-type: inline-size;
+  /* A negative spacing slides the stage under the text above; only the photos
+     take the pointer, so links in that text stay clickable. */
+  pointer-events: none;
 }
 
 .item {
   /* Resolved on each photo, where 100cqw is the stage width. */
   --u: calc(100cqw / var(--collage-width));
   --scale: 1;
+
+  pointer-events: auto;
 
   position: absolute;
   top: calc(var(--item-y) * var(--u));
