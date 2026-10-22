@@ -8,7 +8,7 @@ import { TextLink } from "@/components/ui/text-link";
 import { pageSpacing, pageSpacingVars } from "@/data/page-spacing";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
 import { links } from "@/lib/site";
-import { getVisitorStats } from "@/lib/visitors";
+import { getVisitorCount } from "@/lib/visitors";
 import { AboutCollage } from "./about-collage";
 import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
@@ -66,7 +66,7 @@ export async function PortfolioPage({
       : null;
   const SavePanel =
     process.env.NODE_ENV === "development" ? (await import("./dial-save")).DialSaveDebug : null;
-  const visitorStats = await getVisitorStats();
+  const visitorCount = await getVisitorCount();
 
   return (
     <main className={styles.viewport} style={pageSpacingVars(pageSpacing) as CSSProperties}>
@@ -74,7 +74,7 @@ export async function PortfolioPage({
       <SoundProvider>
         <MotionProvider>
           <HomeRail sections={homeSections} />
-          {visitorStats ? <VisitorCount stats={visitorStats} /> : null}
+          {visitorCount !== null ? <VisitorCount total={visitorCount} /> : null}
           <article
             id="top"
             className={
