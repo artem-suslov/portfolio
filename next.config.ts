@@ -13,12 +13,17 @@ const metrikaScripts = "https://mc.yandex.ru https://mc.yandex.com https://yasta
 const metrikaHosts = "https://mc.yandex.ru https://mc.yandex.com";
 const metrikaSockets = "wss://mc.yandex.ru wss://mc.yandex.com";
 
+// DialKit's dev panels import Geist Mono from Google Fonts. Blocking it makes every
+// Fast Refresh fail to load their CSS and show an "undefined" runtime error.
+const devFontStyles = isDevelopment ? " https://fonts.googleapis.com" : "";
+const devFonts = isDevelopment ? " https://fonts.gstatic.com" : "";
+
 const contentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""} ${metrikaScripts};
-  style-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline'${devFontStyles};
   img-src 'self' blob: data: ${metrikaHosts};
-  font-src 'self' data:;
+  font-src 'self' data:${devFonts};
   media-src 'self' blob:;
   connect-src 'self' ${metrikaHosts} ${metrikaSockets};
   frame-src ${metrikaHosts};

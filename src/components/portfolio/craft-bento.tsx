@@ -96,7 +96,7 @@ export function CraftBento({ settings = craftBento }: { settings?: CraftBentoSet
         </h2>
         {settings.description ? <p className={styles.description}>{settings.description}</p> : null}
       </header>
-      <div className={styles.grid}>
+      <div className={styles.grid} data-craft-grid>
         {settings.rows.map((row, rowIndex) => (
           <div
             className={
