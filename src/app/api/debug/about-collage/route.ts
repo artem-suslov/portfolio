@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 const sourcePath = path.join(process.cwd(), "src/data/about-collage.ts");
 const startMarker = "// ABOUT_COLLAGE_START";
 const endMarker = "// ABOUT_COLLAGE_END";
-const frames = new Set(["circle", "oval", "photo", "plain"]);
+const frames = new Set(["circle", "oval", "photo", "plain", "scallop", "stamp", "ticket"]);
 
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== "development") {
@@ -48,9 +48,13 @@ function createSource(settings: AboutCollageSettings) {
 
   return `export const aboutCollage: AboutCollageSettings = {
   captionSize: ${settings.captionSize},
+  cutSize: ${settings.cutSize},
+  frame: ${text(settings.frame)},
+  frameColor: ${text(settings.frameColor)},
   framePadding: ${settings.framePadding},
   height: ${settings.height},
   hoverScale: ${settings.hoverScale},
+  innerRadius: ${settings.innerRadius},
   items: [
 ${items}
   ],
@@ -76,6 +80,11 @@ function isValidSettings(value: unknown): value is AboutCollageSettings {
 
   return (
     isInRange(value.captionSize, 1, 200) &&
+    isInRange(value.cutSize, 0.1, 5) &&
+    (value.frame === "mixed" || frames.has(value.frame as string)) &&
+    typeof value.frameColor === "string" &&
+    /^#[0-9a-f]{3,8}$/i.test(value.frameColor) &&
+    isInRange(value.innerRadius, 0, 200) &&
     isInRange(value.framePadding, 0, 100) &&
     isInRange(value.height, 100, 4000) &&
     isInRange(value.hoverScale, 1, 2) &&

@@ -1,7 +1,13 @@
 import { Caveat } from "next/font/google";
 import Image from "next/image";
 import type { CSSProperties, PointerEvent } from "react";
-import { type AboutCollageSettings, type CollageItem, aboutCollage, collageMedia } from "@/data/about-collage";
+import {
+  type AboutCollageSettings,
+  type CollageFrame,
+  type CollageItem,
+  aboutCollage,
+  collageMedia,
+} from "@/data/about-collage";
 import styles from "./about-collage.module.css";
 import { CollageVideo } from "./collage-video";
 
@@ -10,10 +16,12 @@ const handwriting = Caveat({ subsets: ["latin"], weight: "500" });
 type ItemPointerHandler = (id: string, event: PointerEvent<HTMLElement>) => void;
 
 function CollagePhoto({
+  frame,
   item,
   onPointerDown,
   stageWidth,
 }: {
+  frame: CollageFrame;
   item: CollageItem;
   onPointerDown?: ItemPointerHandler;
   stageWidth: number;
@@ -24,12 +32,12 @@ function CollagePhoto({
     return null;
   }
 
-  const ratio = item.frame === "circle" ? 1 : media.ratio;
+  const ratio = frame === "circle" ? 1 : media.ratio;
 
   return (
     <figure
       className={styles.item}
-      data-frame={item.frame}
+      data-frame={frame}
       onPointerDown={onPointerDown ? (event) => onPointerDown(item.id, event) : undefined}
       style={
         {
@@ -44,18 +52,20 @@ function CollagePhoto({
         } as CSSProperties
       }
     >
-      <div className={styles.media}>
-        {media.kind === "video" ? (
-          <CollageVideo label={media.alt} poster={media.poster} src={media.src} />
-        ) : (
-          <Image
-            alt={media.alt}
-            draggable={false}
-            fill
-            sizes={`(max-width: 760px) ${Math.ceil((item.width / stageWidth) * 100)}vw, ${item.width}px`}
-            src={media.src}
-          />
-        )}
+      <div className={styles.frame}>
+        <div className={styles.media}>
+          {media.kind === "video" ? (
+            <CollageVideo label={media.alt} poster={media.poster} src={media.src} />
+          ) : (
+            <Image
+              alt={media.alt}
+              draggable={false}
+              fill
+              sizes={`(max-width: 760px) ${Math.ceil((item.width / stageWidth) * 100)}vw, ${item.width}px`}
+              src={media.src}
+            />
+          )}
+        </div>
       </div>
       {item.caption ? (
         <figcaption className={`${styles.caption} ${handwriting.className}`}>{item.caption}</figcaption>
@@ -84,6 +94,9 @@ export function AboutCollage({
           "--collage-height": settings.height,
           "--collage-spacing": `${settings.spacing}px`,
           "--collage-frame-padding": settings.framePadding,
+          "--collage-frame-color": settings.frameColor,
+          "--collage-cut-size": settings.cutSize,
+          "--collage-inner-radius": settings.innerRadius,
           "--collage-caption-size": settings.captionSize,
           "--collage-hover-scale": settings.hoverScale,
           "--collage-shadow": settings.shadow,
@@ -94,6 +107,7 @@ export function AboutCollage({
         .filter(({ visible }) => visible)
         .map((item) => (
           <CollagePhoto
+            frame={settings.frame === "mixed" ? item.frame : settings.frame}
             item={item}
             key={item.id}
             onPointerDown={editable ? onItemPointerDown : undefined}

@@ -18,7 +18,7 @@ import { AboutCollage } from "./about-collage";
 
 type Slider = [number, number, number, number];
 
-const frameOptions: CollageFrame[] = ["photo", "plain", "oval", "circle"];
+const frameOptions: CollageFrame[] = ["photo", "plain", "oval", "circle", "stamp", "scallop", "ticket"];
 
 const config = {
   stage: {
@@ -26,9 +26,15 @@ const config = {
     height: [aboutCollage.height, 300, 2400, 1] as Slider,
     spacing: [aboutCollage.spacing, 0, 200, 1] as Slider,
   },
+  frame: {
+    all: { default: aboutCollage.frame, options: ["mixed", ...frameOptions], type: "select" as const },
+    color: { default: aboutCollage.frameColor, type: "color" as const },
+    thickness: [aboutCollage.framePadding, 0, 40, 1] as Slider,
+    cutSize: [aboutCollage.cutSize, 0.3, 3, 0.05] as Slider,
+    innerRadius: [aboutCollage.innerRadius, 0, 60, 1] as Slider,
+  },
   style: {
     _collapsed: true,
-    framePadding: [aboutCollage.framePadding, 0, 40, 1] as Slider,
     shadow: [aboutCollage.shadow, 0, 1, 0.05] as Slider,
     captionSize: [aboutCollage.captionSize, 10, 60, 1] as Slider,
     hoverScale: [aboutCollage.hoverScale, 1, 1.2, 0.01] as Slider,
@@ -85,9 +91,13 @@ export function AboutCollageDebug() {
 
   const settings: AboutCollageSettings = {
     captionSize: values.style.captionSize,
-    framePadding: values.style.framePadding,
+    cutSize: values.frame.cutSize,
+    frame: values.frame.all as AboutCollageSettings["frame"],
+    frameColor: values.frame.color,
+    framePadding: values.frame.thickness,
     height: values.stage.height,
     hoverScale: values.style.hoverScale,
+    innerRadius: values.frame.innerRadius,
     items: aboutCollage.items.map(({ id }) => {
       const item = photoValues[id];
 

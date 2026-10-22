@@ -1,6 +1,6 @@
 /** The About Me section: a loose collage of personal photos and clips. */
 
-export type CollageFrame = "circle" | "oval" | "photo" | "plain";
+export type CollageFrame = "circle" | "oval" | "photo" | "plain" | "scallop" | "stamp" | "ticket";
 
 export type CollageMedia = {
   alt: string;
@@ -36,8 +36,16 @@ export type CollageItem = {
 export type AboutCollageSettings = {
   /** Handwritten note size in stage pixels. */
   captionSize: number;
-  /** White border of "photo" and "oval" frames, in stage pixels. */
+  /** One frame for every photo, or "mixed" to keep each photo's own. */
+  frame: CollageFrame | "mixed";
+  /** Frame color: the border of photo, oval and die-cut frames. */
+  frameColor: string;
+  /** Frame thickness in stage pixels. */
   framePadding: number;
+  /** Size of the stamp's holes, the scallop's bumps and the ticket's notches, relative to the frame. */
+  cutSize: number;
+  /** Corner radius of the picture inside scallop and ticket frames, in stage pixels. */
+  innerRadius: number;
   /** Stage height in stage pixels. */
   height: number;
   /** How much a photo grows on hover; 1 turns it off. */
@@ -93,32 +101,36 @@ export const collageMedia: Record<string, CollageMedia> = {
 // ABOUT_COLLAGE_START
 export const aboutCollage: AboutCollageSettings = {
   captionSize: 22,
+  cutSize: 1,
+  frame: "mixed",
+  frameColor: "#ffffff",
   framePadding: 10,
   height: 1080,
   hoverScale: 1.04,
+  innerRadius: 10,
   items: [
-    { id: "st-isaacs", visible: true, frame: "oval", x: 170, y: 250, width: 200, rotate: -4, z: 2, caption: "St. Petersburg", captionX: 0, captionY: 30 },
-    { id: "home-setup", visible: true, frame: "photo", x: 500, y: 240, width: 300, rotate: 0, z: 1, caption: "", captionX: 0, captionY: 30 },
-    { id: "video-note", visible: true, frame: "circle", x: 820, y: 230, width: 220, rotate: 4, z: 2, caption: "", captionX: 0, captionY: 30 },
-    { id: "coconut-desk", visible: true, frame: "photo", x: 210, y: 610, width: 230, rotate: -6, z: 3, caption: "", captionX: 0, captionY: 30 },
-    { id: "rolling-loud", visible: true, frame: "plain", x: 520, y: 590, width: 220, rotate: 3, z: 4, caption: "Rolling Loud", captionX: -150, captionY: -20 },
-    { id: "moto-ride", visible: true, frame: "plain", x: 790, y: 580, width: 200, rotate: 5, z: 3, caption: "", captionX: 0, captionY: 30 },
-    { id: "friends", visible: true, frame: "photo", x: 270, y: 900, width: 340, rotate: -3, z: 5, caption: "", captionX: 0, captionY: 30 },
-    { id: "sunset-peace", visible: true, frame: "photo", x: 600, y: 880, width: 230, rotate: 4, z: 6, caption: "", captionX: 0, captionY: 30 },
-    { id: "skyline", visible: true, frame: "oval", x: 850, y: 900, width: 190, rotate: -5, z: 5, caption: "", captionX: 0, captionY: 30 },
-    { id: "moto-sea", visible: false, frame: "photo", x: 500, y: 550, width: 240, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "st-isaacs", visible: true, frame: "oval", x: 226, y: 254, width: 200, rotate: -4, z: 2, caption: "St. Petersburg", captionX: 0, captionY: 30 },
+    { id: "home-setup", visible: true, frame: "stamp", x: 485, y: 256, width: 210, rotate: -11, z: 1, caption: "Home setup", captionX: -66, captionY: -293 },
+    { id: "video-note", visible: true, frame: "circle", x: 759, y: 479, width: 220, rotate: 4, z: 2, caption: "", captionX: 0, captionY: 30 },
+    { id: "coconut-desk", visible: false, frame: "photo", x: 210, y: 610, width: 230, rotate: -6, z: 3, caption: "", captionX: 0, captionY: 30 },
+    { id: "rolling-loud", visible: true, frame: "plain", x: 346, y: 476, width: 184, rotate: 16.5, z: 0, caption: "Rolling Loud", captionX: -150, captionY: -20 },
+    { id: "moto-ride", visible: true, frame: "plain", x: 298, y: 715, width: 169, rotate: -16.5, z: 4, caption: "", captionX: 0, captionY: 30 },
+    { id: "friends", visible: false, frame: "photo", x: 292, y: 800, width: 340, rotate: -3, z: 5, caption: "", captionX: 0, captionY: 30 },
+    { id: "sunset-peace", visible: true, frame: "photo", x: 532, y: 527, width: 230, rotate: 4, z: 6, caption: "", captionX: 0, captionY: 30 },
+    { id: "skyline", visible: true, frame: "circle", x: 711, y: 255, width: 190, rotate: 19.5, z: 5, caption: "SUUUUUUIIIIII", captionX: 7, captionY: -211 },
+    { id: "moto-sea", visible: false, frame: "photo", x: 500, y: 417, width: 240, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-711", visible: false, frame: "photo", x: 500, y: 550, width: 240, rotate: 3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-green", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: -4, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-night", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: 2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "gas-station", visible: false, frame: "plain", x: 500, y: 550, width: 200, rotate: -3, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "sunset", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: 4, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "sunset", visible: false, frame: "photo", x: 633, y: 353, width: 220, rotate: 4, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "pickup", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "laptop-night", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: 3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "laptop-desk", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: -3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "cowork", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: 2, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "cowork-2", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "cowork-2", visible: true, frame: "photo", x: 733, y: 728, width: 162, rotate: 20.5, z: 7, caption: "", captionX: 0, captionY: 30 },
   ],
-  shadow: 0.5,
+  shadow: 0.6,
   spacing: 32,
   width: 1000,
 };

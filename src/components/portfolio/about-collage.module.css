@@ -26,14 +26,24 @@
   transition: transform 320ms var(--ease-out-quint);
 }
 
+/* The frame is a padded mat around the picture in the frame color; die-cut frames
+   trim it with a mask. Picture and mat stay separate elements so the mask never
+   touches how the picture is laid out. */
+.frame {
+  --pad: 0px;
+
+  padding: var(--pad);
+  background: var(--collage-frame-color);
+  box-shadow:
+    0 calc(10 * var(--u)) calc(28 * var(--u)) rgb(0 0 0 / calc(var(--collage-shadow) * 24%)),
+    0 1px 2px rgb(0 0 0 / calc(var(--collage-shadow) * 20%));
+}
+
 .media {
   position: relative;
   overflow: hidden;
   aspect-ratio: var(--item-ratio);
   background: var(--color-surface-placeholder);
-  box-shadow:
-    0 calc(10 * var(--u)) calc(28 * var(--u)) rgb(0 0 0 / calc(var(--collage-shadow) * 24%)),
-    0 1px 2px rgb(0 0 0 / calc(var(--collage-shadow) * 20%));
 }
 
 .media img,
@@ -47,33 +57,84 @@
 
 /* Frames */
 
+.item[data-frame="plain"] .frame,
 .item[data-frame="plain"] .media {
   border-radius: calc(6 * var(--u));
 }
 
-/* A white border around the picture; the ratio stays the picture's own, and the
-   border fits inside the photo's width. */
-.item[data-frame="photo"] .media,
-.item[data-frame="oval"] .media,
-.item[data-frame="circle"] .media {
-  --border: calc(var(--collage-frame-padding) * var(--u));
+.item[data-frame="photo"] .frame {
+  --pad: calc(var(--collage-frame-padding) * var(--u));
 
-  width: calc(100% - 2 * var(--border));
-  box-sizing: content-box;
-  border: var(--border) solid var(--color-surface);
-}
-
-.item[data-frame="photo"] .media {
   outline: 1px solid rgb(0 0 0 / 6%);
 }
 
-/* A cameo: thinner border with a fine gilt line around it. */
-.item[data-frame="oval"] .media,
-.item[data-frame="circle"] .media {
-  --border: calc(var(--collage-frame-padding) * 0.6 * var(--u));
+/* A cameo: thinner mat with a fine gilt line around it. */
+.item[data-frame="oval"] .frame,
+.item[data-frame="circle"] .frame {
+  --pad: calc(var(--collage-frame-padding) * 0.6 * var(--u));
 
-  border-radius: 50%;
   outline: 1px solid rgb(120 100 60 / 40%);
+}
+
+.item[data-frame="oval"] :is(.frame, .media),
+.item[data-frame="circle"] :is(.frame, .media) {
+  border-radius: 50%;
+}
+
+/* Die-cut frames. A mask also clips box-shadow, so their shadow comes from a
+   drop-shadow on the photo instead. */
+.item[data-frame="stamp"],
+.item[data-frame="scallop"],
+.item[data-frame="ticket"] {
+  filter: drop-shadow(0 calc(10 * var(--u)) calc(14 * var(--u)) rgb(0 0 0 / calc(var(--collage-shadow) * 22%)))
+    drop-shadow(0 1px 1px rgb(0 0 0 / calc(var(--collage-shadow) * 16%)));
+}
+
+.item[data-frame="stamp"] .frame,
+.item[data-frame="scallop"] .frame,
+.item[data-frame="ticket"] .frame {
+  box-shadow: none;
+}
+
+.item[data-frame="scallop"] .media,
+.item[data-frame="ticket"] .media {
+  border-radius: calc(var(--collage-inner-radius) * var(--u));
+}
+
+/* Postage stamp: a row of round holes punched along every edge. */
+.item[data-frame="stamp"] .frame {
+  --pad: calc(var(--collage-frame-padding) * 1.6 * var(--u));
+  --hole: calc(var(--pad) * 0.32 * var(--collage-cut-size));
+
+  mask:
+    radial-gradient(var(--hole), #0000 98%, #000) round calc(-1.5 * var(--hole))
+      calc(-1.5 * var(--hole)) / calc(3 * var(--hole)) calc(3 * var(--hole)),
+    linear-gradient(#000 0 0) no-repeat 50% / calc(100% - 3 * var(--hole))
+      calc(100% - 3 * var(--hole));
+}
+
+/* Scalloped card: round bumps all the way around. */
+.item[data-frame="scallop"] .frame {
+  --pad: calc(var(--collage-frame-padding) * 2.2 * var(--u));
+  --bump: calc(var(--pad) * 0.42 * var(--collage-cut-size));
+
+  mask:
+    radial-gradient(var(--bump), #000 98%, #0000) round 0 0 / calc(2 * var(--bump))
+      calc(2 * var(--bump)),
+    linear-gradient(#000 0 0) no-repeat 50% / calc(100% - 2 * var(--bump))
+      calc(100% - 2 * var(--bump));
+}
+
+/* Ticket: rounded notches cut out of the corners. */
+.item[data-frame="ticket"] .frame {
+  --pad: calc(var(--collage-frame-padding) * 1.6 * var(--u));
+  --notch: calc(var(--pad) * 1.3 * var(--collage-cut-size));
+
+  mask:
+    radial-gradient(circle var(--notch) at 0 0, #0000 98%, #000) top left / 51% 51% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 0, #0000 98%, #000) top right / 51% 51% no-repeat,
+    radial-gradient(circle var(--notch) at 0 100%, #0000 98%, #000) bottom left / 51% 51% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 100%, #0000 98%, #000) bottom right / 51% 51% no-repeat;
 }
 
 .caption {
