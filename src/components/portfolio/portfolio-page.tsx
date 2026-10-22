@@ -75,12 +75,23 @@ export async function PortfolioPage({
                 About Me
               </h2>
               <p className={styles.aboutText}>
+                I was born and raised in Saint Petersburg. In 2020 I got hooked on UX/UI design, and
+                it&apos;s been a big part of my life ever since. I still genuinely love what I do.
+              </p>
+              <p className={styles.aboutText}>
+                I started out with simple landing pages, banners, and business cards in Photoshop.
+                The projects have grown a lot since then, but the excitement hasn&apos;t worn off: I
+                still learn something new about design every day, collect inspiration everywhere, and
+                keep trying small experiments. Every day I try to be a bit better than yesterday and
+                give the work everything I&apos;ve got.
+              </p>
+              <p className={styles.aboutText}>
                 I also share practical insights on{" "}
                 <SocialPreviewLink href={links.youtube} previewSrc="/videos/youtube_tooltip.mp4">
                   YouTube
                 </SocialPreviewLink>{" "}
                 and run a <TextLink href={links.telegramChannel}>Telegram</TextLink> channel for
-                designers and tech enthusiasts. Outside of work, I play tennis, go to the gym, and
+                designers and tech enthusiasts. Off the screen, I play tennis, go to the gym, and
                 compete in Counter-Strike 2.
               </p>
               <AboutSection />
