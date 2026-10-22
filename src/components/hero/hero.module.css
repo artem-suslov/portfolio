@@ -137,6 +137,111 @@
   display: var(--hero-name-break, inline);
 }
 
+/* Sized in em/lh so it follows the Headline DialKit typography. The pill's colour lives on
+   .aiToolFill so its width change can animate with a transform. */
+.aiToolChip {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  height: 1lh;
+  padding: 0 var(--space-2) 0 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  vertical-align: top;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--duration-press) var(--ease-out-snappy);
+}
+
+.aiToolChip[data-tool="chatgpt"] {
+  padding-right: var(--space-3);
+}
+
+.aiToolFill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-page);
+  transition: background-color var(--duration-hover) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* 5 points darker: #f2f2f2 → #e6e6e6. */
+  .aiToolChip:hover .aiToolFill {
+    background: color-mix(in srgb, var(--color-page), #000 5%);
+  }
+}
+
+.aiToolChip:active {
+  transform: scale(0.96);
+}
+
+.aiToolChip:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aiToolChip {
+    transition: none;
+  }
+}
+
+/* Fixed-size slot, so swapping marks never moves the name. The outgoing mark is popped
+   out of flow (AnimatePresence popLayout) and spins away on top of the incoming one. */
+.aiToolMarkSlot {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.385em;
+  height: 1.385em;
+  margin-right: var(--space-1);
+}
+
+.aiToolMarkFrame {
+  display: inline-flex;
+}
+
+/* Overhangs the pill, like a sticker on its left end. */
+.aiToolMark {
+  width: 1.385em;
+  height: 1.385em;
+  overflow: visible;
+}
+
+/* The Codex cloud fills its box, so it sits a touch off the pill's left edge. */
+.codexMark {
+  translate: 2px 0;
+}
+
+.aiToolName {
+  display: inline-flex;
+}
+
+/* Rolling letters fade out through soft top and bottom edges (the NumberFlow trick) instead
+   of a hard clip, all within the pill's height. The stops sit in the line's half-leading and
+   above the cap height / below the baseline, so letters at rest stay fully opaque.
+   The mask also hides anything outside the box, so it reaches 1em further right (padding
+   undone by the negative margin) for a longer outgoing word ("hatGPT") to roll away whole.
+   The shared "C" stays outside the mask. */
+.aiToolTail {
+  position: relative;
+  display: inline-flex;
+  padding-right: 1em;
+  margin-right: -1em;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 88%, transparent);
+}
+
+.aiToolTailWord,
+.aiToolLetter {
+  display: inline-block;
+}
+
 .v2Description {
   display: flex;
   flex-direction: column;
@@ -170,14 +275,22 @@
   }
 
   .v2Name {
-    font-size: var(--hero-name-mobile-font-size, var(--font-size-xl));
+    /* "who can ship frontend with [ChatGPT]" (the longer of the two chips) is ~18.4em wide;
+       narrow phones shrink the headline just enough to keep it on one line under the 16px
+       gutters, with a little slack for font rendering differences. */
+    font-size: min(
+      var(--hero-name-mobile-font-size, var(--font-size-xl)),
+      calc((100vw - 2 * var(--space-4)) / 18.8)
+    );
     line-height: var(--hero-name-mobile-line-height, var(--line-height-lg));
     text-wrap: pretty;
   }
 
-  /* Phones break the heading after "Product Designer". */
+  /* Phones break the heading after "Product Designer". The second line opts out of
+     `pretty`, which would otherwise push "with Claude" onto a third line even when it fits. */
   .v2NameBreak {
     display: block;
+    text-wrap: wrap;
   }
 
   .heroToolbar {
