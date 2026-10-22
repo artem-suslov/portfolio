@@ -8,12 +8,14 @@ import { TextLink } from "@/components/ui/text-link";
 import { pageSpacing, pageSpacingVars } from "@/data/page-spacing";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
 import { links } from "@/lib/site";
+import { getVisitorStats } from "@/lib/visitors";
 import { AboutCollage } from "./about-collage";
 import { Colophon } from "./colophon";
 import { CraftBento } from "./craft-bento";
 import { HomeRail } from "./home-rail";
 import { HomeScrollRestore } from "./home-scroll-restore";
 import styles from "./portfolio-page.module.css";
+import { VisitorCount } from "./visitor-count";
 
 const homeSections = [
   // Work opens the page, so it scrolls to the very top rather than to the case list.
@@ -64,6 +66,7 @@ export async function PortfolioPage({
       : null;
   const SavePanel =
     process.env.NODE_ENV === "development" ? (await import("./dial-save")).DialSaveDebug : null;
+  const visitorStats = await getVisitorStats();
 
   return (
     <main className={styles.viewport} style={pageSpacingVars(pageSpacing) as CSSProperties}>
@@ -71,6 +74,7 @@ export async function PortfolioPage({
       <SoundProvider>
         <MotionProvider>
           <HomeRail sections={homeSections} />
+          {visitorStats ? <VisitorCount stats={visitorStats} /> : null}
           <article
             id="top"
             className={

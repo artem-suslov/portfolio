@@ -1,0 +1,47 @@
+/* Mirrors the section rail: 32px from the right, 24px from the top, the same 32px
+   line as a rail item, and only while the gutter beside the 700px card fits it. */
+.count {
+  position: fixed;
+  z-index: 1;
+  top: var(--space-6);
+  right: var(--space-8);
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-2xl);
+  letter-spacing: var(--letter-spacing-tight);
+  transition: opacity var(--duration-hover) ease;
+}
+
+.count[data-covered] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1041px) {
+  .count {
+    display: flex;
+  }
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.bar {
+  width: 3px;
+  border-radius: var(--radius-full);
+  background: var(--color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .count {
+    transition: none;
+  }
+}
