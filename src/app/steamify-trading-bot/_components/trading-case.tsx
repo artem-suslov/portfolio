@@ -18,6 +18,8 @@ import settingsScreen from "../../../../public/images/steamify-trading-case/sett
 
 const assets = "/images/steamify-trading-case";
 const caseId = "steamify-trading-bot";
+// The Prices section is hidden for now; flip to true to bring it back.
+const showPrices = false;
 
 const sections = [
   { id: "overview", label: "Overview" },
@@ -29,7 +31,7 @@ const sections = [
   { id: "profiles", label: "Profiles" },
   { id: "prices", label: "Prices" },
   { id: "results", label: "Outcomes and learnings" },
-];
+].filter((section) => showPrices || section.id !== "prices");
 
 const meta = [
   { label: "Team", value: "CEO, Backend Dev, Frontend Dev, Product Designer (me)" },
@@ -127,7 +129,7 @@ export function TradingCase() {
         <Screen image={profilesScreen} alt="Profiles page with bots grouped by status, showing balance, sales, items, markets and status" />
       </section>
 
-      <section id="prices" className={shared.divided}>
+      {showPrices && <section id="prices" className={shared.divided}>
         <h2>Prices</h2>
         <div className={shared.prose}>
           <p>On this page, users define minimum and maximum pricing thresholds for their items. Each item’s uniqueness is visually emphasized through background color coding, reflecting rarity standards familiar to Steam traders and improving quick recognition.</p>
@@ -138,7 +140,7 @@ export function TradingCase() {
           <Screen name="prices" alt="Prices page with min–max thresholds and the analytics drawer showing the sales chart and sales history" />
           <Screen name="auto-prices" alt="Auto-prices dialog for setting minimum and maximum prices as a percentage of a price service" />
         </div>
-      </section>
+      </section>}
 
       <section id="results" className={shared.divided}>
         <h2>Outcomes and learnings</h2>
