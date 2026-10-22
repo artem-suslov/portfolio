@@ -17,10 +17,10 @@ export type PageSpacing = {
 // "Save to code" in the Page spacing DialKit panel rewrites everything between these markers.
 // PAGE_SPACING_START
 export const pageSpacing: PageSpacing = {
-  aboutHeadingGap: 16,
-  aboutParagraphGap: 16,
-  aboutToColophon: 72,
-  colophonBottom: 76,
+  aboutHeadingGap: 12,
+  aboutParagraphGap: 12,
+  aboutToColophon: 100,
+  colophonBottom: 81,
   craftToAbout: 120,
 };
 // PAGE_SPACING_END
