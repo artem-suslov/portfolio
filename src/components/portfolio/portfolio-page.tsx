@@ -5,6 +5,7 @@ import { MotionProvider } from "@/components/motion/motion-provider";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import { SoundProvider } from "@/components/sound/sound-provider";
 import { TextLink } from "@/components/ui/text-link";
+import { heroHeadline, heroHeadlineVars } from "@/data/hero-headline";
 import { pageSpacing, pageSpacingVars } from "@/data/page-spacing";
 import { portfolioCases, workCaseIds } from "@/data/portfolio-cases";
 import { links } from "@/lib/site";
@@ -50,8 +51,8 @@ export async function PortfolioPage({
     process.env.NODE_ENV === "development"
       ? (await import("@/components/portfolio-case/portfolio-debug-panel")).PortfolioDebugPanel
       : null;
-  // In development the grid, the About Me collage and the section spacing come with live
-  // DialKit controls.
+  // In development the grid, the About Me collage, the section spacing and the headline
+  // come with live DialKit controls.
   const CraftSection =
     process.env.NODE_ENV === "development"
       ? (await import("./craft-bento-debug")).CraftBentoDebug
@@ -64,12 +65,18 @@ export async function PortfolioPage({
     process.env.NODE_ENV === "development"
       ? (await import("./page-spacing-debug")).PageSpacingDebug
       : null;
+  const HeadlinePanel =
+    process.env.NODE_ENV === "development"
+      ? (await import("./hero-headline-debug")).HeroHeadlineDebug
+      : null;
   const SavePanel =
     process.env.NODE_ENV === "development" ? (await import("./dial-save")).DialSaveDebug : null;
   const visitorStats = await getVisitorStats();
 
   return (
-    <main className={styles.viewport} style={pageSpacingVars(pageSpacing) as CSSProperties}>
+    <main className={styles.viewport} style={
+        { ...pageSpacingVars(pageSpacing), ...heroHeadlineVars(heroHeadline) } as CSSProperties
+      }>
       <HomeScrollRestore />
       <SoundProvider>
         <MotionProvider>
@@ -124,6 +131,7 @@ export async function PortfolioPage({
           <Colophon className={styles.colophon} />
           <FeedbackWidget />
           {SpacingPanel ? <SpacingPanel /> : null}
+          {HeadlinePanel ? <HeadlinePanel /> : null}
           {SavePanel ? <SavePanel /> : null}
           {DebugPanel ? (
             <DebugPanel cases={portfolioCases.map(({ id, title }) => ({ id, label: title }))} />

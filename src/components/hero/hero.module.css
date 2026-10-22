@@ -125,16 +125,21 @@
 .v2Name {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: var(--font-size-xl);
-  font-weight: 500;
-  line-height: var(--line-height-xl);
-  letter-spacing: -0.02em;
+  /* The --hero-name-* values come from src/data/hero-headline.ts (Headline DialKit panel). */
+  font-size: var(--hero-name-font-size, var(--font-size-xl));
+  font-weight: var(--hero-name-font-weight, 500);
+  line-height: var(--hero-name-line-height, var(--line-height-xl));
+  letter-spacing: var(--hero-name-letter-spacing, -0.02em);
+}
+
+.v2NameBreak {
+  display: var(--hero-name-break, inline);
 }
 
 .v2Identity {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--hero-name-tagline-gap, var(--space-1));
 }
 
 .v2Description {
@@ -170,7 +175,8 @@
   }
 
   .v2Name {
-    line-height: var(--line-height-lg);
+    font-size: var(--hero-name-mobile-font-size, var(--font-size-xl));
+    line-height: var(--hero-name-mobile-line-height, var(--line-height-lg));
     text-wrap: pretty;
   }
 
