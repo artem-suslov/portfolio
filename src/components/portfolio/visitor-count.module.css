@@ -9,10 +9,10 @@
   align-items: center;
   gap: var(--space-2);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  /* Quieter than the rail; the type scale has no 12px step. */
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
   line-height: var(--line-height-2xl);
-  letter-spacing: var(--letter-spacing-tight);
   transition: opacity var(--duration-hover) ease;
 }
 
@@ -31,17 +31,40 @@
   display: flex;
   align-items: flex-end;
   gap: 2px;
-  height: 12px;
+  height: 10px;
 }
 
+/* Full-height bars scaled from the bottom, so both motions stay on the compositor:
+   `transform` grows each bar to its day's level as the digits roll in, and the
+   separate `scale` property keeps it breathing, each bar out of step with the others. */
 .bar {
   width: 3px;
+  height: 100%;
   border-radius: var(--radius-full);
   background: var(--color-text-muted);
+  transform: scaleY(var(--level));
+  transform-origin: bottom;
+  transition: transform 900ms var(--ease-out-quint) calc(var(--index) * 80ms);
+  animation: breathe 2.4s ease-in-out calc(var(--index) * -0.8s) infinite alternate;
+}
+
+@keyframes breathe {
+  from {
+    scale: 1 1;
+  }
+
+  to {
+    scale: 1 0.6;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .count {
+  .count,
+  .bar {
     transition: none;
+  }
+
+  .bar {
+    animation: none;
   }
 }

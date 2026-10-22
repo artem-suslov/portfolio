@@ -10,12 +10,12 @@ export type VisitorStats = {
 const METRIKA_API = "https://api-metrika.yandex.net/stat/v1/data";
 // Counter install date; Metrika counts nothing before it.
 const METRIKA_START = "2025-01-01";
-const DAILY_BARS = 7;
+const DAILY_BARS = 3;
 const REVALIDATE_SECONDS = 3600;
 
 // Without a token there is nothing to show in production; dev gets sample numbers
 // so the layout can still be checked.
-const SAMPLE_STATS: VisitorStats = { total: 50936, daily: [48, 62, 55, 71, 66, 90, 58] };
+const SAMPLE_STATS: VisitorStats = { total: 50936, daily: [66, 90, 58] };
 
 async function metrikaGet(path: string, params: Record<string, string>, token: string) {
   const query = new URLSearchParams({ ids: String(YANDEX_METRIKA_ID), ...params });
