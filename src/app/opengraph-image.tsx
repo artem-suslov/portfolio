@@ -56,7 +56,6 @@ export default async function OpengraphImage() {
               width: 500,
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- rendered by Satori, not the browser */}
             <img
               alt=""
               height={210}
