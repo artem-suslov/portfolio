@@ -93,6 +93,7 @@ export function AboutCollage({
           "--collage-width": settings.width,
           "--collage-height": settings.height,
           "--collage-spacing": `${settings.spacing}px`,
+          "--collage-mobile-spacing": `${settings.mobileSpacing}px`,
           "--collage-frame-padding": settings.framePadding,
           "--collage-frame-color": settings.frameColor,
           "--collage-cut-size": settings.cutSize,

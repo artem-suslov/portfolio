@@ -51,9 +51,11 @@ export type AboutCollageSettings = {
   /** How much a photo grows on hover; 1 turns it off. */
   hoverScale: number;
   items: CollageItem[];
+  /** Space above the stage on phones (≤760px), where the stage is much smaller. */
+  mobileSpacing: number;
   /** 0–1: strength of the drop shadow under every photo. */
   shadow: number;
-  /** Space between the heading and the stage. */
+  /** Space between the text above and the stage; negative pulls the stage up under it. */
   spacing: number;
   /** Stage width at full size; the whole collage scales down with the page below it. */
   width: number;
@@ -105,41 +107,42 @@ export const collageMedia: Record<string, CollageMedia> = {
 // ABOUT_COLLAGE_START
 export const aboutCollage: AboutCollageSettings = {
   captionSize: 22,
-  cutSize: 1,
+  cutSize: 1.6,
   frame: "mixed",
-  frameColor: "#ffffff",
-  framePadding: 10,
-  height: 1080,
+  frameColor: "#f1f1f1",
+  framePadding: 6,
+  height: 961,
   hoverScale: 1.04,
-  innerRadius: 10,
+  innerRadius: 29,
   items: [
-    { id: "st-isaacs", visible: true, frame: "circle", x: 264, y: 254, width: 200, rotate: 10.5, z: 2, caption: "St. Petersburg", captionX: -24, captionY: 19 },
+    { id: "st-isaacs", visible: true, frame: "circle", x: 266, y: 256, width: 200, rotate: 10.5, z: 2, caption: "🏠 St. Petersburg", captionX: -24, captionY: 19 },
     { id: "home-setup", visible: true, frame: "photo", x: 485, y: 256, width: 210, rotate: -11, z: 1, caption: "Home setup", captionX: -66, captionY: -293 },
-    { id: "video-note", visible: true, frame: "circle", x: 785, y: 492, width: 220, rotate: 4, z: 2, caption: "", captionX: 0, captionY: 30 },
+    { id: "video-note", visible: false, frame: "circle", x: 785, y: 492, width: 220, rotate: 4, z: 2, caption: "", captionX: 0, captionY: 30 },
     { id: "coconut-desk", visible: false, frame: "photo", x: 210, y: 610, width: 230, rotate: -6, z: 3, caption: "", captionX: 0, captionY: 30 },
-    { id: "rolling-loud", visible: true, frame: "photo", x: 721, y: 743, width: 188, rotate: -8, z: 15, caption: "Rolling Loud 2023", captionX: -10, captionY: 23 },
-    { id: "moto-ride", visible: true, frame: "plain", x: 345, y: 534, width: 169, rotate: -16.5, z: 0, caption: "", captionX: 0, captionY: 30 },
-    { id: "friends", visible: false, frame: "photo", x: 292, y: 800, width: 340, rotate: -3, z: 5, caption: "", captionX: 0, captionY: 30 },
-    { id: "sunset-peace", visible: true, frame: "stamp", x: 532, y: 504, width: 288, rotate: 4, z: 13, caption: "", captionX: 0, captionY: 25 },
-    { id: "skyline", visible: true, frame: "circle", x: 711, y: 255, width: 190, rotate: 19.5, z: 5, caption: "SUUUUUUIIIIII", captionX: 7, captionY: -211 },
+    { id: "rolling-loud", visible: true, frame: "photo", x: 736, y: 677, width: 154, rotate: -8, z: 9, caption: "Rolling Loud 2023", captionX: -10, captionY: 23 },
+    { id: "moto-ride", visible: false, frame: "plain", x: 345, y: 534, width: 169, rotate: -16.5, z: 0, caption: "", captionX: 0, captionY: 30 },
+    { id: "friends", visible: false, frame: "photo", x: 308, y: 467, width: 340, rotate: -3, z: 5, caption: "", captionX: 0, captionY: 30 },
+    { id: "sunset-peace", visible: true, frame: "stamp", x: 535, y: 503, width: 288, rotate: 4, z: 13, caption: "", captionX: 0, captionY: 25 },
+    { id: "skyline", visible: true, frame: "circle", x: 730, y: 222, width: 223, rotate: 19.5, z: 5, caption: "SUUUUUUIIIIII", captionX: 7, captionY: -246 },
     { id: "moto-sea", visible: false, frame: "photo", x: 500, y: 417, width: 240, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "moto-711", visible: false, frame: "photo", x: 500, y: 550, width: 240, rotate: 3, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "moto-green", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: -4, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "moto-night", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: 2, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "moto-green", visible: true, frame: "plain", x: 324, y: 502, width: 136, rotate: -4, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "moto-night", visible: false, frame: "photo", x: 134, y: 550, width: 220, rotate: 2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "gas-station", visible: false, frame: "plain", x: 500, y: 550, width: 200, rotate: -3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "sunset", visible: false, frame: "photo", x: 633, y: 353, width: 220, rotate: 4, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "pickup", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: -2, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "laptop-night", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: 3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "laptop-desk", visible: false, frame: "plain", x: 500, y: 550, width: 220, rotate: -3, z: 7, caption: "", captionX: 0, captionY: 30 },
     { id: "cowork", visible: false, frame: "photo", x: 500, y: 550, width: 220, rotate: 2, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "cowork-2", visible: true, frame: "stamp", x: 292, y: 736, width: 173, rotate: 18, z: 7, caption: "", captionX: 0, captionY: 30 },
-    { id: "sunset-2", visible: true, frame: "photo", x: 500, y: 900, width: 200, rotate: -5, z: 16, caption: "", captionX: 0, captionY: 30 },
-    { id: "tennis", visible: true, frame: "circle", x: 110, y: 520, width: 150, rotate: -6, z: 8, caption: "", captionX: 0, captionY: 30 },
-    { id: "teeth", visible: true, frame: "circle", x: 910, y: 260, width: 150, rotate: 8, z: 8, caption: "", captionX: 0, captionY: 30 },
-    { id: "sunset-3", visible: true, frame: "circle", x: 880, y: 900, width: 160, rotate: 5, z: 9, caption: "", captionX: 0, captionY: 30 },
+    { id: "cowork-2", visible: true, frame: "stamp", x: 316, y: 733, width: 173, rotate: 18, z: 7, caption: "", captionX: 0, captionY: 30 },
+    { id: "sunset-2", visible: false, frame: "photo", x: 500, y: 900, width: 200, rotate: -5, z: 16, caption: "", captionX: 0, captionY: 30 },
+    { id: "tennis", visible: true, frame: "circle", x: 537, y: 789, width: 195, rotate: -5.5, z: 14, caption: "Tired on tennis practice", captionX: 0, captionY: 30 },
+    { id: "teeth", visible: true, frame: "circle", x: 186, y: 566, width: 150, rotate: -12.5, z: 8, caption: "", captionX: 0, captionY: 30 },
+    { id: "sunset-3", visible: true, frame: "circle", x: 795, y: 464, width: 229, rotate: 5, z: 9, caption: "", captionX: 0, captionY: 30 },
   ],
+  mobileSpacing: 24,
   shadow: 0.6,
-  spacing: 32,
-  width: 1000,
+  spacing: -40,
+  width: 1046,
 };
 // ABOUT_COLLAGE_END

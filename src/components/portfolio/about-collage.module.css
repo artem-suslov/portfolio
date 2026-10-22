@@ -178,6 +178,10 @@
 @media (max-width: 760px) {
   .collage {
     --collage-gutter: var(--space-4);
+
+    /* The stage shrinks to a third here, so a fixed desktop offset would push it
+       into the text above. */
+    margin-top: var(--collage-mobile-spacing);
   }
 }
 
