@@ -244,14 +244,21 @@
   }
 
   .v2Name {
-    font-size: var(--hero-name-mobile-font-size, var(--font-size-xl));
+    /* "who can ship frontend with [Claude]" is ~17.4em wide; narrow phones shrink the
+       headline just enough to keep it on one line under the 16px gutters. */
+    font-size: min(
+      var(--hero-name-mobile-font-size, var(--font-size-xl)),
+      calc((100vw - 2 * var(--space-4)) / 17.6)
+    );
     line-height: var(--hero-name-mobile-line-height, var(--line-height-lg));
     text-wrap: pretty;
   }
 
-  /* Phones break the heading after "Product Designer". */
+  /* Phones break the heading after "Product Designer". The second line opts out of
+     `pretty`, which would otherwise push "with Claude" onto a third line even when it fits. */
   .v2NameBreak {
     display: block;
+    text-wrap: wrap;
   }
 
   .heroToolbar {
