@@ -27,6 +27,17 @@ export const metadata: Metadata = {
     siteName: "Artem Suslov",
     type: "website",
     url: "/",
+    images: [
+      {
+        url: "/images/og-image.png?v=20261022",
+        width: 2400,
+        height: 1260,
+        alt: SITE_TITLE,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
   },
   robots: {
     follow: true,
