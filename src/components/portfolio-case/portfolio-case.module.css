@@ -736,8 +736,8 @@
     transform: translateX(-50%);
   }
 
-  /* The recording's white backdrop merges with the page on phones; a hairline keeps the frame visible. */
-  .case[data-case-id="telegram-quick-stickers"] .caseVisual::after {
+  /* Covers sit on the plain white page on phones; a hairline keeps each frame visible. */
+  .caseVisual::after {
     content: "";
     position: absolute;
     inset: 0;

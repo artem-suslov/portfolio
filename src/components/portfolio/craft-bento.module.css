@@ -103,4 +103,15 @@
   .hiddenOnMobile {
     display: none;
   }
+
+  /* Same hairline as the case covers, so concept frames don't merge with the page. */
+  .conceptFrame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border: 1px solid #f5f5f5;
+    border-radius: inherit;
+    pointer-events: none;
+  }
 }
