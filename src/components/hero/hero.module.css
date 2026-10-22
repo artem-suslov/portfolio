@@ -122,6 +122,12 @@
   letter-spacing: var(--letter-spacing-tight);
 }
 
+/* Body text on the home page is a step up from the tagline. */
+.v2Description p {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-lg);
+}
+
 .v2Name {
   margin: 0;
   color: var(--color-text-primary);

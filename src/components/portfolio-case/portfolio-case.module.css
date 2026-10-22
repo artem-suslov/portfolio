@@ -560,9 +560,9 @@
   max-width: 580px;
   margin: var(--space-2) 0 var(--space-4);
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
   text-wrap: pretty;
 }
 
@@ -685,9 +685,9 @@
   max-width: 620px;
   margin: 0;
   color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: 400;
-  line-height: var(--line-height-md);
+  line-height: var(--line-height-lg);
   text-align: left;
   text-wrap: pretty;
 }
@@ -713,8 +713,8 @@
 
   .caseDetails > p {
     margin: var(--space-2) 0 var(--space-4);
-    font-size: var(--font-size-sm);
-    line-height: var(--line-height-md);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-lg);
   }
 
   .caseDetails dl > div {
