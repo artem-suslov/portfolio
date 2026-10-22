@@ -137,6 +137,27 @@
   display: var(--hero-name-break, inline);
 }
 
+/* Sized in em/lh so it follows the Headline DialKit typography. */
+.claudeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 1lh;
+  padding-right: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-page);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+/* Overhangs the pill, like a sticker on its left end. */
+.claudeMark {
+  flex-shrink: 0;
+  width: 1.385em;
+  height: 1.385em;
+  overflow: visible;
+}
+
 .v2Description {
   display: flex;
   flex-direction: column;

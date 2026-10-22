@@ -1,10 +1,10 @@
 /** Typography of the home page headline ("Artem Suslov, a Product Designer who can ship
-    frontend") and its gap to the description below. Sizes are in pixels, letter spacing in em. */
+    frontend with Claude") and its gap to the description below. Sizes are in pixels, letter spacing in em. */
 
 export type HeroHeadline = {
   /** Between the headline and the description. */
   descriptionGap: number;
-  /** Puts "who can ship frontend" on its own line on desktop too (phones always break). */
+  /** Puts "who can ship frontend with Claude" on its own line on desktop too (phones always break). */
   desktopBreak: boolean;
   fontSize: number;
   fontWeight: number;
