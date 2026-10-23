@@ -1,7 +1,8 @@
 "use client";
 
-import Image, { getImageProps } from "next/image";
+import { getImageProps } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { CaseCoverModal } from "./case-cover-modal";
 import { CaseVideo } from "./case-video";
 import { DashboardCasePreview } from "./dashboard-case-preview";
@@ -121,7 +122,7 @@ export function CaseCover({
           label={label}
           renderMedia={(isExpanded) =>
             foreground ? (
-              <Image
+              <SkeletonImage
                 alt={foreground.alt}
                 className={styles.backgroundCaseImage}
                 data-debug-media
@@ -154,7 +155,7 @@ export function CaseCover({
             label={label}
             mediaOnly
             renderMedia={(isExpanded) => (
-              <Image
+              <SkeletonImage
                 alt={cover.alt}
                 className={styles.screenCaseImage}
                 height={cover.height}
@@ -240,7 +241,7 @@ export function CaseCover({
             }
 
             const image = (
-              <Image
+              <SkeletonImage
                 alt={cover.alt}
                 className={join(styles.caseImage, imageClassNames[cover.variant])}
                 data-debug-media

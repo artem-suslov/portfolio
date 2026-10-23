@@ -1,10 +1,10 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
 import { type CSSProperties, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { Button } from "@/components/ui/button";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { imagePath, imageSizes } from "./animator-case-parts";
 import styles from "./animator-case.module.css";
 
@@ -59,7 +59,7 @@ export function AnimatorSlider({
               key={name}
               role="group"
             >
-              <Image alt={alt} height={height} sizes={imageSizes} src={`${imagePath}/${name}`} width={width} />
+              <SkeletonImage alt={alt} height={height} sizes={imageSizes} src={`${imagePath}/${name}`} width={width} />
             </div>
           ))}
         </div>

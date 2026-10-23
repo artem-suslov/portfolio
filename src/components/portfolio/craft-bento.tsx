@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import type { CSSProperties } from "react";
 import { CaseInfo } from "@/components/portfolio-case/case-info";
 import { PortfolioCase } from "@/components/portfolio-case/portfolio-case";
 import caseStyles from "@/components/portfolio-case/portfolio-case.module.css";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import { type Concept, conceptsById } from "@/data/concepts";
 import {
   type CraftBentoSettings,
@@ -35,7 +35,7 @@ function ConceptTile({
   return (
     <article className={`${caseStyles.case} ${caseStyles.tileCase}`} data-case-id={id}>
       <div className={styles.conceptFrame}>
-        <Image
+        <SkeletonImage
           alt={alt}
           className={styles.concept}
           height={src.height}

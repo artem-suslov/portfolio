@@ -1,5 +1,5 @@
-import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import styles from "./animator-case.module.css";
 
 export const imagePath = "/images/animator-case";
@@ -18,7 +18,7 @@ export function CaseImage({
   width?: number;
 }) {
   return (
-    <Image
+    <SkeletonImage
       alt={alt}
       className={shared.media}
       height={height}

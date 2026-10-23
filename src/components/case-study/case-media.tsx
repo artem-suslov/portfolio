@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useRef } from "react";
 import { CaseCoverModal } from "@/components/portfolio-case/case-cover-modal";
 import { ExpandedCaseVideo } from "@/components/portfolio-case/case-video";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import styles from "./case-media.module.css";
 
 // The page needs a `MotionProvider` above these, since the expanding view animates with `m.*`.
@@ -56,7 +56,7 @@ export function CaseImage({
   if (!expandable) {
     return (
       <div className={frameClassName ? `${styles.still} ${frameClassName}` : styles.still}>
-        <Image alt={alt} className={imageClassName} height={height} preload={preload} sizes={sizes} src={src} width={width} />
+        <SkeletonImage alt={alt} className={imageClassName} height={height} preload={preload} sizes={sizes} src={src} width={width} />
       </div>
     );
   }
@@ -68,7 +68,7 @@ export function CaseImage({
       label={alt}
       mediaOnly
       renderMedia={(isExpanded) => (
-        <Image
+        <SkeletonImage
           alt={alt}
           className={imageClassName}
           height={height}
