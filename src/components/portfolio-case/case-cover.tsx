@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { CaseCoverModal } from "./case-cover-modal";
 import { CaseVideo } from "./case-video";
@@ -259,13 +259,22 @@ export function CaseCover({
               />
             );
 
-            return cover.mobileSrc ? (
+            if (!cover.mobileSrc) {
+              return image;
+            }
+
+            // Resized variants of the phone crop, so phones don't load the original PNG.
+            const { props: mobile } = getImageProps({
+              alt: "",
+              sizes: "calc(100vw - 32px)",
+              src: cover.mobileSrc,
+            });
+
+            return (
               <picture className={styles.steamifyExperimentPicture}>
-                <source media="(max-width: 760px)" srcSet={cover.mobileSrc} />
+                <source media="(max-width: 760px)" sizes={mobile.sizes} srcSet={mobile.srcSet} />
                 {image}
               </picture>
-            ) : (
-              image
             );
           }}
         />

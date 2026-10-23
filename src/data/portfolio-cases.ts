@@ -4,6 +4,7 @@ import safeDesignSystemThumbnail from "../../public/images/safe_thumb_case.png";
 // Imported so the URL carries a content hash: replacing the file busts the image cache.
 import steamifyCashoutPhones from "../../public/images/cashout_thumb_case.png";
 import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.png";
+import steamifyTradingBotMobile from "../../public/images/Concept/tradingbot_thumb_case_mobile.png";
 
 export const portfolioCases: PortfolioCaseData[] = [
   {
@@ -158,7 +159,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       alt: "Steam trading management dashboard overview",
       height: steamifyTradingBotScreen.height,
       // Phones get a crop of the screen that matches their 37:30 cover frame.
-      mobileSrc: "/images/Concept/tradingbot_thumb_case_mobile.png?v=20261015",
+      mobileSrc: steamifyTradingBotMobile,
       src: steamifyTradingBotScreen,
       type: "image",
       // The exported cover carries its own gray surface, so it fills the frame like Safe's.

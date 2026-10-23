@@ -68,7 +68,6 @@ export function DashboardCasePreview({
         fill
         sizes={sizes}
         src={src}
-        unoptimized
       />
       {shouldLoad ? <LocalDashboardOverview /> : null}
     </div>
