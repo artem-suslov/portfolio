@@ -1,8 +1,6 @@
 "use client";
 
-import { AnimatePresence, m, useReducedMotion, type Variants } from "framer-motion";
-import { useId, useState } from "react";
-import { useMotionFeaturesLoaded } from "@/components/motion/motion-provider";
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import styles from "./hero.module.css";
 
@@ -90,136 +88,93 @@ function CodexMark() {
 }
 
 const TOOL_NAMES: Record<Tool, string> = { claude: "Claude", chatgpt: "ChatGPT" };
+const TOOLS: Tool[] = ["claude", "chatgpt"];
 
 // Strong ease-out (same curve as --ease-out-snappy).
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
-const LETTER_STAGGER = 0.02;
-
-type LetterPosition = { index: number; count: number };
-
-const MARK_SPRING = { type: "spring", duration: 0.5, bounce: 0.25 } as const;
-
-const FADE_VARIANTS: Variants = {
-  hidden: { opacity: 0 },
-  shown: { opacity: 1, transition: { duration: 0.2 } },
-  gone: { opacity: 0, transition: { duration: 0.15 } },
-};
-
-const MARK_VARIANTS: Variants = {
-  hidden: { opacity: 0, transform: "rotate(-90deg) scale(0.5)" },
-  shown: {
-    opacity: 1,
-    transform: "rotate(0deg) scale(1)",
-    transition: { ...MARK_SPRING, opacity: { duration: 0.15 } },
-  },
-  gone: {
-    opacity: 0,
-    transform: "rotate(90deg) scale(0.5)",
-    transition: { duration: 0.18, ease: EASE_OUT },
-  },
-};
-
-/** Letters roll up out of the line and in from below it, one after another. */
-const LETTER_VARIANTS: Variants = {
-  hidden: { opacity: 0, transform: "translateY(100%)" },
-  shown: ({ index }: LetterPosition) => ({
-    opacity: 1,
-    transform: "translateY(0%)",
-    transition: { duration: 0.32, ease: EASE_OUT, delay: index * LETTER_STAGGER },
-  }),
-  // Leaves as unhurriedly as it arrives, so the swap reads as one roll, not a cut. Letters
-  // leave from the end, so a longer outgoing name clears the pill's right edge first.
-  gone: ({ index, count }: LetterPosition) => ({
-    opacity: 0,
-    transform: "translateY(-100%)",
-    transition: { duration: 0.32, ease: EASE_OUT, delay: (count - 1 - index) * LETTER_STAGGER },
-  }),
-};
+const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
 
 /** "Claude" with its mark, set inline in the hero headline; a click swaps it for ChatGPT and back.
-    The marks swap with a spin, and the letters after the shared "C" roll like a flap display. */
+    The marks swap with a spin, and the letters after the shared "C" roll like a flap display.
+    Plain CSS animations (plus one WAAPI call for the pill), so the swap animates from the
+    first click, with no wait for a motion library to load. */
 export function AiToolChip() {
   const { playTap } = useInteractionSound();
-  const reduceMotion = useReducedMotion();
-  // A click before the lazy motion features load would mount the new mark and letters at
-  // their hidden `initial` with nothing to animate them in, so until then the swap is instant.
-  const canAnimate = useMotionFeaturesLoaded();
   const [tool, setTool] = useState<Tool>("claude");
-  const name = TOOL_NAMES[tool];
-  // Both names start with "C", so it stays put while the rest rolls.
-  const tail = name.slice(1).split("");
-  // Reduced motion keeps the crossfade and drops the spin and roll.
-  const presence = { initial: "hidden", animate: "shown", exit: "gone" } as const;
-  const mark = tool === "claude" ? <ClaudeMark /> : <CodexMark />;
+  // Animations only run once the chip has been clicked, so nothing plays on page load.
+  const [swapped, setSwapped] = useState(false);
+  const fillRef = useRef<HTMLSpanElement>(null);
+  const fillFrom = useRef<number | null>(null);
+  const fillAnimation = useRef<Animation | null>(null);
+
+  // The pill's fill is its own layer: when the name changes width, it eases from the old
+  // width to the new one, while the mark and letters stay put.
+  useLayoutEffect(() => {
+    const fill = fillRef.current;
+    const from = fillFrom.current;
+    fillFrom.current = null;
+    if (!fill || from === null) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const to = fill.offsetWidth;
+    fillAnimation.current = fill.animate([{ width: `${from}px` }, { width: `${to}px` }], {
+      duration: 320,
+      easing: EASE_OUT,
+      // Narrowing waits for the outgoing name's last letters to fade, so they never
+      // hang past the pill's edge; widening starts at once to make room for the new ones.
+      delay: to < from ? 100 : 0,
+      fill: "backwards",
+    });
+  }, [tool]);
 
   return (
     <button
       type="button"
       className={styles.aiToolChip}
       data-tool={tool}
-      aria-label={name}
+      data-swapped={swapped || undefined}
+      aria-label={TOOL_NAMES[tool]}
       onClick={() => {
+        // Start from wherever the pill is now, even mid-animation.
+        fillFrom.current = fillRef.current?.offsetWidth ?? null;
+        fillAnimation.current?.cancel();
         setTool((current) => (current === "claude" ? "chatgpt" : "claude"));
+        setSwapped(true);
         playTap();
       }}
     >
-      {/* The pill's fill is its own layer: when the name changes width, Motion eases it with
-          scaleX and corrects the rounded ends, while the mark and letters stay unscaled. */}
-      <m.span
-        layout={!reduceMotion}
-        // Narrowing waits for the outgoing name's last letters to fade, so they never
-        // hang past the pill's edge; widening starts at once to make room for the new ones.
-        transition={{
-          layout: { duration: 0.32, ease: EASE_OUT, delay: tool === "claude" ? 0.1 : 0 },
-        }}
-        style={{ borderRadius: 999 }}
-        className={styles.aiToolFill}
-        aria-hidden="true"
-      />
+      <span ref={fillRef} className={styles.aiToolFill} aria-hidden="true" />
       <span className={styles.aiToolMarkSlot} aria-hidden="true">
-        {canAnimate ? (
-          <AnimatePresence mode="popLayout" initial={false}>
-            <m.span
-              key={tool}
-              className={styles.aiToolMarkFrame}
-              variants={reduceMotion ? FADE_VARIANTS : MARK_VARIANTS}
-              {...presence}
-            >
-              {mark}
-            </m.span>
-          </AnimatePresence>
-        ) : (
-          <span className={styles.aiToolMarkFrame}>{mark}</span>
-        )}
+        {TOOLS.map((option) => (
+          <span key={option} className={styles.aiToolMarkFrame} data-active={option === tool}>
+            {option === "claude" ? <ClaudeMark /> : <CodexMark />}
+          </span>
+        ))}
       </span>
       <span className={styles.aiToolName} aria-hidden="true">
+        {/* Both names start with "C", so it stays put while the rest rolls. */}
         C
         <span className={styles.aiToolTail}>
-          {canAnimate ? (
-            <AnimatePresence mode="popLayout" initial={false}>
-              <m.span key={tool} className={styles.aiToolTailWord}>
+          {TOOLS.map((option) => {
+            const tail = TOOL_NAMES[option].slice(1).split("");
+
+            return (
+              <span
+                key={option}
+                className={styles.aiToolTailWord}
+                data-active={option === tool}
+                style={{ "--count": tail.length } as CSSProperties}
+              >
                 {tail.map((letter, index) => (
-                  <m.span
+                  <span
                     key={`${letter}-${index}`}
-                    custom={{ index, count: tail.length } satisfies LetterPosition}
                     className={styles.aiToolLetter}
-                    variants={reduceMotion ? FADE_VARIANTS : LETTER_VARIANTS}
-                    {...presence}
+                    style={{ "--index": index } as CSSProperties}
                   >
                     {letter}
-                  </m.span>
+                  </span>
                 ))}
-              </m.span>
-            </AnimatePresence>
-          ) : (
-            <span className={styles.aiToolTailWord}>
-              {tail.map((letter, index) => (
-                <span key={`${letter}-${index}`} className={styles.aiToolLetter}>
-                  {letter}
-                </span>
-              ))}
-            </span>
-          )}
+              </span>
+            );
+          })}
         </span>
       </span>
     </button>
