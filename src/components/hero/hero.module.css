@@ -374,7 +374,7 @@
 
   .v2Toolbar {
     min-height: 197px;
-    padding: var(--space-4) var(--space-4) 0;
+    padding: 0 var(--space-4);
   }
 
   .v2Content {
