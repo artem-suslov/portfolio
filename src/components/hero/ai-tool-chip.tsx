@@ -2,6 +2,7 @@
 
 import { AnimatePresence, m, useReducedMotion, type Variants } from "framer-motion";
 import { useId, useState } from "react";
+import { useMotionFeaturesLoaded } from "@/components/motion/motion-provider";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import styles from "./hero.module.css";
 
@@ -140,12 +141,16 @@ const LETTER_VARIANTS: Variants = {
 export function AiToolChip() {
   const { playTap } = useInteractionSound();
   const reduceMotion = useReducedMotion();
+  // A click before the lazy motion features load would mount the new mark and letters at
+  // their hidden `initial` with nothing to animate them in, so until then the swap is instant.
+  const canAnimate = useMotionFeaturesLoaded();
   const [tool, setTool] = useState<Tool>("claude");
   const name = TOOL_NAMES[tool];
   // Both names start with "C", so it stays put while the rest rolls.
   const tail = name.slice(1).split("");
   // Reduced motion keeps the crossfade and drops the spin and roll.
   const presence = { initial: "hidden", animate: "shown", exit: "gone" } as const;
+  const mark = tool === "claude" ? <ClaudeMark /> : <CodexMark />;
 
   return (
     <button
@@ -172,35 +177,49 @@ export function AiToolChip() {
         aria-hidden="true"
       />
       <span className={styles.aiToolMarkSlot} aria-hidden="true">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <m.span
-            key={tool}
-            className={styles.aiToolMarkFrame}
-            variants={reduceMotion ? FADE_VARIANTS : MARK_VARIANTS}
-            {...presence}
-          >
-            {tool === "claude" ? <ClaudeMark /> : <CodexMark />}
-          </m.span>
-        </AnimatePresence>
+        {canAnimate ? (
+          <AnimatePresence mode="popLayout" initial={false}>
+            <m.span
+              key={tool}
+              className={styles.aiToolMarkFrame}
+              variants={reduceMotion ? FADE_VARIANTS : MARK_VARIANTS}
+              {...presence}
+            >
+              {mark}
+            </m.span>
+          </AnimatePresence>
+        ) : (
+          <span className={styles.aiToolMarkFrame}>{mark}</span>
+        )}
       </span>
       <span className={styles.aiToolName} aria-hidden="true">
         C
         <span className={styles.aiToolTail}>
-          <AnimatePresence mode="popLayout" initial={false}>
-            <m.span key={tool} className={styles.aiToolTailWord}>
+          {canAnimate ? (
+            <AnimatePresence mode="popLayout" initial={false}>
+              <m.span key={tool} className={styles.aiToolTailWord}>
+                {tail.map((letter, index) => (
+                  <m.span
+                    key={`${letter}-${index}`}
+                    custom={{ index, count: tail.length } satisfies LetterPosition}
+                    className={styles.aiToolLetter}
+                    variants={reduceMotion ? FADE_VARIANTS : LETTER_VARIANTS}
+                    {...presence}
+                  >
+                    {letter}
+                  </m.span>
+                ))}
+              </m.span>
+            </AnimatePresence>
+          ) : (
+            <span className={styles.aiToolTailWord}>
               {tail.map((letter, index) => (
-                <m.span
-                  key={`${letter}-${index}`}
-                  custom={{ index, count: tail.length } satisfies LetterPosition}
-                  className={styles.aiToolLetter}
-                  variants={reduceMotion ? FADE_VARIANTS : LETTER_VARIANTS}
-                  {...presence}
-                >
+                <span key={`${letter}-${index}`} className={styles.aiToolLetter}>
                   {letter}
-                </m.span>
+                </span>
               ))}
-            </m.span>
-          </AnimatePresence>
+            </span>
+          )}
         </span>
       </span>
     </button>
