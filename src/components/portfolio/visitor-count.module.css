@@ -31,13 +31,11 @@
   }
 }
 
-/* Phones only: sits in the hero toolbar, top-aligned right beside the video
-   rather than pushed to the far edge by the toolbar's space-between. */
+/* Phones only: the hero toolbar's space-between pushes it to the right edge, inset by
+   the same 16px gutter as the content on the left. */
 @media (max-width: 760px) {
   .heroCount {
     display: flex;
-    margin-right: auto;
-    margin-left: var(--space-2);
   }
 }
 
