@@ -5,7 +5,7 @@ import Image from "next/image";
 import { type CSSProperties, useRef, useState } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { Button } from "@/components/ui/button";
-import { imagePath } from "./animator-case-parts";
+import { imagePath, imageSizes } from "./animator-case-parts";
 import styles from "./animator-case.module.css";
 
 // A horizontal swipe shorter than this is treated as a tap, not a slide change.
@@ -59,7 +59,7 @@ export function AnimatorSlider({
               key={name}
               role="group"
             >
-              <Image alt={alt} height={height} src={`${imagePath}/${name}`} width={width} />
+              <Image alt={alt} height={height} sizes={imageSizes} src={`${imagePath}/${name}`} width={width} />
             </div>
           ))}
         </div>
