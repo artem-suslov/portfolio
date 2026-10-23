@@ -32,7 +32,7 @@ export function SteamifyCaseContent() {
               <span>4 min read</span>
             </div>
             <p className={styles.lede}>A mobile cashout service with 500+ withdrawals per day, designed to convert in-game assets into real money.</p>
-            <CaseVideo alt="Steamify cashout product preview" className={styles.heroVideo} poster="/images/steamify-case/hero-poster.webp" src="/images/steamify-case/hero.mp4" />
+            <CaseVideo alt="Steamify cashout product preview" className={styles.heroVideo} poster="/images/steamify-case/hero-poster.webp" src="/images/steamify-case/hero.mp4?v=20261023" />
             <dl className={styles.details}>
               <div><dt>Team</dt><dd>CEO, 2x Backend Devs, 1x Frontend Dev, Product Designer, QA</dd></div>
               <div><dt>My role</dt><dd>Product Design, Research, Handoff, Design Review, Analytics</dd></div>
@@ -80,7 +80,7 @@ export function SteamifyCaseContent() {
             <h2 className={styles.compactHeading}>But what if the user&apos;s inventory is private?</h2>
             <p className={styles.compactCopy}>Users often had privacy settings enabled, which prevented our parsing and displaying their inventory when the user wanted to view it.</p>
             <p>In this case, I created an explanatory modal window with video-instruction on how to change the privacy settings, since the Steam UX can be complex for some people and it&apos;s hard to find privacy settings inside of it.</p>
-            <CaseVideo alt="Steam privacy settings instruction" className={styles.mediaVideo} poster="/images/steamify-case/private-inventory-poster.webp" src="/images/steamify-case/private-inventory.mp4" />
+            <CaseVideo alt="Steam privacy settings instruction" className={styles.mediaVideo} poster="/images/steamify-case/private-inventory-poster.webp" src="/images/steamify-case/private-inventory.mp4?v=20261023" />
           </section>
 
           <section id="payment-details" className={styles.section}>

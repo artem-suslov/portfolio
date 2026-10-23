@@ -11,7 +11,7 @@ export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
       poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261022",
-      src: "/videos/telegram-quick-stickers.mp4?v=20261022",
+      src: "/videos/telegram-quick-stickers.mp4?v=20261023",
       type: "video",
       variant: "quick-stickers",
     },
@@ -206,7 +206,7 @@ export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
       poster: "/images/video-posters/ccp-white.webp",
-      src: "/videos/CCP_White_BG_compress.mp4?v=20261001-2",
+      src: "/videos/CCP_White_BG_compress.mp4?v=20261023",
       type: "video",
       variant: "ccp",
     },

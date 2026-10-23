@@ -183,7 +183,7 @@ export function AnimatorCaseContent() {
           that makes phone screenshots look right without any tweaking. I also
           cut shadows down to a few presets instead of a full set of controls.
         </p>
-        <AnimatorClip label="The reworked editor: presets with previews on the left, uploads and background settings on the right" src="/videos/sidebar.mp4" />
+        <AnimatorClip label="The reworked editor: presets with previews on the left, uploads and background settings on the right" src="/videos/sidebar.mp4?v=20261023" />
       </section>
 
       <section className={shared.divided} id="authentication">
