@@ -701,14 +701,13 @@
     padding: 0;
   }
 
-  .caseDetails h3 {
+  /* Phones fill each line before wrapping: balancing broke titles early and left a
+     ragged half-empty first line. `pretty` still keeps a lone last word off its own line. */
+  .caseDetails h3,
+  .case[data-case-id="steamify-case"] .caseDetails h3 {
     font-size: var(--font-size-md);
     line-height: var(--line-height-md);
-  }
-
-  /* The single-line title is a desktop layout; phones are too narrow for it. */
-  .case[data-case-id="steamify-case"] .caseDetails h3 {
-    text-wrap: balance;
+    text-wrap: pretty;
   }
 
   .caseDetails > p {
