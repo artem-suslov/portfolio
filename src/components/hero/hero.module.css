@@ -166,6 +166,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
+  border-radius: var(--radius-full);
   background: var(--color-page);
   transition: background-color var(--duration-hover) ease;
 }
@@ -192,8 +193,8 @@
   }
 }
 
-/* Fixed-size slot, so swapping marks never moves the name. The outgoing mark is popped
-   out of flow (AnimatePresence popLayout) and spins away on top of the incoming one. */
+/* Fixed-size slot, so swapping marks never moves the name. Both marks sit stacked in it;
+   the outgoing one spins away while the incoming one spins in. */
 .aiToolMarkSlot {
   position: relative;
   display: inline-flex;
@@ -204,7 +205,49 @@
 }
 
 .aiToolMarkFrame {
+  position: absolute;
+  inset: 0;
   display: inline-flex;
+}
+
+.aiToolMarkFrame[data-active="false"] {
+  opacity: 0;
+}
+
+/* A soft spring (damping 0.75, ~3% overshoot) sampled into linear(). */
+.aiToolChip[data-swapped] .aiToolMarkFrame[data-active="true"] {
+  animation:
+    aiToolMarkIn 500ms
+      linear(0, 0.037, 0.128, 0.247, 0.375, 0.501, 0.617, 0.718, 0.803, 0.871, 0.923, 0.963,
+        0.991, 1.009, 1.021, 1.026, 1.028, 1.028, 1.025, 1.022, 1.018, 1.015, 1.011, 1.008, 1),
+    aiToolFadeIn 150ms linear;
+}
+
+.aiToolChip[data-swapped] .aiToolMarkFrame[data-active="false"] {
+  animation: aiToolMarkOut 180ms var(--ease-out-snappy);
+}
+
+@keyframes aiToolMarkIn {
+  from {
+    transform: rotate(-90deg) scale(0.5);
+  }
+}
+
+@keyframes aiToolMarkOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+}
+
+@keyframes aiToolFadeIn {
+  from {
+    opacity: 0;
+  }
 }
 
 /* Overhangs the pill, like a sticker on its left end. */
@@ -240,6 +283,70 @@
 .aiToolTailWord,
 .aiToolLetter {
   display: inline-block;
+}
+
+/* The outgoing word leaves the flow, so the chip takes the incoming word's width at once. */
+.aiToolTailWord[data-active="false"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.aiToolTailWord[data-active="false"] .aiToolLetter {
+  opacity: 0;
+}
+
+/* Letters roll up out of the line and in from below it, one after another. The outgoing ones
+   leave as unhurriedly as the new ones arrive, so the swap reads as one roll, not a cut, and
+   from the end, so a longer outgoing name clears the pill's right edge first. */
+.aiToolChip[data-swapped] .aiToolTailWord[data-active="true"] .aiToolLetter {
+  animation: aiToolLetterIn 320ms var(--ease-out-snappy) calc(var(--index) * 20ms) backwards;
+}
+
+.aiToolChip[data-swapped] .aiToolTailWord[data-active="false"] .aiToolLetter {
+  animation: aiToolLetterOut 320ms var(--ease-out-snappy)
+    calc((var(--count) - 1 - var(--index)) * 20ms) backwards;
+}
+
+@keyframes aiToolLetterIn {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes aiToolLetterOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+/* Reduced motion keeps the crossfade and drops the spin and roll. */
+@media (prefers-reduced-motion: reduce) {
+  .aiToolChip[data-swapped] .aiToolMarkFrame[data-active="true"],
+  .aiToolChip[data-swapped] .aiToolTailWord[data-active="true"] .aiToolLetter {
+    animation: aiToolFadeIn 200ms linear;
+  }
+
+  .aiToolChip[data-swapped] .aiToolMarkFrame[data-active="false"],
+  .aiToolChip[data-swapped] .aiToolTailWord[data-active="false"] .aiToolLetter {
+    animation: aiToolFadeOut 150ms linear;
+  }
+}
+
+@keyframes aiToolFadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 .v2Description {
