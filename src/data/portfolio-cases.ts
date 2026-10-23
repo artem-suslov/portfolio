@@ -5,6 +5,7 @@ import safeDesignSystemThumbnail from "../../public/images/safe_thumb_case.png";
 import steamifyCashoutPhones from "../../public/images/cashout_thumb_case.png";
 import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.png";
 import steamifyTradingBotMobile from "../../public/images/Concept/tradingbot_thumb_case_mobile.png";
+import loopDashboard from "../../public/images/loop_case.png";
 
 export const portfolioCases: PortfolioCaseData[] = [
   {
@@ -101,7 +102,7 @@ export const portfolioCases: PortfolioCaseData[] = [
     title: "Interactive bank card built with Paper Shaders",
   },
   {
-    cover: { alt: "", height: 1393, src: "/images/loop_case.png?v=20260706-2", type: "image", variant: "loop", width: 2544 },
+    cover: { alt: "", height: loopDashboard.height, src: loopDashboard, type: "image", variant: "loop", width: loopDashboard.width },
     description:
       "A UI exploration for supervising AI agents — designed to make parallel runs, statuses, and handoffs easy to scan at a glance.",
     id: "steamify-case-2",
