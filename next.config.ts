@@ -82,9 +82,9 @@ const nextConfig: NextConfig = {
     viewTransition: true,
   },
   images: {
-    // AVIF first: about a fifth smaller than WebP at the same quality setting;
-    // browsers without AVIF still get WebP.
-    formats: ["image/avif", "image/webp"],
+    // WebP only, on purpose: on our hosting every new deploy starts with a cold
+    // cache, and encoding AVIF added 0.3–0.5s to each first image request for a
+    // few KB saved. The hosting cache also ignores `Vary: Accept`.
     minimumCacheTTL: 604800,
     // The optimizer keeps resized copies in memory, so an image replaced under
     // the same name keeps showing the old version until a restart. Serve the
