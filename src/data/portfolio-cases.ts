@@ -75,6 +75,8 @@ export const portfolioCases: PortfolioCaseData[] = [
     // },
     cover: {
       alt: "Steamify cashout flow across mobile screens",
+      // The first cover on the page: preload it instead of lazy-loading.
+      eager: true,
       height: steamifyCashoutPhones.height,
       src: steamifyCashoutPhones,
       type: "image",
