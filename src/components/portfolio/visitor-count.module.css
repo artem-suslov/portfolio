@@ -1,10 +1,7 @@
 /* Mirrors the section rail: 32px from the right, 24px from the top, the same 32px
    line as a rail item, and only while the gutter beside the 700px card fits it. */
-.count {
-  position: fixed;
-  z-index: 1;
-  top: var(--space-6);
-  right: var(--space-8);
+.count,
+.heroCount {
   display: none;
   align-items: center;
   gap: var(--space-2);
@@ -16,6 +13,13 @@
   transition: opacity var(--duration-hover) ease;
 }
 
+.count {
+  position: fixed;
+  z-index: 1;
+  top: var(--space-6);
+  right: var(--space-8);
+}
+
 .count[data-covered] {
   opacity: 0;
   pointer-events: none;
@@ -24,6 +28,16 @@
 @media (min-width: 1041px) {
   .count {
     display: flex;
+  }
+}
+
+/* Phones only: sits in the hero toolbar, top-aligned right beside the video
+   rather than pushed to the far edge by the toolbar's space-between. */
+@media (max-width: 760px) {
+  .heroCount {
+    display: flex;
+    margin-right: auto;
+    margin-left: var(--space-2);
   }
 }
 
@@ -60,6 +74,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .count,
+  .heroCount,
   .bar {
     transition: none;
   }

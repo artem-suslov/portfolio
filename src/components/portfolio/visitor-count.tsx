@@ -10,11 +10,17 @@ import styles from "./visitor-count.module.css";
 const BAR_LEVELS = [0.55, 1, 0.75];
 
 /**
- * Visitor count pinned in the right gutter, mirroring the section rail on the left.
- * The digits roll up from zero once the page is in view (after the paper intro, if
+ * Visitor count pinned in the right gutter, mirroring the section rail on the left;
+ * on phones, where there is no gutter, the hero places it beside the video. The digits roll up from zero once the page is in view (after the paper intro, if
  * it plays). The bars beside them grow in with the digits, then keep gently breathing.
  */
-export function VisitorCount({ total }: { total: number }) {
+export function VisitorCount({
+  total,
+  placement = "gutter",
+}: {
+  total: number;
+  placement?: "gutter" | "hero";
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const isCovered = useCraftGridCover(ref);
   const [value, setValue] = useState(0);
@@ -30,7 +36,11 @@ export function VisitorCount({ total }: { total: number }) {
   }, [total]);
 
   return (
-    <div ref={ref} className={styles.count} data-covered={isCovered || undefined}>
+    <div
+      ref={ref}
+      className={placement === "hero" ? styles.heroCount : styles.count}
+      data-covered={(placement === "gutter" && isCovered) || undefined}
+    >
       <NumberFlow value={value} locales="en-US" suffix=" visitors" />
       <span className={styles.bars} aria-hidden="true">
         {BAR_LEVELS.map((level, index) => (
