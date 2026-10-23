@@ -1,0 +1,18 @@
+/* Until the file arrives, the image box itself is the skeleton; it pulses with
+   opacity only, so the animation stays on the compositor. */
+.image:not([data-loaded]) {
+  background: var(--color-surface-placeholder);
+  animation: skeleton-pulse 1.4s var(--ease-in-out-cubic) infinite;
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image:not([data-loaded]) {
+    animation: none;
+  }
+}

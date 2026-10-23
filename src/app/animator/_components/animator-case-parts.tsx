@@ -1,8 +1,10 @@
-import Image from "next/image";
 import shared from "@/components/case-study/case-study.module.css";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import styles from "./animator-case.module.css";
 
 export const imagePath = "/images/animator-case";
+// The case column is at most 636px wide; without this, every screen loads the 2048–3840px variant.
+export const imageSizes = "(max-width: 760px) calc(100vw - 32px), 636px";
 
 export function CaseImage({
   alt,
@@ -16,10 +18,11 @@ export function CaseImage({
   width?: number;
 }) {
   return (
-    <Image
+    <SkeletonImage
       alt={alt}
       className={shared.media}
       height={height}
+      sizes={imageSizes}
       src={`${imagePath}/${name}`}
       width={width}
     />

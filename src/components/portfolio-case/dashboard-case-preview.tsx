@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import type { StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import styles from "./dashboard-case-preview.module.css";
 
 const LocalDashboardOverview = dynamic(
@@ -62,13 +62,12 @@ export function DashboardCasePreview({
       ref={containerRef}
       className={styles.dashboardCaseEmbed}
     >
-      <Image
+      <SkeletonImage
         alt={alt}
         className={styles.dashboardCasePreview}
         fill
         sizes={sizes}
         src={src}
-        unoptimized
       />
       {shouldLoad ? <LocalDashboardOverview /> : null}
     </div>

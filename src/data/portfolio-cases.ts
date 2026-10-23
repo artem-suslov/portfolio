@@ -4,12 +4,14 @@ import safeDesignSystemThumbnail from "../../public/images/safe_thumb_case.png";
 // Imported so the URL carries a content hash: replacing the file busts the image cache.
 import steamifyCashoutPhones from "../../public/images/cashout_thumb_case.png";
 import steamifyTradingBotScreen from "../../public/images/tradingbot_thumb_case.png";
+import steamifyTradingBotMobile from "../../public/images/Concept/tradingbot_thumb_case_mobile.png";
+import loopDashboard from "../../public/images/loop_case.png";
 
 export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
       poster: "/images/video-posters/telegram-quick-stickers.webp?v=20261022",
-      src: "/videos/telegram-quick-stickers.mp4?v=20261022",
+      src: "/videos/telegram-quick-stickers.mp4?v=20261023",
       type: "video",
       variant: "quick-stickers",
     },
@@ -73,6 +75,8 @@ export const portfolioCases: PortfolioCaseData[] = [
     // },
     cover: {
       alt: "Steamify cashout flow across mobile screens",
+      // The first cover on the page: preload it instead of lazy-loading.
+      eager: true,
       height: steamifyCashoutPhones.height,
       src: steamifyCashoutPhones,
       type: "image",
@@ -100,7 +104,7 @@ export const portfolioCases: PortfolioCaseData[] = [
     title: "Interactive bank card built with Paper Shaders",
   },
   {
-    cover: { alt: "", height: 1393, src: "/images/loop_case.png?v=20260706-2", type: "image", variant: "loop", width: 2544 },
+    cover: { alt: "", height: loopDashboard.height, src: loopDashboard, type: "image", variant: "loop", width: loopDashboard.width },
     description:
       "A UI exploration for supervising AI agents — designed to make parallel runs, statuses, and handoffs easy to scan at a glance.",
     id: "steamify-case-2",
@@ -158,7 +162,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       alt: "Steam trading management dashboard overview",
       height: steamifyTradingBotScreen.height,
       // Phones get a crop of the screen that matches their 37:30 cover frame.
-      mobileSrc: "/images/Concept/tradingbot_thumb_case_mobile.png?v=20261015",
+      mobileSrc: steamifyTradingBotMobile,
       src: steamifyTradingBotScreen,
       type: "image",
       // The exported cover carries its own gray surface, so it fills the frame like Safe's.
@@ -204,7 +208,7 @@ export const portfolioCases: PortfolioCaseData[] = [
   {
     cover: {
       poster: "/images/video-posters/ccp-white.webp",
-      src: "/videos/CCP_White_BG_compress.mp4?v=20261001-2",
+      src: "/videos/CCP_White_BG_compress.mp4?v=20261023",
       type: "video",
       variant: "ccp",
     },

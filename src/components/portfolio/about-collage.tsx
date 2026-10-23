@@ -1,6 +1,6 @@
 import { Caveat } from "next/font/google";
-import Image from "next/image";
 import type { CSSProperties, PointerEvent } from "react";
+import { SkeletonImage } from "@/components/ui/skeleton-image";
 import {
   type AboutCollageSettings,
   type CollageFrame,
@@ -57,7 +57,7 @@ function CollagePhoto({
           {media.kind === "video" ? (
             <CollageVideo label={media.alt} poster={media.poster} src={media.src} />
           ) : (
-            <Image
+            <SkeletonImage
               alt={media.alt}
               draggable={false}
               fill

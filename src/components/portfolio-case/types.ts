@@ -20,7 +20,8 @@ export type CaseImageCover = {
   alt: string;
   eager?: boolean;
   height: number;
-  mobileSrc?: string;
+  /** Phone crop; a static import so it goes through the image optimizer. */
+  mobileSrc?: StaticImageData;
   sizes?: string;
   src: string | StaticImageData;
   type: "image";
