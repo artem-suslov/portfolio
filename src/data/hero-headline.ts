@@ -23,7 +23,7 @@ export const heroHeadline: HeroHeadline = {
   fontSize: 26,
   fontWeight: 500,
   letterSpacing: -0.03,
-  lineHeight: 30,
+  lineHeight: 32,
   mobileFontSize: 22,
   mobileLineHeight: 26,
 };
