@@ -1,3 +1,5 @@
+import { VisitorCount } from "@/components/portfolio/visitor-count";
+import { getVisitorCount } from "@/lib/visitors";
 import { AiToolChip } from "./ai-tool-chip";
 import { ContactButton } from "./contact-button";
 import styles from "./hero.module.css";
@@ -6,11 +8,15 @@ import { ResumeButton } from "./resume-button";
 import { SoundToggleButton } from "./sound-toggle-button";
 import { V2Description } from "./v2-description";
 
-export function V2Hero() {
+export async function V2Hero() {
+  // Same cached Metrika request as the desktop counter in PortfolioPage.
+  const visitorCount = await getVisitorCount();
+
   return (
     <header className={styles.v2Hero}>
       <div className={styles.v2Toolbar}>
         <HeroVideo compact />
+        {visitorCount !== null ? <VisitorCount total={visitorCount} placement="hero" /> : null}
         <SoundToggleButton />
       </div>
       <div className={styles.v2Content}>
