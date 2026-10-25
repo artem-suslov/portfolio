@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useEffectEvent, useId, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import styles from "./hero.module.css";
 
@@ -90,10 +90,14 @@ function CodexMark() {
 const TOOL_NAMES: Record<Tool, string> = { claude: "Claude", chatgpt: "ChatGPT" };
 const TOOLS: Tool[] = ["claude", "chatgpt"];
 
+// How long each name stays before the chip swaps to the other one on its own.
+const AUTO_SWAP_MS = 5000;
+
 // Strong ease-out (same curve as --ease-out-snappy).
 const EASE_OUT = "cubic-bezier(0.23, 1, 0.32, 1)";
 
-/** "Claude" with its mark, set inline in the hero headline; a click swaps it for ChatGPT and back.
+/** "Claude" with its mark, set inline in the hero headline; it swaps to ChatGPT and back every
+    5 seconds, and a click swaps it right away (restarting the countdown).
     The marks swap with a spin, and the letters after the shared "C" roll like a flap display.
     Plain CSS animations (plus one WAAPI call for the pill), so the swap animates from the
     first click, with no wait for a motion library to load. */
@@ -125,6 +129,25 @@ export function AiToolChip() {
     });
   }, [tool]);
 
+  const swap = () => {
+    // Start from wherever the pill is now, even mid-animation.
+    fillFrom.current = fillRef.current?.offsetWidth ?? null;
+    fillAnimation.current?.cancel();
+    setTool((current) => (current === "claude" ? "chatgpt" : "claude"));
+    setSwapped(true);
+  };
+
+  const autoSwap = useEffectEvent(() => {
+    // A hidden tab skips its turn, so the swap isn't spent where nobody sees it.
+    if (!document.hidden) swap();
+  });
+
+  // Every swap, manual or automatic, restarts the countdown to the next one.
+  useEffect(() => {
+    const timer = window.setInterval(autoSwap, AUTO_SWAP_MS);
+    return () => window.clearInterval(timer);
+  }, [tool]);
+
   return (
     <button
       type="button"
@@ -133,11 +156,7 @@ export function AiToolChip() {
       data-swapped={swapped || undefined}
       aria-label={TOOL_NAMES[tool]}
       onClick={() => {
-        // Start from wherever the pill is now, even mid-animation.
-        fillFrom.current = fillRef.current?.offsetWidth ?? null;
-        fillAnimation.current?.cancel();
-        setTool((current) => (current === "claude" ? "chatgpt" : "claude"));
-        setSwapped(true);
+        swap();
         playTap();
       }}
     >
