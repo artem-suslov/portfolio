@@ -1,0 +1,40 @@
+/* Self-contained visual: keeps its own blue palette. Hangs from the cover's top edge. */
+.ribbon {
+  position: absolute;
+  top: 0;
+  left: var(--ribbon-inset);
+  z-index: 7;
+  width: var(--ribbon-width);
+  height: var(--ribbon-height);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgb(48 92 214 / 0.28))
+    drop-shadow(0 1px 2px rgb(30 60 160 / 0.2));
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.label {
+  position: absolute;
+  inset: 0 0 var(--ribbon-notch);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* letter-spacing trails the last letter too; matching padding keeps the label centred. */
+  padding-left: var(--ribbon-letter-spacing);
+  color: var(--ribbon-text-color);
+  font-size: var(--ribbon-font-size);
+  font-weight: var(--ribbon-font-weight);
+  letter-spacing: var(--ribbon-letter-spacing);
+  text-transform: var(--ribbon-text-transform);
+  white-space: nowrap;
+  translate: 0 var(--ribbon-text-offset);
+}
+
+.letter {
+  display: inline-block;
+  will-change: transform;
+}

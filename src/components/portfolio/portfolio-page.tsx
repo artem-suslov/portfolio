@@ -69,6 +69,10 @@ export async function PortfolioPage({
     process.env.NODE_ENV === "development"
       ? (await import("./hero-headline-debug")).HeroHeadlineDebug
       : null;
+  const RibbonPanel =
+    process.env.NODE_ENV === "development"
+      ? (await import("@/components/portfolio-case/ai-ribbon-debug")).AiRibbonDebug
+      : null;
   const SavePanel =
     process.env.NODE_ENV === "development" ? (await import("./dial-save")).DialSaveDebug : null;
   const visitorCount = await getVisitorCount();
@@ -132,6 +136,7 @@ export async function PortfolioPage({
           <FeedbackWidget />
           {SpacingPanel ? <SpacingPanel /> : null}
           {HeadlinePanel ? <HeadlinePanel /> : null}
+          {RibbonPanel ? <RibbonPanel /> : null}
           {SavePanel ? <SavePanel /> : null}
           {DebugPanel ? (
             <DebugPanel cases={portfolioCases.map(({ id, title }) => ({ id, label: title }))} />

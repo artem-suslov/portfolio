@@ -96,5 +96,7 @@ export type PortfolioCaseData = {
   /** Internal case-study page; the whole card becomes a link to it. */
   href?: string;
   id: string;
+  /** Short label on a bookmark hanging from the top of the cover, e.g. "Made with AI". */
+  ribbon?: string;
   title: string;
 };
