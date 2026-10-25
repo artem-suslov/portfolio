@@ -140,9 +140,71 @@ function shape(settings: AiRibbonSettings) {
   };
 }
 
-/** "Made with AI" bookmark that hangs from the top of a case card and ripples. */
+/** "Made with AI" label on a case card: a waving bookmark or a sash across the corner. */
 export function AiRibbon({ label }: { label: string }) {
   const settings = useSyncExternalStore(subscribe, getSettings, getServerSettings);
+
+  return settings.variant === "corner" ? (
+    <CornerRibbon label={label} settings={settings} />
+  ) : (
+    <BookmarkRibbon label={label} settings={settings} />
+  );
+}
+
+/** Text styles both variants share. */
+function labelVars(settings: AiRibbonSettings) {
+  const { fontSize, fontWeight, letterSpacing, textColor, textOffset, uppercase } = settings;
+
+  return {
+    "--ribbon-font-size": `${fontSize}px`,
+    "--ribbon-font-weight": fontWeight,
+    "--ribbon-letter-spacing": `${letterSpacing}em`,
+    "--ribbon-text-color": textColor,
+    "--ribbon-text-offset": `${textOffset}px`,
+    "--ribbon-text-transform": uppercase ? "uppercase" : "none",
+  };
+}
+
+/**
+ * A sash across the cover's top-left corner, cut off by the card's edges. The
+ * band's centre line sits `cornerDistance` from the corner, along the diagonal.
+ */
+function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
+  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness } = settings;
+  const centre = cornerDistance / Math.SQRT2;
+  // Just large enough to hold the band from one edge to the other.
+  const size = Math.ceil(2 * centre + cornerThickness * Math.SQRT2);
+  const length = 2 * cornerDistance + 2 * cornerThickness;
+
+  return (
+    <div
+      aria-hidden="true"
+      className={styles.corner}
+      style={
+        {
+          ...labelVars(settings),
+          "--ribbon-corner-size": `${size}px`,
+        } as CSSProperties
+      }
+    >
+      <span
+        className={styles.sash}
+        style={{
+          background: `linear-gradient(90deg, ${colorLight}, ${colorMid} 55%, ${colorDeep})`,
+          height: cornerThickness,
+          left: centre - length / 2,
+          top: centre - cornerThickness / 2,
+          width: length,
+        }}
+      >
+        <span className={styles.sashLabel}>{label}</span>
+      </span>
+    </div>
+  );
+}
+
+/** A bookmark that hangs from the top of the cover and ripples in the wind. */
+function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
   const settingsRef = useRef(settings);
   const rootRef = useRef<HTMLDivElement>(null);
   const shapeRef = useRef<SVGPathElement>(null);
@@ -154,21 +216,7 @@ export function AiRibbon({ label }: { label: string }) {
   const shadeId = `${ids}-shade`;
   const fadeId = `${ids}-fade`;
   const letters = Array.from(label);
-  const {
-    colorDeep,
-    colorLight,
-    colorMid,
-    fontSize,
-    fontWeight,
-    height,
-    inset,
-    letterSpacing,
-    notch,
-    textColor,
-    textOffset,
-    uppercase,
-    width,
-  } = settings;
+  const { colorDeep, colorLight, colorMid, height, inset, notch, width } = settings;
 
   useEffect(() => {
     settingsRef.current = settings;
@@ -285,15 +333,10 @@ export function AiRibbon({ label }: { label: string }) {
       ref={rootRef}
       style={
         {
-          "--ribbon-font-size": `${fontSize}px`,
-          "--ribbon-font-weight": fontWeight,
+          ...labelVars(settings),
           "--ribbon-height": `${height}px`,
           "--ribbon-inset": `${inset}px`,
-          "--ribbon-letter-spacing": `${letterSpacing}em`,
           "--ribbon-notch": `${notch}px`,
-          "--ribbon-text-color": textColor,
-          "--ribbon-text-offset": `${textOffset}px`,
-          "--ribbon-text-transform": uppercase ? "uppercase" : "none",
           "--ribbon-width": `${width}px`,
         } as CSSProperties
       }

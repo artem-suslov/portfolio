@@ -1,4 +1,6 @@
-/** Look and motion of the "Made with AI" bookmark on the Animator card. Sizes are in pixels. */
+/** Look and motion of the "Made with AI" label on the Animator card: a bookmark or a corner sash. Sizes are in pixels. */
+
+export type AiRibbonVariant = "bookmark" | "corner";
 
 export type AiRibbon = {
   /** Vertical ripple of the bottom edge. */
@@ -6,6 +8,10 @@ export type AiRibbon = {
   colorDeep: string;
   colorLight: string;
   colorMid: string;
+  /** Corner variant: from the card's corner to the band's centre line, along the diagonal. */
+  cornerDistance: number;
+  /** Corner variant: the band's thickness. */
+  cornerThickness: number;
   /** Mix of a second, shorter ripple on top of the main one, 0–1. */
   detail: number;
   /** How fast the ripple grows from the attached top edge to the free bottom one; 1 is linear. */
@@ -40,6 +46,8 @@ export type AiRibbon = {
   /** How far the free end turns toward or away from the viewer, in radians. */
   twist: number;
   uppercase: boolean;
+  /** A waving bookmark hanging from the top edge, or a sash across the corner. */
+  variant: AiRibbonVariant;
   /** Wave length as a share of the ribbon's width. */
   wavelength: number;
   width: number;
@@ -52,6 +60,8 @@ export const aiRibbon: AiRibbon = {
   colorDeep: "#87b9ff",
   colorLight: "#00a3fa",
   colorMid: "#0079fa",
+  cornerDistance: 56,
+  cornerThickness: 22,
   detail: 0.45,
   falloff: 0.9,
   fontSize: 11,
@@ -72,6 +82,7 @@ export const aiRibbon: AiRibbon = {
   turbulence: 0.35,
   twist: 0.49,
   uppercase: true,
+  variant: "corner",
   wavelength: 0.7,
   width: 88,
 };

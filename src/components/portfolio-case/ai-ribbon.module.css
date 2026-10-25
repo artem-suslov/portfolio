@@ -38,3 +38,37 @@
   display: inline-block;
   will-change: transform;
 }
+
+/* Corner variant: a sash across the cover's top-left corner, clipped to its rounded edge. */
+.corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 7;
+  width: var(--ribbon-corner-size);
+  height: var(--ribbon-corner-size);
+  overflow: hidden;
+  border-top-left-radius: var(--radius-md);
+  pointer-events: none;
+}
+
+.sash {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), inset 0 -1px 0 rgb(20 40 140 / 0.2);
+  transform: rotate(-45deg);
+}
+
+.sashLabel {
+  /* letter-spacing trails the last letter too; matching padding keeps the label centred. */
+  padding-left: var(--ribbon-letter-spacing);
+  color: var(--ribbon-text-color);
+  font-size: var(--ribbon-font-size);
+  font-weight: var(--ribbon-font-weight);
+  letter-spacing: var(--ribbon-letter-spacing);
+  text-transform: var(--ribbon-text-transform);
+  white-space: nowrap;
+  translate: 0 var(--ribbon-text-offset);
+}
