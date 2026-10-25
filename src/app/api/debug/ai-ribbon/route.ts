@@ -14,9 +14,12 @@ const startMarker = "// AI_RIBBON_START";
 const endMarker = "// AI_RIBBON_END";
 const numberKeys = [
   "amplitude",
+  "detail",
   "falloff",
   "fontSize",
   "fontWeight",
+  "gustiness",
+  "gustPeriod",
   "height",
   "highlight",
   "inset",
@@ -27,6 +30,8 @@ const numberKeys = [
   "shadow",
   "sway",
   "textOffset",
+  "turbulence",
+  "twist",
   "wavelength",
   "width",
 ] as const;

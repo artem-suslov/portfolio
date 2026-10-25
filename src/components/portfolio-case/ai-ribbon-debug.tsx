@@ -35,6 +35,13 @@ const config = {
     wavelength: [aiRibbon.wavelength, 0.3, 3, 0.05] as Slider,
     period: [aiRibbon.period, 0.5, 8, 0.1] as Slider,
     falloff: [aiRibbon.falloff, 0.3, 3, 0.1] as Slider,
+    detail: [aiRibbon.detail, 0, 1, 0.05] as Slider,
+    turbulence: [aiRibbon.turbulence, 0, 1, 0.05] as Slider,
+  },
+  wind: {
+    gustiness: [aiRibbon.gustiness, 0, 1, 0.05] as Slider,
+    gustPeriod: [aiRibbon.gustPeriod, 1, 12, 0.5] as Slider,
+    twist: [aiRibbon.twist, 0, 0.8, 0.01] as Slider,
   },
   light: {
     highlight: [aiRibbon.highlight, 0, 1, 0.01] as Slider,
@@ -58,11 +65,12 @@ export function AiRibbonDebug() {
       }
     },
   });
-  const { light, shape, text, wave } = dial.values;
+  const { light, shape, text, wave, wind } = dial.values;
   const ribbon: AiRibbon = {
     ...shape,
     ...text,
     ...wave,
+    ...wind,
     ...light,
     letterSpacing: Math.round(text.letterSpacing * 1000) / 1000,
   };

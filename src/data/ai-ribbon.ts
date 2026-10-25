@@ -6,10 +6,16 @@ export type AiRibbon = {
   colorDeep: string;
   colorLight: string;
   colorMid: string;
+  /** Mix of a second, shorter ripple on top of the main one, 0–1. */
+  detail: number;
   /** How fast the ripple grows from the attached top edge to the free bottom one; 1 is linear. */
   falloff: number;
   fontSize: number;
   fontWeight: number;
+  /** How much gusts swell and calm the wind, 0–1. */
+  gustiness: number;
+  /** Seconds between gusts, roughly. */
+  gustPeriod: number;
   height: number;
   /** Strength of the light on slopes facing up, 0–1. */
   highlight: number;
@@ -19,7 +25,7 @@ export type AiRibbon = {
   letterSpacing: number;
   /** Depth of the V-notch in the bottom edge. */
   notch: number;
-  /** Seconds per wave. */
+  /** Seconds per wave in steady wind. */
   period: number;
   radius: number;
   /** Strength of the shade on slopes facing down, 0–1. */
@@ -29,6 +35,10 @@ export type AiRibbon = {
   textColor: string;
   /** Nudges the label up (negative) or down from the centre of the band above the notch. */
   textOffset: number;
+  /** Irregular noise mixed into the ripple, 0–1. */
+  turbulence: number;
+  /** How far the free end turns toward or away from the viewer, in radians. */
+  twist: number;
   uppercase: boolean;
   /** Wave length as a share of the ribbon's width. */
   wavelength: number;
@@ -42,9 +52,12 @@ export const aiRibbon: AiRibbon = {
   colorDeep: "#2923d4",
   colorLight: "#c5e5ff",
   colorMid: "#2484ff",
+  detail: 0.45,
   falloff: 0.9,
-  fontSize: 10,
-  fontWeight: 600,
+  fontSize: 11,
+  fontWeight: 700,
+  gustiness: 0.5,
+  gustPeriod: 4,
   height: 38,
   highlight: 0.22,
   inset: 10,
@@ -56,6 +69,8 @@ export const aiRibbon: AiRibbon = {
   sway: 2.9,
   textColor: "#ffffff",
   textOffset: 1.5,
+  turbulence: 0.35,
+  twist: 0.25,
   uppercase: true,
   wavelength: 0.7,
   width: 102,

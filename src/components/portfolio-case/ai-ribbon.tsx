@@ -57,23 +57,86 @@ function buildOutline({ height, notch, radius, width }: AiRibbonSettings): Point
   ];
 }
 
-// The top edge hangs from the card and stays put; the ripple grows toward the
-// free bottom edge, like fabric caught by a light breeze.
-function wave(settings: AiRibbonSettings) {
-  const { amplitude, falloff, height, period, sway, wavelength, width } = settings;
-  const wavenumber = (2 * Math.PI) / (width * wavelength);
-  const speed = (2 * Math.PI) / period;
-  const phase = (x: number, time: number) => wavenumber * x - speed * time;
+/** Smooth value noise in -1…1, so the wind never repeats the way a sine does. */
+function hash(n: number) {
+  const s = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+const smooth = (t: number) => t * t * (3 - 2 * t);
+
+function noise1(x: number) {
+  const i = Math.floor(x);
+  const f = smooth(x - i);
+  return (hash(i) + (hash(i + 1) - hash(i)) * f) * 2 - 1;
+}
+
+function noise2(x: number, y: number) {
+  const i = Math.floor(x);
+  const j = Math.floor(y);
+  const fx = smooth(x - i);
+  const fy = smooth(y - j);
+  const a = hash(i + j * 57);
+  const b = hash(i + 1 + j * 57);
+  const c = hash(i + (j + 1) * 57);
+  const d = hash(i + 1 + (j + 1) * 57);
+  return (a + (b - a) * fx + (c - a + (a - b + d - c) * fx) * fy) * 2 - 1;
+}
+
+/** The wind at one moment: shared by every point of the outline and every letter. */
+type Wind = { amplitude: number; phase: number; sway: number; time: number; twist: number };
+
+/**
+ * Gusts come and go, scaling the ripple and how fast it travels. The phase is
+ * accumulated rather than derived from time so a change of speed never jumps.
+ */
+function blow(settings: AiRibbonSettings, previous: Wind | null, time: number): Wind {
+  const { amplitude, gustiness, gustPeriod, period, sway, twist } = settings;
+  const gust = 1 + gustiness * noise1(time / gustPeriod + 3.7);
+  const step = previous ? Math.min(Math.max(time - previous.time, 0), 0.1) : 0;
+  const speed = ((2 * Math.PI) / period) * (0.7 + 0.3 * gust);
 
   return {
-    displace(x: number, y: number, time: number): Point {
-      const strength = Math.max(0, y / height) ** falloff;
-      return [
-        x + sway * strength * Math.sin(speed * 0.45 * time + 1),
-        y + amplitude * strength * Math.sin(phase(x, time)),
-      ];
+    amplitude: amplitude * gust,
+    phase: (previous?.phase ?? 0) + speed * step,
+    sway: sway * gust * noise1(time * 0.35 + 11),
+    time,
+    twist: twist * noise1(time * 0.45 + 23),
+  };
+}
+
+// The top edge hangs from the card and stays put; the ripple grows toward the
+// free bottom edge, like fabric caught by the wind.
+function shape(settings: AiRibbonSettings) {
+  const { detail, falloff, height, turbulence, wavelength, width } = settings;
+  const wavenumber = (2 * Math.PI) / (width * wavelength);
+  // Keeps `amplitude` meaning roughly the same whatever the mix.
+  const norm = 1 + detail * 0.6 + turbulence * 0.6;
+  const centre = width / 2;
+
+  function displace(x: number, y: number, wind: Wind): Point {
+    const strength = Math.max(0, y / height) ** falloff;
+    const ripple =
+      (Math.sin(wavenumber * x - wind.phase) +
+        detail * Math.sin(wavenumber * 1.73 * x - wind.phase * 1.41 + 1.3) +
+        turbulence * noise2((x / width) * 3, wind.time * 0.9)) /
+      norm;
+    // The free end turns slightly toward or away from the viewer: it narrows and tilts.
+    const angle = wind.twist * strength;
+
+    return [
+      centre + (x - centre) * Math.cos(angle) + wind.sway * strength,
+      y + wind.amplitude * strength * ripple + (x - centre) * Math.sin(angle) * 0.25,
+    ];
+  }
+
+  return {
+    displace,
+    /** How steeply the bottom edge slopes at `x`, scaled to about -1…1. */
+    slope(x: number, wind: Wind) {
+      const rise = displace(x + 1, height, wind)[1] - displace(x - 1, height, wind)[1];
+      return Math.max(-1, Math.min(1, rise / 2 / Math.max(0.01, settings.amplitude * wavenumber)));
     },
-    phase,
   };
 }
 
@@ -121,6 +184,7 @@ export function AiRibbon({ label }: { label: string }) {
     // Letter centres and the outline are rebuilt only when the size changes, not per frame.
     let letterCenters: number[] = [];
     let geometry = { outline: [] as Point[], settings: null as AiRibbonSettings | null };
+    let wind: Wind | null = null;
 
     function measure() {
       letterCenters = letterRefs.current.map((letter) =>
@@ -148,11 +212,13 @@ export function AiRibbon({ label }: { label: string }) {
         measure();
       }
 
-      const { displace, phase } = wave(current);
+      const now = blow(current, wind, time);
+      wind = now;
+      const { displace, slope } = shape(current);
       const d =
         geometry.outline
           .map(([x, y], i) => {
-            const [px, py] = displace(x, y, time);
+            const [px, py] = displace(x, y, now);
             return `${i ? "L" : "M"}${px.toFixed(2)} ${py.toFixed(2)}`;
           })
           .join("") + "Z";
@@ -162,16 +228,16 @@ export function AiRibbon({ label }: { label: string }) {
 
       // Slopes facing up catch light, slopes facing down fall into shade.
       stopRefs.current.forEach((stop, i) => {
-        const slope = Math.cos(phase((current.width * i) / (shadeStops - 1), time));
-        const strength = slope > 0 ? current.highlight : current.shadow;
-        stop?.setAttribute("stop-color", slope > 0 ? "#fff" : "#1b2f8f");
-        stop?.setAttribute("stop-opacity", (Math.abs(slope) * strength).toFixed(3));
+        const tilt = slope((current.width * i) / (shadeStops - 1), now);
+        const strength = tilt > 0 ? current.highlight : current.shadow;
+        stop?.setAttribute("stop-color", tilt > 0 ? "#fff" : "#1b2f8f");
+        stop?.setAttribute("stop-opacity", (Math.abs(tilt) * strength).toFixed(3));
       });
 
       const letterY = (current.height - current.notch) / 2 + current.textOffset;
       letterRefs.current.forEach((letter, i) => {
         const x = letterCenters[i] ?? 0;
-        const [px, py] = displace(x, letterY, time);
+        const [px, py] = displace(x, letterY, now);
         letter?.style.setProperty(
           "transform",
           `translate(${(px - x).toFixed(2)}px, ${(py - letterY).toFixed(2)}px)`,
