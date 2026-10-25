@@ -20,7 +20,14 @@ const config = {
     notch: [aiRibbon.notch, 0, 30, 1] as Slider,
     radius: [aiRibbon.radius, 0, 20, 1] as Slider,
     inset: [aiRibbon.inset, 0, 120, 1] as Slider,
-    fontSize: [aiRibbon.fontSize, 9, 20, 1] as Slider,
+  },
+  text: {
+    uppercase: aiRibbon.uppercase,
+    fontSize: [aiRibbon.fontSize, 8, 20, 0.5] as Slider,
+    fontWeight: [aiRibbon.fontWeight, 300, 900, 100] as Slider,
+    letterSpacing: [aiRibbon.letterSpacing, -0.1, 0.3, 0.005] as Slider,
+    textOffset: [aiRibbon.textOffset, -10, 10, 0.5] as Slider,
+    textColor: { default: aiRibbon.textColor, type: "color" as const },
   },
   wave: {
     amplitude: [aiRibbon.amplitude, 0, 10, 0.1] as Slider,
@@ -51,8 +58,14 @@ export function AiRibbonDebug() {
       }
     },
   });
-  const { light, shape, wave } = dial.values;
-  const ribbon: AiRibbon = { ...shape, ...wave, ...light };
+  const { light, shape, text, wave } = dial.values;
+  const ribbon: AiRibbon = {
+    ...shape,
+    ...text,
+    ...wave,
+    ...light,
+    letterSpacing: Math.round(text.letterSpacing * 1000) / 1000,
+  };
 
   useEffect(() => {
     ribbonRef.current = ribbon;

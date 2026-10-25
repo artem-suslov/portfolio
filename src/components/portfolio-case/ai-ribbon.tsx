@@ -91,7 +91,21 @@ export function AiRibbon({ label }: { label: string }) {
   const shadeId = `${ids}-shade`;
   const fadeId = `${ids}-fade`;
   const letters = Array.from(label);
-  const { colorDeep, colorLight, colorMid, fontSize, height, inset, notch, width } = settings;
+  const {
+    colorDeep,
+    colorLight,
+    colorMid,
+    fontSize,
+    fontWeight,
+    height,
+    inset,
+    letterSpacing,
+    notch,
+    textColor,
+    textOffset,
+    uppercase,
+    width,
+  } = settings;
 
   useEffect(() => {
     settingsRef.current = settings;
@@ -124,7 +138,11 @@ export function AiRibbon({ label }: { label: string }) {
         previous.height !== current.height ||
         previous.notch !== current.notch ||
         previous.radius !== current.radius ||
-        previous.fontSize !== current.fontSize
+        previous.fontSize !== current.fontSize ||
+        previous.fontWeight !== current.fontWeight ||
+        previous.letterSpacing !== current.letterSpacing ||
+        previous.textOffset !== current.textOffset ||
+        previous.uppercase !== current.uppercase
       ) {
         geometry = { outline: buildOutline(current), settings: current };
         measure();
@@ -150,7 +168,7 @@ export function AiRibbon({ label }: { label: string }) {
         stop?.setAttribute("stop-opacity", (Math.abs(slope) * strength).toFixed(3));
       });
 
-      const letterY = (current.height - current.notch) / 2;
+      const letterY = (current.height - current.notch) / 2 + current.textOffset;
       letterRefs.current.forEach((letter, i) => {
         const x = letterCenters[i] ?? 0;
         const [px, py] = displace(x, letterY, time);
@@ -202,9 +220,14 @@ export function AiRibbon({ label }: { label: string }) {
       style={
         {
           "--ribbon-font-size": `${fontSize}px`,
+          "--ribbon-font-weight": fontWeight,
           "--ribbon-height": `${height}px`,
           "--ribbon-inset": `${inset}px`,
+          "--ribbon-letter-spacing": `${letterSpacing}em`,
           "--ribbon-notch": `${notch}px`,
+          "--ribbon-text-color": textColor,
+          "--ribbon-text-offset": `${textOffset}px`,
+          "--ribbon-text-transform": uppercase ? "uppercase" : "none",
           "--ribbon-width": `${width}px`,
         } as CSSProperties
       }

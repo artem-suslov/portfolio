@@ -16,19 +16,22 @@ const numberKeys = [
   "amplitude",
   "falloff",
   "fontSize",
+  "fontWeight",
   "height",
   "highlight",
   "inset",
+  "letterSpacing",
   "notch",
   "period",
   "radius",
   "shadow",
   "sway",
+  "textOffset",
   "wavelength",
   "width",
 ] as const;
-const colorKeys = ["colorDeep", "colorLight", "colorMid"] as const;
-const keys = [...numberKeys, ...colorKeys].sort();
+const colorKeys = ["colorDeep", "colorLight", "colorMid", "textColor"] as const;
+const keys = [...numberKeys, ...colorKeys, "uppercase"].sort();
 
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== "development") {
@@ -51,7 +54,7 @@ export async function POST(request: Request) {
     }
 
     const lines = keys
-      .map((key) => `  ${key}: ${typeof ribbon[key] === "string" ? JSON.stringify(ribbon[key]) : ribbon[key]},`)
+      .map((key) => `  ${key}: ${JSON.stringify(ribbon[key as keyof AiRibbon])},`)
       .join("\n");
     const next = `${source.slice(0, start + startMarker.length)}
 export const aiRibbon: AiRibbon = {
@@ -74,9 +77,10 @@ function isValidRibbon(value: unknown): value is AiRibbon {
   const record = value as Record<string, unknown>;
 
   return (
+    typeof record.uppercase === "boolean" &&
     numberKeys.every((key) => {
       const number = record[key];
-      return typeof number === "number" && Number.isFinite(number) && number >= 0 && number <= 1000;
+      return typeof number === "number" && Number.isFinite(number) && number >= -1000 && number <= 1000;
     }) &&
     colorKeys.every((key) => {
       const color = record[key];

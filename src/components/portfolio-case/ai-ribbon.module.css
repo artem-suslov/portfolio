@@ -23,11 +23,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-inverse);
+  /* letter-spacing trails the last letter too; matching padding keeps the label centred. */
+  padding-left: var(--ribbon-letter-spacing);
+  color: var(--ribbon-text-color);
   font-size: var(--ribbon-font-size);
-  font-weight: 600;
-  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--ribbon-font-weight);
+  letter-spacing: var(--ribbon-letter-spacing);
+  text-transform: var(--ribbon-text-transform);
   white-space: nowrap;
+  translate: 0 var(--ribbon-text-offset);
 }
 
 .letter {

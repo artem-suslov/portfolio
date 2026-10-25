@@ -9,11 +9,14 @@ export type AiRibbon = {
   /** How fast the ripple grows from the attached top edge to the free bottom one; 1 is linear. */
   falloff: number;
   fontSize: number;
+  fontWeight: number;
   height: number;
   /** Strength of the light on slopes facing up, 0–1. */
   highlight: number;
   /** From the card's left edge. */
   inset: number;
+  /** In em. */
+  letterSpacing: number;
   /** Depth of the V-notch in the bottom edge. */
   notch: number;
   /** Seconds per wave. */
@@ -23,6 +26,10 @@ export type AiRibbon = {
   shadow: number;
   /** Side-to-side drift of the bottom edge. */
   sway: number;
+  textColor: string;
+  /** Nudges the label up (negative) or down from the centre of the band above the notch. */
+  textOffset: number;
+  uppercase: boolean;
   /** Wave length as a share of the ribbon's width. */
   wavelength: number;
   width: number;
@@ -36,15 +43,20 @@ export const aiRibbon: AiRibbon = {
   colorLight: "#c5e5ff",
   colorMid: "#2484ff",
   falloff: 0.9,
-  fontSize: 13,
+  fontSize: 10,
+  fontWeight: 600,
   height: 38,
   highlight: 0.22,
   inset: 10,
+  letterSpacing: 0.01,
   notch: 8,
   period: 1.9,
   radius: 0,
   shadow: 0.13,
-  sway: 1.3,
+  sway: 2.9,
+  textColor: "#ffffff",
+  textOffset: 1.5,
+  uppercase: true,
   wavelength: 0.7,
   width: 102,
 };
