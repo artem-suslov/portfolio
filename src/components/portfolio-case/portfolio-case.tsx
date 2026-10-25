@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { CaseMorph } from "@/components/case-study/case-morph";
 import { useInteractionSound } from "@/components/sound/sound-provider";
 import { markCaseNavigation, rememberHomeScroll, useCaseReturnTarget } from "@/lib/case-return";
+import { AiRibbon } from "./ai-ribbon";
 import { CaseCover } from "./case-cover";
 import { CaseInfo } from "./case-info";
 import styles from "./portfolio-case.module.css";
@@ -23,6 +24,7 @@ export function PortfolioCase({
   details,
   href,
   id,
+  ribbon,
   tile = false,
   title,
 }: PortfolioCaseData & {
@@ -63,6 +65,7 @@ export function PortfolioCase({
         // Grid tiles stay put; only full cards open their cover in the expanded view.
         <CaseCover caseId={id} cover={cover} expandable={!tile} isLinked={false} title={title} />
       )}
+      {ribbon ? <AiRibbon label={ribbon} /> : null}
       {caption === "full" ? (
         <CaseInfo description={description} details={details} title={title} />
       ) : caption === "title" ? (

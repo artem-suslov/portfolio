@@ -133,6 +133,7 @@ export const portfolioCases: PortfolioCaseData[] = [
       title: "Animator: a looping MP4 tool I designed and built with AI",
     },
     href: "/animator",
+    ribbon: "Made with AI",
     title: "Animator: a looping MP4 tool I designed and built with AI",
   },
   {

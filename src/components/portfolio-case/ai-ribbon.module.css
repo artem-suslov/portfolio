@@ -1,0 +1,43 @@
+/* Self-contained visual: keeps its own blue palette. Hangs from the cover's top edge. */
+.ribbon {
+  position: absolute;
+  top: 0;
+  right: var(--ribbon-inset);
+  z-index: 7;
+  width: var(--ribbon-width);
+  height: var(--ribbon-height);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 10px rgb(48 92 214 / 0.28))
+    drop-shadow(0 1px 2px rgb(30 60 160 / 0.2));
+}
+
+.shape {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.label {
+  position: absolute;
+  inset: 0 0 var(--ribbon-notch);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-inverse);
+  font-size: var(--ribbon-font-size);
+  font-weight: 600;
+  letter-spacing: var(--letter-spacing-tight);
+  text-shadow: 0 1px 1px rgb(30 60 160 / 0.3);
+  white-space: nowrap;
+}
+
+.letter {
+  display: inline-block;
+  will-change: transform;
+}
+
+@media (max-width: 760px) {
+  .ribbon {
+    right: var(--space-4);
+  }
+}
