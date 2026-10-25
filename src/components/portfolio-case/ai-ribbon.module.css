@@ -27,7 +27,6 @@
   font-size: var(--ribbon-font-size);
   font-weight: 600;
   letter-spacing: var(--letter-spacing-tight);
-  text-shadow: 0 1px 1px rgb(30 60 160 / 0.3);
   white-space: nowrap;
 }
 
