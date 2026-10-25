@@ -2,7 +2,7 @@
 .ribbon {
   position: absolute;
   top: 0;
-  right: var(--ribbon-inset);
+  left: var(--ribbon-inset);
   z-index: 7;
   width: var(--ribbon-width);
   height: var(--ribbon-height);
@@ -34,10 +34,4 @@
 .letter {
   display: inline-block;
   will-change: transform;
-}
-
-@media (max-width: 760px) {
-  .ribbon {
-    right: var(--space-4);
-  }
 }

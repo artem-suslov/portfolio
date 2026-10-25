@@ -12,7 +12,7 @@ export type AiRibbon = {
   height: number;
   /** Strength of the light on slopes facing up, 0–1. */
   highlight: number;
-  /** From the card's right edge. */
+  /** From the card's left edge. */
   inset: number;
   /** Depth of the V-notch in the bottom edge. */
   notch: number;
@@ -31,21 +31,21 @@ export type AiRibbon = {
 // "Save to code" in the Ribbon DialKit panel rewrites everything between these markers.
 // AI_RIBBON_START
 export const aiRibbon: AiRibbon = {
-  amplitude: 2.6,
-  colorDeep: "#5b78f2",
-  colorLight: "#9ad2ff",
-  colorMid: "#6eaaff",
-  falloff: 1.2,
+  amplitude: 1.3,
+  colorDeep: "#2923d4",
+  colorLight: "#c5e5ff",
+  colorMid: "#2484ff",
+  falloff: 0.9,
   fontSize: 13,
-  height: 46,
-  highlight: 0.3,
-  inset: 24,
-  notch: 9,
-  period: 2.6,
-  radius: 7,
-  shadow: 0.2,
-  sway: 1.1,
-  wavelength: 0.95,
-  width: 116,
+  height: 38,
+  highlight: 0.22,
+  inset: 10,
+  notch: 8,
+  period: 1.9,
+  radius: 0,
+  shadow: 0.13,
+  sway: 1.3,
+  wavelength: 0.7,
+  width: 102,
 };
 // AI_RIBBON_END
