@@ -42,7 +42,17 @@ const numberKeys = [
 ] as const;
 const colorKeys = ["colorDeep", "colorLight", "colorMid", "textColor"] as const;
 const variants = ["bookmark", "corner"];
-const textBlends = ["normal", "overlay", "screen", "soft-light"];
+const textBlends = [
+  "color-dodge",
+  "hard-light",
+  "luminosity",
+  "multiply",
+  "normal",
+  "overlay",
+  "plus-lighter",
+  "screen",
+  "soft-light",
+];
 const keys = [...numberKeys, ...colorKeys, "textBlend", "uppercase", "variant"].sort();
 
 export async function POST(request: Request) {

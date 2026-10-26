@@ -153,14 +153,29 @@ export function AiRibbon({ label }: { label: string }) {
 
 /** Text styles both variants share. */
 function labelVars(settings: AiRibbonSettings) {
-  const { fontSize, fontWeight, letterSpacing, textColor, textOffset, uppercase } = settings;
+  const {
+    fontSize,
+    fontWeight,
+    letterSpacing,
+    press,
+    sheen,
+    textBlend,
+    textColor,
+    textOffset,
+    textOpacity,
+    uppercase,
+  } = settings;
 
   return {
     "--ribbon-font-size": `${fontSize}px`,
     "--ribbon-font-weight": fontWeight,
     "--ribbon-letter-spacing": `${letterSpacing}em`,
+    "--ribbon-press": press,
+    "--ribbon-sheen": sheen,
+    "--ribbon-text-blend": textBlend,
     "--ribbon-text-color": textColor,
     "--ribbon-text-offset": `${textOffset}px`,
+    "--ribbon-text-opacity": textOpacity,
     "--ribbon-text-transform": uppercase ? "uppercase" : "none",
   };
 }
@@ -170,8 +185,7 @@ function labelVars(settings: AiRibbonSettings) {
  * band's centre line sits `cornerDistance` from the corner, along the diagonal.
  */
 function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
-  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness, press, sheen, textBlend, textOpacity } =
-    settings;
+  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness } = settings;
   const centre = cornerDistance / Math.SQRT2;
   // Just large enough to hold the band from one edge to the other.
   const size = Math.ceil(2 * centre + cornerThickness * Math.SQRT2);
@@ -185,10 +199,6 @@ function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSe
         {
           ...labelVars(settings),
           "--ribbon-corner-size": `${size}px`,
-          "--ribbon-press": press,
-          "--ribbon-sheen": sheen,
-          "--ribbon-text-blend": textBlend,
-          "--ribbon-text-opacity": textOpacity,
         } as CSSProperties
       }
     >
@@ -214,14 +224,18 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
   const rootRef = useRef<HTMLDivElement>(null);
   const shapeRef = useRef<SVGPathElement>(null);
   const shadeRef = useRef<SVGPathElement>(null);
+  const sheenRef = useRef<SVGPathElement>(null);
+  const glossRef = useRef<SVGPathElement>(null);
   const stopRefs = useRef<(SVGStopElement | null)[]>([]);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const ids = useId();
   const fillId = `${ids}-fill`;
   const shadeId = `${ids}-shade`;
   const fadeId = `${ids}-fade`;
+  const sheenId = `${ids}-sheen`;
+  const glossId = `${ids}-gloss`;
   const letters = Array.from(label);
-  const { colorDeep, colorLight, colorMid, height, inset, notch, width } = settings;
+  const { colorDeep, colorLight, colorMid, height, inset, notch, sheen, width } = settings;
 
   useEffect(() => {
     settingsRef.current = settings;
@@ -276,8 +290,9 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
           })
           .join("") + "Z";
 
-      shapeRef.current?.setAttribute("d", d);
-      shadeRef.current?.setAttribute("d", d);
+      for (const path of [shapeRef, shadeRef, sheenRef, glossRef]) {
+        path.current?.setAttribute("d", d);
+      }
 
       // Slopes facing up catch light, slopes facing down fall into shade.
       stopRefs.current.forEach((stop, i) => {
@@ -373,7 +388,6 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
           </mask>
         </defs>
         <path fill={`url(#${fillId})`} ref={shapeRef} />
-        <path fill={`url(#${shadeId})`} mask={`url(#${shadeId}-mask)`} ref={shadeRef} />
       </svg>
       <span className={styles.label}>
         {letters.map((letter, i) => (
@@ -388,6 +402,24 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
           </span>
         ))}
       </span>
+      {/* Light and shade lie over the letters too, so fabric and print share one surface. */}
+      <svg className={styles.shape} height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+        <defs>
+          <linearGradient id={sheenId} x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity={0.5 * sheen} />
+            <stop offset="0.48" stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#0a1450" stopOpacity={0.22 * sheen} />
+          </linearGradient>
+          <linearGradient id={glossId} x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0.22" stopColor="#fff" stopOpacity="0" />
+            <stop offset="0.4" stopColor="#fff" stopOpacity={0.28 * sheen} />
+            <stop offset="0.58" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path fill={`url(#${shadeId})`} mask={`url(#${shadeId}-mask)`} ref={shadeRef} />
+        <path fill={`url(#${sheenId})`} ref={sheenRef} />
+        <path fill={`url(#${glossId})`} ref={glossRef} />
+      </svg>
     </div>
   );
 }

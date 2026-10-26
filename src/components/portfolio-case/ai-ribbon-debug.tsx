@@ -25,14 +25,6 @@ const config = {
   corner: {
     cornerDistance: [aiRibbon.cornerDistance, 12, 80, 1] as Slider,
     cornerThickness: [aiRibbon.cornerThickness, 12, 48, 1] as Slider,
-    textOpacity: [aiRibbon.textOpacity, 0.3, 1, 0.01] as Slider,
-    textBlend: {
-      default: aiRibbon.textBlend,
-      options: ["normal", "screen", "soft-light", "overlay"],
-      type: "select" as const,
-    },
-    press: [aiRibbon.press, 0, 1, 0.05] as Slider,
-    sheen: [aiRibbon.sheen, 0, 1, 0.05] as Slider,
   },
   shape: {
     width: [aiRibbon.width, 60, 200, 1] as Slider,
@@ -48,6 +40,25 @@ const config = {
     letterSpacing: [aiRibbon.letterSpacing, -0.1, 0.3, 0.005] as Slider,
     textOffset: [aiRibbon.textOffset, -10, 10, 0.5] as Slider,
     textColor: { default: aiRibbon.textColor, type: "color" as const },
+    textOpacity: [aiRibbon.textOpacity, 0.3, 1, 0.01] as Slider,
+    textBlend: {
+      default: aiRibbon.textBlend,
+      // White letters look the same under normal and screen; the others change them visibly.
+      options: [
+        "normal",
+        "screen",
+        "plus-lighter",
+        "color-dodge",
+        "soft-light",
+        "overlay",
+        "hard-light",
+        "luminosity",
+        "multiply",
+      ],
+      type: "select" as const,
+    },
+    press: [aiRibbon.press, 0, 1, 0.05] as Slider,
+    sheen: [aiRibbon.sheen, 0, 1, 0.05] as Slider,
   },
   wave: {
     amplitude: [aiRibbon.amplitude, 0, 10, 0.1] as Slider,
@@ -94,7 +105,7 @@ export function AiRibbonDebug() {
     ...wind,
     ...light,
     letterSpacing: Math.round(text.letterSpacing * 1000) / 1000,
-    textBlend: corner.textBlend as AiRibbonTextBlend,
+    textBlend: text.textBlend as AiRibbonTextBlend,
     variant: variant as AiRibbonVariant,
   };
 

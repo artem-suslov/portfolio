@@ -1,6 +1,8 @@
 /* Self-contained visual: keeps its own blue palette. Hangs from the cover's top edge. */
 .ribbon {
   position: absolute;
+  /* Keeps the label's blend mode inside the ribbon, so it mixes with the fabric only. */
+  isolation: isolate;
   top: 0;
   left: var(--ribbon-inset);
   z-index: 7;
@@ -20,6 +22,12 @@
 .label {
   position: absolute;
   inset: 0 0 var(--ribbon-notch);
+  opacity: var(--ribbon-text-opacity);
+  mix-blend-mode: var(--ribbon-text-blend);
+  /* Letterpress: a lit lower lip and a shaded upper one read as letters pressed into the fabric. */
+  text-shadow:
+    0 1px 0 rgb(255 255 255 / calc(0.4 * var(--ribbon-press))),
+    0 -1px 0 rgb(10 20 80 / calc(0.45 * var(--ribbon-press)));
   display: flex;
   align-items: center;
   justify-content: center;
