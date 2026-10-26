@@ -4,7 +4,7 @@ import { useDialKitController } from "dialkit";
 import { useEffect, useRef } from "react";
 import "dialkit/styles.css";
 import { useDialSave } from "@/components/portfolio/dial-save";
-import { type AiRibbon, type AiRibbonVariant, aiRibbon } from "@/data/ai-ribbon";
+import { type AiRibbon, type AiRibbonTextBlend, type AiRibbonVariant, aiRibbon } from "@/data/ai-ribbon";
 import { setAiRibbonSettings } from "./ai-ribbon";
 
 // Dev-only: live DialKit controls for the "Made with AI" bookmark on the Animator card.
@@ -25,6 +25,14 @@ const config = {
   corner: {
     cornerDistance: [aiRibbon.cornerDistance, 12, 80, 1] as Slider,
     cornerThickness: [aiRibbon.cornerThickness, 12, 48, 1] as Slider,
+    textOpacity: [aiRibbon.textOpacity, 0.3, 1, 0.01] as Slider,
+    textBlend: {
+      default: aiRibbon.textBlend,
+      options: ["normal", "screen", "soft-light", "overlay"],
+      type: "select" as const,
+    },
+    press: [aiRibbon.press, 0, 1, 0.05] as Slider,
+    sheen: [aiRibbon.sheen, 0, 1, 0.05] as Slider,
   },
   shape: {
     width: [aiRibbon.width, 60, 200, 1] as Slider,
@@ -86,6 +94,7 @@ export function AiRibbonDebug() {
     ...wind,
     ...light,
     letterSpacing: Math.round(text.letterSpacing * 1000) / 1000,
+    textBlend: corner.textBlend as AiRibbonTextBlend,
     variant: variant as AiRibbonVariant,
   };
 

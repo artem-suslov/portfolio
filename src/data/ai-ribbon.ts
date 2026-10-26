@@ -2,6 +2,9 @@
 
 export type AiRibbonVariant = "bookmark" | "corner";
 
+/** How the corner sash's label mixes with the fabric under it. */
+export type AiRibbonTextBlend = "normal" | "overlay" | "screen" | "soft-light";
+
 export type AiRibbon = {
   /** Vertical ripple of the bottom edge. */
   amplitude: number;
@@ -31,16 +34,24 @@ export type AiRibbon = {
   letterSpacing: number;
   /** Depth of the V-notch in the bottom edge. */
   notch: number;
+  /** Corner variant: how deeply the letters look pressed into the fabric, 0–1. */
+  press: number;
   /** Seconds per wave in steady wind. */
   period: number;
   radius: number;
   /** Strength of the shade on slopes facing down, 0–1. */
   shadow: number;
+  /** Corner variant: gloss laid over fabric and letters alike, 0–1. */
+  sheen: number;
   /** Side-to-side drift of the bottom edge. */
   sway: number;
+  /** Corner variant. */
+  textBlend: AiRibbonTextBlend;
   textColor: string;
   /** Nudges the label up (negative) or down from the centre of the band above the notch. */
   textOffset: number;
+  /** Corner variant: below 1 the ribbon's colour shows through the letters. */
+  textOpacity: number;
   /** Irregular noise mixed into the ripple, 0–1. */
   turbulence: number;
   /** How far the free end turns toward or away from the viewer, in radians. */
@@ -73,12 +84,16 @@ export const aiRibbon: AiRibbon = {
   inset: 10,
   letterSpacing: -0.02,
   notch: 8,
+  press: 0.6,
   period: 2.3,
   radius: 0,
   shadow: 0.13,
+  sheen: 0.7,
   sway: 1.7,
+  textBlend: "normal",
   textColor: "#ffffff",
   textOffset: 1,
+  textOpacity: 0.85,
   turbulence: 0.35,
   twist: 0.49,
   uppercase: true,

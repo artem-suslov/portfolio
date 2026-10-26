@@ -170,7 +170,8 @@ function labelVars(settings: AiRibbonSettings) {
  * band's centre line sits `cornerDistance` from the corner, along the diagonal.
  */
 function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
-  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness } = settings;
+  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness, press, sheen, textBlend, textOpacity } =
+    settings;
   const centre = cornerDistance / Math.SQRT2;
   // Just large enough to hold the band from one edge to the other.
   const size = Math.ceil(2 * centre + cornerThickness * Math.SQRT2);
@@ -184,6 +185,10 @@ function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSe
         {
           ...labelVars(settings),
           "--ribbon-corner-size": `${size}px`,
+          "--ribbon-press": press,
+          "--ribbon-sheen": sheen,
+          "--ribbon-text-blend": textBlend,
+          "--ribbon-text-opacity": textOpacity,
         } as CSSProperties
       }
     >

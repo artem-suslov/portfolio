@@ -54,6 +54,8 @@
 
 .sash {
   position: absolute;
+  /* Keeps the label's blend mode inside the ribbon, so it mixes with the fabric only. */
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,10 +63,38 @@
   transform: rotate(-45deg);
 }
 
+/* One light for fabric and letters alike: it lies over the label, not under it. */
+.sash::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(255 255 255 / calc(0.5 * var(--ribbon-sheen))) 0%,
+      rgb(255 255 255 / 0) 48%,
+      rgb(10 20 80 / calc(0.22 * var(--ribbon-sheen))) 100%
+    ),
+    linear-gradient(
+      90deg,
+      transparent 22%,
+      rgb(255 255 255 / calc(0.28 * var(--ribbon-sheen))) 40%,
+      transparent 58%
+    );
+  content: "";
+  pointer-events: none;
+}
+
 .sashLabel {
   /* letter-spacing trails the last letter too; matching padding keeps the label centred. */
   padding-left: var(--ribbon-letter-spacing);
   color: var(--ribbon-text-color);
+  opacity: var(--ribbon-text-opacity);
+  mix-blend-mode: var(--ribbon-text-blend);
+  /* Letterpress: a lit lower lip and a shaded upper one read as letters pressed into the fabric. */
+  text-shadow:
+    0 1px 0 rgb(255 255 255 / calc(0.4 * var(--ribbon-press))),
+    0 -1px 0 rgb(10 20 80 / calc(0.45 * var(--ribbon-press)));
   font-size: var(--ribbon-font-size);
   font-weight: var(--ribbon-font-weight);
   letter-spacing: var(--ribbon-letter-spacing);
