@@ -8,6 +8,7 @@ export const YANDEX_METRIKA_ID = 110413593;
 export const EMAIL = "asuslov4242@gmail.com";
 
 export const links = {
+  github: "https://github.com/artem-suslov",
   linkedin: "https://www.linkedin.com/in/artem-suslov-7447b3224/",
   resume:
     "https://drive.google.com/file/d/1P8XKiDdLtftVHvlIbEwT0LWX7UPoKrZ1/view?usp=sharing",
