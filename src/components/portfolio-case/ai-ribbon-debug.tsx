@@ -4,7 +4,7 @@ import { useDialKitController } from "dialkit";
 import { useEffect, useRef } from "react";
 import "dialkit/styles.css";
 import { useDialSave } from "@/components/portfolio/dial-save";
-import { type AiRibbon, aiRibbon } from "@/data/ai-ribbon";
+import { type AiRibbon, type AiRibbonTextBlend, type AiRibbonVariant, aiRibbon } from "@/data/ai-ribbon";
 import { setAiRibbonSettings } from "./ai-ribbon";
 
 // Dev-only: live DialKit controls for the "Made with AI" bookmark on the Animator card.
@@ -14,6 +14,18 @@ import { setAiRibbonSettings } from "./ai-ribbon";
 type Slider = [number, number, number, number];
 
 const config = {
+  variant: {
+    default: aiRibbon.variant,
+    options: [
+      { label: "Bookmark", value: "bookmark" },
+      { label: "Corner", value: "corner" },
+    ],
+    type: "select" as const,
+  },
+  corner: {
+    cornerDistance: [aiRibbon.cornerDistance, 12, 80, 1] as Slider,
+    cornerThickness: [aiRibbon.cornerThickness, 12, 48, 1] as Slider,
+  },
   shape: {
     width: [aiRibbon.width, 60, 200, 1] as Slider,
     height: [aiRibbon.height, 24, 100, 1] as Slider,
@@ -28,6 +40,25 @@ const config = {
     letterSpacing: [aiRibbon.letterSpacing, -0.1, 0.3, 0.005] as Slider,
     textOffset: [aiRibbon.textOffset, -10, 10, 0.5] as Slider,
     textColor: { default: aiRibbon.textColor, type: "color" as const },
+    textOpacity: [aiRibbon.textOpacity, 0.3, 1, 0.01] as Slider,
+    textBlend: {
+      default: aiRibbon.textBlend,
+      // White letters look the same under normal and screen; the others change them visibly.
+      options: [
+        "normal",
+        "screen",
+        "plus-lighter",
+        "color-dodge",
+        "soft-light",
+        "overlay",
+        "hard-light",
+        "luminosity",
+        "multiply",
+      ],
+      type: "select" as const,
+    },
+    press: [aiRibbon.press, 0, 1, 0.05] as Slider,
+    sheen: [aiRibbon.sheen, 0, 1, 0.05] as Slider,
   },
   wave: {
     amplitude: [aiRibbon.amplitude, 0, 10, 0.1] as Slider,
@@ -65,14 +96,17 @@ export function AiRibbonDebug() {
       }
     },
   });
-  const { light, shape, text, wave, wind } = dial.values;
+  const { corner, light, shape, text, variant, wave, wind } = dial.values;
   const ribbon: AiRibbon = {
+    ...corner,
     ...shape,
     ...text,
     ...wave,
     ...wind,
     ...light,
     letterSpacing: Math.round(text.letterSpacing * 1000) / 1000,
+    textBlend: text.textBlend as AiRibbonTextBlend,
+    variant: variant as AiRibbonVariant,
   };
 
   useEffect(() => {

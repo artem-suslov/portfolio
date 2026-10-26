@@ -14,6 +14,8 @@ const startMarker = "// AI_RIBBON_START";
 const endMarker = "// AI_RIBBON_END";
 const numberKeys = [
   "amplitude",
+  "cornerDistance",
+  "cornerThickness",
   "detail",
   "falloff",
   "fontSize",
@@ -26,17 +28,32 @@ const numberKeys = [
   "letterSpacing",
   "notch",
   "period",
+  "press",
   "radius",
   "shadow",
+  "sheen",
   "sway",
   "textOffset",
+  "textOpacity",
   "turbulence",
   "twist",
   "wavelength",
   "width",
 ] as const;
 const colorKeys = ["colorDeep", "colorLight", "colorMid", "textColor"] as const;
-const keys = [...numberKeys, ...colorKeys, "uppercase"].sort();
+const variants = ["bookmark", "corner"];
+const textBlends = [
+  "color-dodge",
+  "hard-light",
+  "luminosity",
+  "multiply",
+  "normal",
+  "overlay",
+  "plus-lighter",
+  "screen",
+  "soft-light",
+];
+const keys = [...numberKeys, ...colorKeys, "textBlend", "uppercase", "variant"].sort();
 
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== "development") {
@@ -83,6 +100,10 @@ function isValidRibbon(value: unknown): value is AiRibbon {
 
   return (
     typeof record.uppercase === "boolean" &&
+    typeof record.variant === "string" &&
+    variants.includes(record.variant) &&
+    typeof record.textBlend === "string" &&
+    textBlends.includes(record.textBlend) &&
     numberKeys.every((key) => {
       const number = record[key];
       return typeof number === "number" && Number.isFinite(number) && number >= -1000 && number <= 1000;
