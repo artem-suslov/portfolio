@@ -16,6 +16,7 @@ const externalContacts = [
   { href: links.telegramPersonal, icon: "telegram", label: "Telegram", value: "@art_ew" },
   { href: links.x, icon: "x", label: "X", value: "@artyoyom" },
   { href: links.linkedin, icon: "linkedin", label: "LinkedIn", value: "Artem Suslov" },
+  { href: links.github, icon: "github", label: "GitHub", value: "artem-suslov" },
 ] as const;
 
 async function copyToClipboard(value: string) {
