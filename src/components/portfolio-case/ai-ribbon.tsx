@@ -1,8 +1,9 @@
 "use client";
 
-import { type CSSProperties, useEffect, useId, useRef, useSyncExternalStore } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useSyncExternalStore, useState } from "react";
 import { type AiRibbon as AiRibbonSettings, aiRibbon } from "@/data/ai-ribbon";
 import styles from "./ai-ribbon.module.css";
+import { type GlyphRun, layoutGlyphs, loadGlyphFont, nearestWeight } from "./ribbon-glyphs";
 
 const shadeStops = 12;
 
@@ -226,6 +227,9 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
   const shadeRef = useRef<SVGPathElement>(null);
   const sheenRef = useRef<SVGPathElement>(null);
   const glossRef = useRef<SVGPathElement>(null);
+  const glyphsRef = useRef<SVGPathElement>(null);
+  // HTML letters stand in until the glyph outlines have loaded.
+  const [outlined, setOutlined] = useState(false);
   const stopRefs = useRef<(SVGStopElement | null)[]>([]);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const ids = useId();
@@ -252,6 +256,42 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
     let letterCenters: number[] = [];
     let geometry = { outline: [] as Point[], settings: null as AiRibbonSettings | null };
     let wind: Wind | null = null;
+    let glyphs: { key: string; run: GlyphRun } | null = null;
+    let pendingKey: string | null = null;
+    let lastTime = 0;
+    let cancelled = false;
+    // The parser and font load only once the ribbon is on screen and the browser is idle.
+    let mayLoadGlyphs = false;
+
+    // Outlines depend on the font and text settings only; they are re-laid out when those change.
+    function ensureGlyphs(current: AiRibbonSettings) {
+      const { fontSize, fontWeight, letterSpacing, uppercase } = current;
+      const key = `${nearestWeight(fontWeight)}|${fontSize}|${letterSpacing}|${uppercase}`;
+
+      if (!mayLoadGlyphs || glyphs?.key === key || pendingKey === key) {
+        return;
+      }
+
+      pendingKey = key;
+      loadGlyphFont(fontWeight)
+        .then((font) => {
+          if (cancelled || pendingKey !== key) {
+            return;
+          }
+
+          const text = uppercase ? label.toUpperCase() : label;
+          glyphs = { key, run: layoutGlyphs(font, text, { fontSize, letterSpacing }) };
+          pendingKey = null;
+          setOutlined(true);
+          draw(lastTime);
+        })
+        .catch(() => {
+          // Keep the HTML letters if the font can't load.
+          if (pendingKey === key) {
+            pendingKey = null;
+          }
+        });
+    }
 
     function measure() {
       letterCenters = letterRefs.current.map((letter) =>
@@ -262,6 +302,8 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
     function draw(time: number) {
       const current = settingsRef.current;
       const previous = geometry.settings;
+      lastTime = time;
+      ensureGlyphs(current);
 
       if (
         !previous ||
@@ -303,6 +345,27 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
       });
 
       const letterY = (current.height - current.notch) / 2 + current.textOffset;
+
+      // Every point of every glyph moves with the fabric under it, so letters bend, not slide.
+      if (glyphs) {
+        const { capHeight, contours, width: runWidth } = glyphs.run;
+        const left = (current.width - runWidth) / 2;
+        const baseline = letterY + capHeight / 2;
+        const text = contours
+          .map(
+            (contour) =>
+              contour
+                .map(([x, y], i) => {
+                  const [px, py] = displace(left + x, baseline + y, now);
+                  return `${i ? "L" : "M"}${px.toFixed(2)} ${py.toFixed(2)}`;
+                })
+                .join("") + "Z",
+          )
+          .join("");
+        glyphsRef.current?.setAttribute("d", text);
+        return;
+      }
+
       letterRefs.current.forEach((letter, i) => {
         const x = letterCenters[i] ?? 0;
         const [px, py] = displace(x, letterY, now);
@@ -333,6 +396,18 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
     const observer = new IntersectionObserver(([entry]) => {
       cancelAnimationFrame(frame);
 
+      if (entry?.isIntersecting && !mayLoadGlyphs) {
+        const allowLoad = () => {
+          mayLoadGlyphs = true;
+          draw(lastTime);
+        };
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(allowLoad, { timeout: 1500 });
+        } else {
+          setTimeout(allowLoad, 200);
+        }
+      }
+
       if (entry?.isIntersecting && !reducedMotion) {
         frame = requestAnimationFrame(tick);
       }
@@ -340,6 +415,7 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
     observer.observe(root);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
       unsubscribe?.();
       cancelAnimationFrame(frame);
@@ -389,7 +465,7 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
         </defs>
         <path fill={`url(#${fillId})`} ref={shapeRef} />
       </svg>
-      <span className={styles.label}>
+      <span className={outlined ? `${styles.label} ${styles.labelHidden}` : styles.label}>
         {letters.map((letter, i) => (
           <span
             className={styles.letter}
@@ -402,6 +478,9 @@ function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbon
           </span>
         ))}
       </span>
+      <svg className={styles.glyphs} height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+        <path fill="currentColor" ref={glyphsRef} />
+      </svg>
       {/* Light and shade lie over the letters too, so fabric and print share one surface. */}
       <svg className={styles.shape} height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
         <defs>
