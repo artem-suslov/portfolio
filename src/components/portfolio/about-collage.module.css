@@ -1,4 +1,4 @@
-/* The stage can be wider than the page's 800px column, so it centers itself on that
+/* The stage can be wider than the page's 750px column, so it centers itself on that
    column. Every size inside is in stage pixels: --u is one of them at the current
    width, so the whole collage scales down as one piece on narrow screens. */
 .collage {

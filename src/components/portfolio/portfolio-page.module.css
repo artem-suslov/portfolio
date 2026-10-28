@@ -5,11 +5,11 @@
   background: var(--color-page);
   color: var(--color-text-primary);
   font-family: var(--font-geist-sans), Geist, system-ui, sans-serif;
-  padding: var(--space-6) max(24px, calc((100vw - 800px) / 2));
+  padding: var(--space-6) max(24px, calc((100vw - 750px) / 2));
 }
 
 /* Section rail: placed like the case-study rail (32px from the left, 24px from the top),
-   shown only while the gutter beside the 800px card fits it. */
+   shown only while the gutter beside the 750px card fits it. */
 .rail {
   position: fixed;
   z-index: 1;
@@ -29,7 +29,7 @@
   scroll-margin-top: var(--space-8);
 }
 
-@media (min-width: 1141px) {
+@media (min-width: 1091px) {
   .rail {
     display: block;
   }
@@ -37,7 +37,7 @@
 
 .portfolio {
   position: relative;
-  width: min(800px, 100%);
+  width: min(750px, 100%);
   min-height: calc(100vh - 144px);
   display: flex;
   flex-direction: column;
@@ -61,9 +61,9 @@
 
 /* Section spacing comes from src/data/page-spacing.ts through --page-* properties
    on the viewport; phones keep their own values below. The 32px inline padding puts
-   the text on the hero's 736px column. */
+   the text on the hero's 686px column. */
 .aboutSection {
-  width: min(800px, 100%);
+  width: min(750px, 100%);
   display: flex;
   flex-direction: column;
   margin: var(--page-craft-to-about) auto 0;
@@ -102,7 +102,7 @@
 }
 
 
-@media (max-width: 1140px) {
+@media (max-width: 1090px) {
   .viewport {
     padding-inline: var(--space-6);
     padding-top: var(--space-6);
