@@ -26,7 +26,8 @@
 
 .roll {
   position: relative;
-  width: 700px;
+  /* As wide as the home card, which keeps a 24px gutter on narrower screens. */
+  width: min(800px, 100vw - 48px);
   height: 48px;
   margin-inline: auto;
   border-radius: 50% / 5px;

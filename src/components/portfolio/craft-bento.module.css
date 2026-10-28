@@ -1,4 +1,4 @@
-/* On the page below the card. It can be wider than the card's 700px column, so it
+/* On the page below the card. It can be wider than the card's 800px column, so it
    centers itself on that column; the page keeps a 24px gutter on either side. */
 .craft {
   --bento-width: min(var(--bento-max-width), calc(100vw - 2 * var(--space-6)));

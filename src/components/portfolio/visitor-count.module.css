@@ -1,5 +1,5 @@
 /* Mirrors the section rail: 32px from the right, 24px from the top, the same 32px
-   line as a rail item, and only while the gutter beside the 700px card fits it. */
+   line as a rail item, and only while the gutter beside the 800px card fits it. */
 .count,
 .heroCount {
   display: none;
@@ -25,7 +25,7 @@
   pointer-events: none;
 }
 
-@media (min-width: 1041px) {
+@media (min-width: 1141px) {
   .count {
     display: flex;
   }

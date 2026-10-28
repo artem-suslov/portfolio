@@ -252,7 +252,7 @@ export function CaseCover({
                 sizes={
                   isExpanded
                     ? caseViewSizes
-                    : (cover.sizes ?? "(max-width: 760px) 100vw, 700px")
+                    : (cover.sizes ?? "(max-width: 760px) 100vw, 800px")
                 }
                 src={cover.src}
                 unoptimized={isExpanded || cover.unoptimized}
