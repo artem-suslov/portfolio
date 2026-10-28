@@ -80,7 +80,9 @@
   letter-spacing: -0.02em;
 }
 
+/* Lines stay readable at 600px; the block keeps the column's left edge. */
 .aboutBody {
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: var(--page-about-paragraph-gap);
