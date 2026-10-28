@@ -55,7 +55,7 @@ export const craftBento: CraftBentoSettings = {
   gap: 16,
   heading: "Concepts and craft",
   headerGap: 32,
-  headerWidth: 636,
+  headerWidth: 686,
   maxWidth: 1077,
   radius: 8,
   rowHeight: 400,

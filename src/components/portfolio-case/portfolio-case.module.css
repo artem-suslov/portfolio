@@ -636,8 +636,8 @@
   inset: auto;
   top: 0px;
   left: 0px;
-  width: 636px;
-  height: 348px;
+  width: 100%;
+  height: 100%;
   max-width: none;
   max-height: none;
   margin: 0;

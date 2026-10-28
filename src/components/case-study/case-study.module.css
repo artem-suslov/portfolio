@@ -76,14 +76,14 @@
   list-style: none;
 }
 
-/* Dash marker so it sits flush with the label above; wrapped lines align with the text. */
+/* Bullet marker so it sits flush with the label above; wrapped lines align with the text. */
 .article ul > li {
   position: relative;
   padding-left: var(--space-5);
 }
 
 .article ul > li::before {
-  content: "-";
+  content: "•";
   position: absolute;
   top: 0;
   left: 0;
