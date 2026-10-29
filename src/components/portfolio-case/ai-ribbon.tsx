@@ -1,8 +1,9 @@
 "use client";
 
-import { type CSSProperties, useEffect, useId, useRef, useSyncExternalStore } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useSyncExternalStore, useState } from "react";
 import { type AiRibbon as AiRibbonSettings, aiRibbon } from "@/data/ai-ribbon";
 import styles from "./ai-ribbon.module.css";
+import { type GlyphRun, layoutGlyphs, loadGlyphFont, nearestWeight } from "./ribbon-glyphs";
 
 const shadeStops = 12;
 
@@ -140,35 +141,105 @@ function shape(settings: AiRibbonSettings) {
   };
 }
 
-/** "Made with AI" bookmark that hangs from the top of a case card and ripples. */
+/** "Made with AI" label on a case card: a waving bookmark or a sash across the corner. */
 export function AiRibbon({ label }: { label: string }) {
   const settings = useSyncExternalStore(subscribe, getSettings, getServerSettings);
+
+  return settings.variant === "corner" ? (
+    <CornerRibbon label={label} settings={settings} />
+  ) : (
+    <BookmarkRibbon label={label} settings={settings} />
+  );
+}
+
+/** Text styles both variants share. */
+function labelVars(settings: AiRibbonSettings) {
+  const {
+    fontSize,
+    fontWeight,
+    letterSpacing,
+    press,
+    sheen,
+    textBlend,
+    textColor,
+    textOffset,
+    textOpacity,
+    uppercase,
+  } = settings;
+
+  return {
+    "--ribbon-font-size": `${fontSize}px`,
+    "--ribbon-font-weight": fontWeight,
+    "--ribbon-letter-spacing": `${letterSpacing}em`,
+    "--ribbon-press": press,
+    "--ribbon-sheen": sheen,
+    "--ribbon-text-blend": textBlend,
+    "--ribbon-text-color": textColor,
+    "--ribbon-text-offset": `${textOffset}px`,
+    "--ribbon-text-opacity": textOpacity,
+    "--ribbon-text-transform": uppercase ? "uppercase" : "none",
+  };
+}
+
+/**
+ * A sash across the cover's top-left corner, cut off by the card's edges. The
+ * band's centre line sits `cornerDistance` from the corner, along the diagonal.
+ */
+function CornerRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
+  const { colorDeep, colorLight, colorMid, cornerDistance, cornerThickness } = settings;
+  const centre = cornerDistance / Math.SQRT2;
+  // Just large enough to hold the band from one edge to the other.
+  const size = Math.ceil(2 * centre + cornerThickness * Math.SQRT2);
+  const length = 2 * cornerDistance + 2 * cornerThickness;
+
+  return (
+    <div
+      aria-hidden="true"
+      className={styles.corner}
+      style={
+        {
+          ...labelVars(settings),
+          "--ribbon-corner-size": `${size}px`,
+        } as CSSProperties
+      }
+    >
+      <span
+        className={styles.sash}
+        style={{
+          background: `linear-gradient(90deg, ${colorLight}, ${colorMid} 55%, ${colorDeep})`,
+          height: cornerThickness,
+          left: centre - length / 2,
+          top: centre - cornerThickness / 2,
+          width: length,
+        }}
+      >
+        <span className={styles.sashLabel}>{label}</span>
+      </span>
+    </div>
+  );
+}
+
+/** A bookmark that hangs from the top of the cover and ripples in the wind. */
+function BookmarkRibbon({ label, settings }: { label: string; settings: AiRibbonSettings }) {
   const settingsRef = useRef(settings);
   const rootRef = useRef<HTMLDivElement>(null);
   const shapeRef = useRef<SVGPathElement>(null);
   const shadeRef = useRef<SVGPathElement>(null);
+  const sheenRef = useRef<SVGPathElement>(null);
+  const glossRef = useRef<SVGPathElement>(null);
+  const glyphsRef = useRef<SVGPathElement>(null);
+  // HTML letters stand in until the glyph outlines have loaded.
+  const [outlined, setOutlined] = useState(false);
   const stopRefs = useRef<(SVGStopElement | null)[]>([]);
   const letterRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const ids = useId();
   const fillId = `${ids}-fill`;
   const shadeId = `${ids}-shade`;
   const fadeId = `${ids}-fade`;
+  const sheenId = `${ids}-sheen`;
+  const glossId = `${ids}-gloss`;
   const letters = Array.from(label);
-  const {
-    colorDeep,
-    colorLight,
-    colorMid,
-    fontSize,
-    fontWeight,
-    height,
-    inset,
-    letterSpacing,
-    notch,
-    textColor,
-    textOffset,
-    uppercase,
-    width,
-  } = settings;
+  const { colorDeep, colorLight, colorMid, height, inset, notch, sheen, width } = settings;
 
   useEffect(() => {
     settingsRef.current = settings;
@@ -185,6 +256,42 @@ export function AiRibbon({ label }: { label: string }) {
     let letterCenters: number[] = [];
     let geometry = { outline: [] as Point[], settings: null as AiRibbonSettings | null };
     let wind: Wind | null = null;
+    let glyphs: { key: string; run: GlyphRun } | null = null;
+    let pendingKey: string | null = null;
+    let lastTime = 0;
+    let cancelled = false;
+    // The parser and font load only once the ribbon is on screen and the browser is idle.
+    let mayLoadGlyphs = false;
+
+    // Outlines depend on the font and text settings only; they are re-laid out when those change.
+    function ensureGlyphs(current: AiRibbonSettings) {
+      const { fontSize, fontWeight, letterSpacing, uppercase } = current;
+      const key = `${nearestWeight(fontWeight)}|${fontSize}|${letterSpacing}|${uppercase}`;
+
+      if (!mayLoadGlyphs || glyphs?.key === key || pendingKey === key) {
+        return;
+      }
+
+      pendingKey = key;
+      loadGlyphFont(fontWeight)
+        .then((font) => {
+          if (cancelled || pendingKey !== key) {
+            return;
+          }
+
+          const text = uppercase ? label.toUpperCase() : label;
+          glyphs = { key, run: layoutGlyphs(font, text, { fontSize, letterSpacing }) };
+          pendingKey = null;
+          setOutlined(true);
+          draw(lastTime);
+        })
+        .catch(() => {
+          // Keep the HTML letters if the font can't load.
+          if (pendingKey === key) {
+            pendingKey = null;
+          }
+        });
+    }
 
     function measure() {
       letterCenters = letterRefs.current.map((letter) =>
@@ -195,6 +302,8 @@ export function AiRibbon({ label }: { label: string }) {
     function draw(time: number) {
       const current = settingsRef.current;
       const previous = geometry.settings;
+      lastTime = time;
+      ensureGlyphs(current);
 
       if (
         !previous ||
@@ -223,8 +332,9 @@ export function AiRibbon({ label }: { label: string }) {
           })
           .join("") + "Z";
 
-      shapeRef.current?.setAttribute("d", d);
-      shadeRef.current?.setAttribute("d", d);
+      for (const path of [shapeRef, shadeRef, sheenRef, glossRef]) {
+        path.current?.setAttribute("d", d);
+      }
 
       // Slopes facing up catch light, slopes facing down fall into shade.
       stopRefs.current.forEach((stop, i) => {
@@ -235,6 +345,27 @@ export function AiRibbon({ label }: { label: string }) {
       });
 
       const letterY = (current.height - current.notch) / 2 + current.textOffset;
+
+      // Every point of every glyph moves with the fabric under it, so letters bend, not slide.
+      if (glyphs) {
+        const { capHeight, contours, width: runWidth } = glyphs.run;
+        const left = (current.width - runWidth) / 2;
+        const baseline = letterY + capHeight / 2;
+        const text = contours
+          .map(
+            (contour) =>
+              contour
+                .map(([x, y], i) => {
+                  const [px, py] = displace(left + x, baseline + y, now);
+                  return `${i ? "L" : "M"}${px.toFixed(2)} ${py.toFixed(2)}`;
+                })
+                .join("") + "Z",
+          )
+          .join("");
+        glyphsRef.current?.setAttribute("d", text);
+        return;
+      }
+
       letterRefs.current.forEach((letter, i) => {
         const x = letterCenters[i] ?? 0;
         const [px, py] = displace(x, letterY, now);
@@ -265,6 +396,18 @@ export function AiRibbon({ label }: { label: string }) {
     const observer = new IntersectionObserver(([entry]) => {
       cancelAnimationFrame(frame);
 
+      if (entry?.isIntersecting && !mayLoadGlyphs) {
+        const allowLoad = () => {
+          mayLoadGlyphs = true;
+          draw(lastTime);
+        };
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(allowLoad, { timeout: 1500 });
+        } else {
+          setTimeout(allowLoad, 200);
+        }
+      }
+
       if (entry?.isIntersecting && !reducedMotion) {
         frame = requestAnimationFrame(tick);
       }
@@ -272,6 +415,7 @@ export function AiRibbon({ label }: { label: string }) {
     observer.observe(root);
 
     return () => {
+      cancelled = true;
       observer.disconnect();
       unsubscribe?.();
       cancelAnimationFrame(frame);
@@ -285,15 +429,10 @@ export function AiRibbon({ label }: { label: string }) {
       ref={rootRef}
       style={
         {
-          "--ribbon-font-size": `${fontSize}px`,
-          "--ribbon-font-weight": fontWeight,
+          ...labelVars(settings),
           "--ribbon-height": `${height}px`,
           "--ribbon-inset": `${inset}px`,
-          "--ribbon-letter-spacing": `${letterSpacing}em`,
           "--ribbon-notch": `${notch}px`,
-          "--ribbon-text-color": textColor,
-          "--ribbon-text-offset": `${textOffset}px`,
-          "--ribbon-text-transform": uppercase ? "uppercase" : "none",
           "--ribbon-width": `${width}px`,
         } as CSSProperties
       }
@@ -325,9 +464,8 @@ export function AiRibbon({ label }: { label: string }) {
           </mask>
         </defs>
         <path fill={`url(#${fillId})`} ref={shapeRef} />
-        <path fill={`url(#${shadeId})`} mask={`url(#${shadeId}-mask)`} ref={shadeRef} />
       </svg>
-      <span className={styles.label}>
+      <span className={outlined ? `${styles.label} ${styles.labelHidden}` : styles.label}>
         {letters.map((letter, i) => (
           <span
             className={styles.letter}
@@ -340,6 +478,27 @@ export function AiRibbon({ label }: { label: string }) {
           </span>
         ))}
       </span>
+      <svg className={styles.glyphs} height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+        <path fill="currentColor" ref={glyphsRef} />
+      </svg>
+      {/* Light and shade lie over the letters too, so fabric and print share one surface. */}
+      <svg className={styles.shape} height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+        <defs>
+          <linearGradient id={sheenId} x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity={0.5 * sheen} />
+            <stop offset="0.48" stopColor="#fff" stopOpacity="0" />
+            <stop offset="1" stopColor="#0a1450" stopOpacity={0.22 * sheen} />
+          </linearGradient>
+          <linearGradient id={glossId} x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0.22" stopColor="#fff" stopOpacity="0" />
+            <stop offset="0.4" stopColor="#fff" stopOpacity={0.28 * sheen} />
+            <stop offset="0.58" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path fill={`url(#${shadeId})`} mask={`url(#${shadeId}-mask)`} ref={shadeRef} />
+        <path fill={`url(#${sheenId})`} ref={sheenRef} />
+        <path fill={`url(#${glossId})`} ref={glossRef} />
+      </svg>
     </div>
   );
 }
