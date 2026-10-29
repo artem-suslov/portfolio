@@ -12,10 +12,11 @@
   line-height: 1.6;
 }
 
-/* Equal side columns keep the article centered in the viewport; the rail sits in the left one. */
+/* Equal side columns keep the article centered in the viewport; the rail sits in the left one.
+   The article stays 700px wide like the home page card; below 1041px the rail moves above it. */
 .layout {
   display: grid;
-  grid-template-columns: minmax(160px, 1fr) minmax(0, 700px) minmax(160px, 1fr);
+  grid-template-columns: minmax(0, 1fr) 700px minmax(0, 1fr);
   align-items: start;
   gap: var(--space-8);
 }
@@ -306,6 +307,30 @@
 @media (hover: hover) {
   .railItem:hover {
     color: var(--color-text-primary);
+  }
+}
+
+/* Same breakpoint and gutters as the home page: the gutter no longer fits the table
+   of contents, so only Back stays, above the 700px article. */
+@media (max-width: 1040px) {
+  .page {
+    padding-inline: var(--space-6);
+  }
+
+  .layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .rail {
+    position: static;
+    width: min(700px, 100%);
+  }
+
+  .railItems {
+    display: none;
   }
 }
 
